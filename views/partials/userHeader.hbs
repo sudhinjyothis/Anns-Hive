@@ -1,3 +1,4 @@
+{{!-- nav only header --}}
 {{#if header}}
 <section class="w3l-banner-slider-main">
     <div class="top-header-content">
@@ -37,6 +38,8 @@
     </div>
 </section>
 {{/if}}
+{{!-- nav only header --}}
+{{!-- home header --}}
 {{#if home}}
 <section class="w3l-banner-slider-main">
     <div class="top-header-content">
@@ -125,6 +128,8 @@
     </div>
 </section>
 {{/if}}
+{{!-- home header --}}
+{{!-- about header--}}
 {{#if about}}
 <section class="w3l-banner-slider-main inner-pagehny">
     <div class="breadcrumb-infhny">
@@ -167,10 +172,10 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto">
-                                <li class="nav-item active">
+                                <li class="nav-item">
                                     <a class="nav-link" href="index.html">Home</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item active">
                                     <a class="nav-link" href="/about">About</a>
                                 </li>
                                 <li class="nav-item">
@@ -209,9 +214,126 @@
                     </div>
                 </div>
             </header>
+            <div class="breadcrumb-contentnhy">
+                <div class="container">
+                    <nav aria-label="breadcrumb">
+                        <h2 class="hny-title text-center">About Us</h2>
+                        <ol class="breadcrumb mb-0">
+                            <li><a href="index.html">Home</a>
+                                <span class="fa fa-angle-double-right"></span>
+                            </li>
+                            <li class="active">About</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
         </div>
+    </div>
     </div>
 </section>
 {{/if}}
+{{!-- about header--}}
+{{!-- contact header --}}
 {{#if contact}}
+<section class="w3l-banner-slider-main inner-pagehny">
+    <div class="breadcrumb-infhny">
+        <div class="top-header-content">
+            <header class="tophny-header">
+                <!--/nav-->
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <div class="container-fluid serarc-fluid">
+                        <a class="navbar-brand" href="/">
+                            <img src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
+                        </a>
+                        <a class="navbar-brand" href="/">
+                            Ann's<span class="lohny">H</span>ive
+                        </a>
+                        <!--/search-right-->
+                        <div class="search-right">
+
+                            <a href="#search" title="search"><span class="fa fa-search mr-2" aria-hidden="true"></span>
+                                <span class="search-text">Search here</span></a>
+                            <!-- search popup -->
+                            <div id="search" class="pop-overlay">
+                                <div class="popup">
+
+                                    <form action="#" method="post" class="search-box">
+                                        <input type="search" placeholder="Keyword" name="search" required="required"
+                                            autofocus="">
+                                        <button type="submit" class="btn">Search</button>
+                                    </form>
+
+                                </div>
+                                <a class="close" href="#">×</a>
+                            </div>
+                            <!-- /search popup -->
+                        </div>
+                        <!--//search-right-->
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon fa fa-bars"> </span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="index.html">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/about">About</a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="contact.html">Contact</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="contact.html">Orders</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+                <!--//nav-->
+                <div class="container-fluid">
+                    <div class="top-right-strip userbtns row">
+                        <div class="top-right-strip dropdown">
+                            <button class="dropdownbtn btn btn-secondary dropdown-toggle" type="button"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span style="margin-right: 10px;" class="fa fa-user"></span>User
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                                <div class="dropdownmenu">
+                                    <a class="" href="/signup">
+                                        Sign Up
+                                    </a>
+                                    <a class=" " href="/signin">
+                                        Sign In
+                                    </a>
+                                    <a class="" href="">
+                                        My Cart
+                                    </a>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="breadcrumb-contentnhy">
+                <div class="container">
+                    <nav aria-label="breadcrumb">
+                        <h2 class="hny-title text-center">Contact Us</h2>
+                        <ol class="breadcrumb mb-0">
+                            <li><a href="index.html">Home</a>
+                                <span class="fa fa-angle-double-right"></span>
+                            </li>
+                            <li class="active">Contact</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
 {{/if}}
+{{!-- contact header --}}

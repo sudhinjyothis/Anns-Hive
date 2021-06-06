@@ -19,6 +19,7 @@
 <body>
     {{>userHeader}}
     {{{body}}}
+    {{>footer}}
 </body>
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/jquery-3.3.1.min.js"></script>
@@ -29,22 +30,7 @@
 <!--pop-up-box-->
 <script src="js/jquery.magnific-popup.js"></script>
 <!--//pop-up-box-->
-<script>
-    $(document).ready(function () {
-        $('.popup-with-zoom-anim').magnificPopup({
-            type: 'inline',
-            fixedContentPos: false,
-            fixedBgPos: true,
-            overflowY: 'auto',
-            closeBtnInside: true,
-            preloader: false,
-            midClick: true,
-            removalDelay: 300,
-            mainClass: 'my-mfp-zoom-in'
-        });
 
-    });
-</script>
 <!--//search-bar-->
 <!-- disable body scroll which navbar is in active -->
 <script>
