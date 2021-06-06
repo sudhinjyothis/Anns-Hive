@@ -4,11 +4,12 @@ const state = {
 }
 
 module.exports.connect = function (done) {
-    const url = "mongodb+srv://annshive:4ORbbSXbkdwdBUb5@cluster0.2ilxg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-    const dbname = "annshive"
+    const url = "mongodb+srv://annshive:sin30equaltocos60@cluster0.2ilxg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    const dbname = "annshieve"
 
     mongoClient.connect(url, (err, data) => {
         if (err) return done(err)
+        state.db = data.db(dbname)
         done()
     })
 
