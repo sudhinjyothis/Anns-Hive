@@ -8,7 +8,7 @@ module.exports.connect = function (done) {
     const devurl = "mongodb://localhost:27017"
     const dbname = "annshieve"
 
-    mongoClient.connect(devurl, (err, data) => {
+    mongoClient.connect(url, (err, data) => {
         if (err) return done(err)
         state.db = data.db(dbname)
         done()

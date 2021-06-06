@@ -177,6 +177,7 @@ a.read-more-btn2.btn:hover {
   h3.hny-title.two {
     font-size: 26px;
     line-height: 36px;
+    margin-top: 50px;
   }
 }
 
@@ -7664,7 +7665,7 @@ iframe {
 
 @media all and (max-width: 1080px) {
   .features-4 .features4-grid h5 a {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 20px;
     margin: 0px 0 10px 0;
   }
@@ -18951,6 +18952,9 @@ a.text-dark:focus {
   font-size: 2rem;
   padding-top: 122px;
 }
+.team-social{
+  margin-top: 1rem ;
+}
 .wrap form label{
   color: #adb5bd;
 }
@@ -18974,6 +18978,24 @@ a.text-dark:focus {
   }
   .signintext{
     padding-top: 30%;
+  }
+  .w3l-grids-hny-2 .welcome-image h4 a{
+    font-size: 16px;
+    line-height: 23px;
+  }
+  .w3l-team-main .team_info {
+    bottom: 7px;
+    left: 20px;
+    padding: 0;
+    width: 80%;
+    height: 80px;
+    border-radius: 6px;
+  }
+  .features-4 .features4-grid p {
+    font-size: 12px;
+  } 
+  .team-social{
+    margin-top: 0rem;
   }
 }
 @media only screen
@@ -19091,8 +19113,10 @@ a.text-dark:focus {
 }
 .top-right-strip.dropdown{
   padding-top: 0;
+  padding-right: 0;
 }
 .w3l-banner-slider-main .bannerhny-content{
   display: block;
 }
+
 /*# sourceMappingURL=style-starter.css.map */
