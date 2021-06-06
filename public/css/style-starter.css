@@ -357,6 +357,20 @@ a.read-more-btn2.btn:hover {
   filter: none;
 }
 
+::-webkit-scrollbar{
+  width:10px;
+}
+::-webkit-scrollbar-track{
+  background:#c3bcbc;
+  border-radius:10px;
+}
+::-webkit-scrollbar-thumb{
+  background:#888;
+  border-radius:10px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background:#555;
+}
 .fa-stack {
   position: relative;
   display: inline-block;
@@ -18960,7 +18974,7 @@ a.text-dark:focus {
 }
 @media (max-width:767px) {
   .signuptext{
-    padding-top: 30px;
+    padding-top: 100px;
   }
   .signupcontainer{
     height: 112vh;
@@ -18997,6 +19011,12 @@ a.text-dark:focus {
   .team-social{
     margin-top: 0rem;
   }
+  .w3l-grids-hny-2 .boxhny13 .title{
+    font-size: 15px;
+  }
+  .w3l-grids-hny-2 .boxhny13:hover .boxhny-content{
+    transform: translate(0, -61%);
+  }
 }
 @media only screen
 
@@ -19020,6 +19040,7 @@ a.text-dark:focus {
 .signbg{
   background-color: #464242c7;
   border-radius: 10px;
+  padding: 13px;
 }
 .signlogo{
   margin-right: 10px;
@@ -19043,7 +19064,6 @@ a.text-dark:focus {
 .signincontainer{
   background-color: #3a3535;
   height: 100vh;
-  overflow: hidden;
 }
 .dropdown-menu.show{
   background: #3a3535;
