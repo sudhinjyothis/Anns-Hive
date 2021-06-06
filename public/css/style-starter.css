@@ -19072,10 +19072,15 @@ a.text-dark:focus {
   font-family: 'Lato', sans-serif;
   font-size: 16px;
   text-transform: capitalize;
+  margin-bottom: 10px;
 }
 .dropdownbtn:hover{
   color: #fff;
   background-color: #ff7315;
+  border: none;
+}
+.dropdownbtn:active{
+  border: none;
 }
 .top-right-strip{
   display: flex;

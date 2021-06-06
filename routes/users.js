@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.render('users/index', { header: true })
+  res.render('users/index', { header: true, home: true })
 })
 router.get('/signup', (req, res) => {
   var indian_states = [
@@ -35,10 +35,10 @@ router.get('/signup', (req, res) => {
     'Uttar Pradesh',
     'West Bengal'
   ]
-  res.render('users/signup', { header: false, indian_states })
+  res.render('users/signup', { header: true, indian_states })
 })
 router.get('/about', (req, res) => {
-  res.render('users/about', { header: true })
+  res.render('users/about', { header: true, about: true })
 })
 router.get('/signin', (req, res) => {
   res.render("users/signin", { header: false })
