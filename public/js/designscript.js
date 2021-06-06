@@ -16,3 +16,37 @@ function topFunction() {
     document.documentElement.scrollTop = 0;
 }
 // /move top
+// disable body scroll which navbar is in active and remove sign navs
+$(function () {
+    $('.navbar-toggler').click(function () {
+        $('body').toggleClass('noscroll');
+        $('.userbtns').toggleClass('userbtnshide');
+    })
+});
+// disable body scroll which navbar is in active and remove sign navs
+//search-bar
+$(document).ready(function () {
+    $('.popup-with-zoom-anim').magnificPopup({
+        type: 'inline',
+        fixedContentPos: false,
+        fixedBgPos: true,
+        overflowY: 'auto',
+        closeBtnInside: true,
+        preloader: false,
+        midClick: true,
+        removalDelay: 300,
+        mainClass: 'my-mfp-zoom-in'
+    });
+
+});
+//search-bar
+// cart-js 
+transmitv.render();
+transmitv.cart.on('transmitv_checkout', function (evt) {
+    var items, len, i;
+    if (this.subtotal() > 0) {
+        items = this.items();
+        for (i = 0, len = items.length; i < len; i++) { }
+    }
+});
+//cart-js -->

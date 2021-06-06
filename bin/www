@@ -1,12 +1,13 @@
 #!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
 
 var app = require('../app');
 var debug = require('debug')('e-commerce:server');
-var http = require('http');
+var https = require('https');
+const fs = require('fs')
+const path = require('path')
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +20,10 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = https.createServer({
+  key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
+}, app);
 
 /**
  * Listen on provided port, on all network interfaces.

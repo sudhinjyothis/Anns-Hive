@@ -43,7 +43,7 @@
                                 <a class="nav-link" href="index.html">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="about.html">About</a>
+                                <a class="nav-link" href="/about">About</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="contact.html">Contact</a>
@@ -60,31 +60,31 @@
             <div class="container-fluid">
                 <div class="top-right-strip userbtns row">
                     <!--/right-->
-                    <ul class="top-hnt-right-content col-lg-6">
-                        <li class="">
-                            <a class="signupbtn" href="/signup">
-                                <span aria-hidden="true">Sign Up</span>
-                            </a>
-                        </li>
-                        <li class="button-log usernhy">
-                            <a class="btn-open " href="/signin">
-                                <span class="" aria-hidden="true">Sign In</span>
-                            </a>
-                        </li>
-                        <li class="transmitvcart galssescart2 cart cart box_1">
-                            <form action="#" method="post" class="last">
-                                <input type="hidden" name="cmd" value="_cart">
-                                <input type="hidden" name="display" value="1">
-                                <button class="top_transmitv_cart" type="submit" name="submit" value="">
+                    <div class="top-right-strip dropdown">
+                        <button class="dropdownbtn btn btn-secondary dropdown-toggle" type="button"
+                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span style="margin-right: 10px;" class="fa fa-user"></span>User
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdownmenu">
+                                <a class="" href="/signup">
+                                    Sign Up
+                                </a>
+                                <a class=" " href="/signin">
+                                    Sign In
+                                </a>
+                                <a class="" href="">
                                     My Cart
-                                    <span class="fa fa-shopping-cart"></span>
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
     </div>
 </section>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/popper.min.js"></script>
 {{/if}}

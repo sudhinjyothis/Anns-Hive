@@ -38,7 +38,7 @@ router.get('/signup', (req, res) => {
   res.render('users/signup', { header: false, indian_states })
 })
 router.get('/about', (req, res) => {
-
+  res.render('users/about', { header: true })
 })
 router.get('/signin', (req, res) => {
   res.render("users/signin", { header: false })
