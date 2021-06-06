@@ -19016,6 +19016,7 @@ a.text-dark:focus {
   display: flex;
   align-items: center;
   overflow: hidden;
+  margin-bottom: 10px;
 }
 .signincontainer{
   background-color: #3a3535;
