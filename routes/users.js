@@ -47,7 +47,7 @@ router.get('/contact', (req, res) => {
   res.render("users/contact", { contact: true, footer: true })
 })
 router.get('/signin', (req, res) => {
-  res.render("users/signin", { header: false })
+  res.render("users/signin", { header: true })
 })
 
 module.exports = router;

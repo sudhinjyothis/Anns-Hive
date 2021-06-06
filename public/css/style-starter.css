@@ -4049,7 +4049,7 @@ a.read-more-btn2.btn:hover {
 }
 
 .w3l-banner-slider-main .carousel-item {
-  background: url(../images/banner1.jpg) no-repeat center;
+  background: url(../images/carsoul2-min.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -o-background-size: cover;
@@ -4058,7 +4058,7 @@ a.read-more-btn2.btn:hover {
 }
 
 .w3l-banner-slider-main .carousel-item.item2 {
-  background: url(../images/banner2.jpg) no-repeat center;
+  background: url(../images/carsoul-min.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -o-background-size: cover;
@@ -4067,7 +4067,7 @@ a.read-more-btn2.btn:hover {
 }
 
 .w3l-banner-slider-main .carousel-item.item3 {
-  background: url(../images/banner3.jpg) no-repeat center;
+  background: url(../images/carsoul3-min.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -o-background-size: cover;
@@ -4076,7 +4076,7 @@ a.read-more-btn2.btn:hover {
 }
 
 .w3l-banner-slider-main .carousel-item.item4 {
-  background: url(../images/banner4.jpg) no-repeat center;
+  background: url(../images/carsoul4-min.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -o-background-size: cover;
@@ -4131,7 +4131,7 @@ a.read-more-btn2.btn:hover {
 }
 
 .w3l-banner-slider-main .right-banner {
-  background: url(../images/left3.jpg) no-repeat center;
+  background: url(../images/carsoulright.jpg) no-repeat center;
   background-size: cover;
   display: grid;
   align-items: center;
@@ -19091,5 +19091,8 @@ a.text-dark:focus {
 }
 .top-right-strip.dropdown{
   padding-top: 0;
+}
+.w3l-banner-slider-main .bannerhny-content{
+  display: block;
 }
 /*# sourceMappingURL=style-starter.css.map */

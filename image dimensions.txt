@@ -1,0 +1,14 @@
+image format jpg( recommended )
+Home page 
+carsoul images - 1680x1000
+carsoul right - 640 x 840
+categories - 200x200
+products - 350x450
+display bgs - 1680 x 900 
+emailsubimg- 640x740
+
+About page
+headerbg - 1680x900
+about...img-640x420
+meet team - 350 x 450
+aboutthingsbg - 1680x1000
