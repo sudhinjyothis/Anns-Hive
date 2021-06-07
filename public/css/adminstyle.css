@@ -819,7 +819,7 @@ ul.dropdown-menu.drp-mnu li {
 }
 .market-update-block h3 {
     color: #fff;
-    font-size: 2.5em;
+    font-size: 1.5em;
     font-family: 'Carrois Gothic', sans-serif;
 }
 .market-update-block h4 {
@@ -881,10 +881,10 @@ ul.dropdown-menu.drp-mnu li {
   -o-transition: 0.5s all;
 }
 .market-update-right i.fa.fa-file-text-o {
-    font-size: 3em;
+    font-size: 2em;
     color:#68AE00;
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     background: #fff;
     text-align: center;
     border-radius: 49px;
@@ -894,10 +894,10 @@ ul.dropdown-menu.drp-mnu li {
     line-height: 1.7em;
 }
 .market-update-right i.fa.fa-eye {
-     font-size: 3em;
+    font-size: 2em;
     color:#FC8213;
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     background: #fff;
     text-align: center;
     border-radius: 49px;
@@ -907,10 +907,10 @@ ul.dropdown-menu.drp-mnu li {
     line-height: 1.7em;
 }
 .market-update-right i.fa.fa-envelope-o {
-     font-size:3em;
+    font-size:2em;
     color:#337AB7;
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     background: #fff;
     text-align: center;
     border-radius: 49px;
@@ -4715,4 +4715,17 @@ ul.dropdown-menu {
 .b_tooltip {
     padding: 4px 7px 7px 7px;
 }
+}
+.shoppingcarticon{
+    font-size: 2em;
+    color: #FC8213;
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    text-align: center;
+    border-radius: 49px;
+    -webkit-border-radius: 49px;
+    -moz-border-radius: 49px;
+    -o-border-radius: 49px;
+    line-height: 1.7em;
 }
