@@ -4,9 +4,11 @@ const promise = require("promise")
 const { resolve, reject } = require("promise")
 const objectID = require("mongodb").ObjectID
 module.exports = {
-    addProduct: (product, callback) => {
-        db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data) => {
-            callback(data.ops[0]._id)
+    addProduct: (product) => {
+        return new promise((resolve, reject) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data) => {
+                resolve(data.ops[0]._id)
+            })
         })
     },
     getAllProducts: () => {

@@ -811,7 +811,8 @@ ul.dropdown-menu.drp-mnu li {
 /*inner-block--*/
 .inner-block {
     padding: 8em 2em 4em 2em;
-    background: #fafafa;
+    background: #3a3535;
+    height: 100vh;
 }
 .market-update-block {
     padding: 2em 2em;
@@ -834,7 +835,7 @@ ul.dropdown-menu.drp-mnu li {
     line-height: 1.8em;
 }
 .market-update-block.clr-block-1 {
-    background: #68ae00;
+    background: #3C3C3C;
     margin-right: 0.8em;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     transition: 0.5s all;
@@ -843,7 +844,7 @@ ul.dropdown-menu.drp-mnu li {
   -o-transition: 0.5s all;
 }
 .market-update-block.clr-block-2 {
-    background:#FC8213;
+    background:#3C3C3C;
     margin-right: 0.8em;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     transition: 0.5s all;
@@ -852,7 +853,7 @@ ul.dropdown-menu.drp-mnu li {
   -o-transition: 0.5s all;
 }
 .market-update-block.clr-block-3 {
-    background:#337AB7;
+    background:#3C3C3C;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     transition: 0.5s all;
   -webkit-transition: 0.5s all;
@@ -860,7 +861,6 @@ ul.dropdown-menu.drp-mnu li {
   -o-transition: 0.5s all;
 }
 .market-update-block.clr-block-1:hover {
-    background: #3C3C3C;
    transition: 0.5s all;
   -webkit-transition: 0.5s all;
   -moz-transition: 0.5s all;
@@ -1261,14 +1261,13 @@ span.malorum-pro {
 .chit-chat-heading {
     font-size: 1.2em;
     font-weight: 700;
-    color: #5F5D5D;
+    color: #eeecec;
     text-transform: uppercase;
    font-family: 'Carrois Gothic', sans-serif;
 }
 .work-progres {
-    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.15);
     padding: 1.34em 1em;
-    background: #fff;
+    background: #3a3535;
 }
 /*--geochart start here--*/
 section#charts1 {
@@ -3464,6 +3463,19 @@ div#geoChart {
     font-size: 0.7em;
 }
 }
+.shoppingcarticon{
+    font-size: 2em;
+    color: #FC8213;
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    text-align: center;
+    border-radius: 49px;
+    -webkit-border-radius: 49px;
+    -moz-border-radius: 49px;
+    -o-border-radius: 49px;
+    line-height: 1.7em;
+}
 @media (max-width:991px){
 .market-update-gd {
     float: left;
@@ -3504,23 +3516,23 @@ li.dropdown.head-dpdn a.dropdown-toggle {
     padding: 1em 1em;
 }
 .market-update-right i.fa.fa-file-text-o {
-    font-size: 2em;
-    width: 60px;
-    height: 60px;
+    font-size: 19px;
+    width: 37px;
+    height: 36px;
     line-height: 1.9em;
     margin-top: 0px;
 }
-.market-update-right i.fa.fa-eye{
-	font-size: 2em;
-    width: 60px;
-    height: 60px;
+.shoppingcarticon{
+	font-size: 19px;
+    width: 37px;
+    height: 36px;
     line-height: 1.9em;
      margin-top: 0em;
 }
 .market-update-right i.fa.fa-envelope-o{
-	font-size: 2em;
-    width: 60px;
-    height: 60px;
+	font-size: 19px;
+    width: 37px;
+    height: 36px;
     line-height: 1.9em;
     margin-top: 0px;
 }
@@ -3528,10 +3540,10 @@ li.dropdown.head-dpdn a.dropdown-toggle {
     padding-bottom: 0.8em;
 }
 .market-update-block h3 {
-    font-size: 2em;
+    font-size: 1em;
 }
 .market-update-block h4 {
-    font-size: 1em;
+    font-size: 11px;
 }
 .chit-chat-layer1-left {
     padding: 0em 0em 2em 0em;
@@ -4049,7 +4061,7 @@ canvas#bar {
     min-width: 480px;
 }
 .inner-block {
-    padding: 10em 1em 2em 1em;
+    padding: 7em 1em 2em 1em;
 }
 .chit-chat-layer1 {
     margin: 1em 0em;
@@ -4716,16 +4728,15 @@ ul.dropdown-menu {
     padding: 4px 7px 7px 7px;
 }
 }
-.shoppingcarticon{
-    font-size: 2em;
-    color: #FC8213;
-    width: 50px;
-    height: 50px;
-    background: #fff;
-    text-align: center;
-    border-radius: 49px;
-    -webkit-border-radius: 49px;
-    -moz-border-radius: 49px;
-    -o-border-radius: 49px;
-    line-height: 1.7em;
+.addproductadmin{
+    background-color: #3a3535;
+    height: 110vh;
+}
+.viewtable.container{
+    padding: 0;
+}
+@media (max-width:767px){
+    .addproductadmin{
+        height: 100%;
+    }
 }

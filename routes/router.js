@@ -50,10 +50,20 @@ router.get('/signin', (req, res) => {
   res.render("users/signin", { header: true })
 })
 router.get('/admin', function (req, res, next) {
-  res.render("admin/dashboard", { header: true, headerblack: true, adminheader: true });
+  res.render("admin/dashboard", { header: true, adminheader: true });
 });
-router.get('/products', (req, res) => {
-  res.render("admin/products", { header: true, adminheader: true, headerblack: true, childroute: true })
+router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', (req, res) => {
+  res.render("admin/products", { header: true, adminheader: true, })
 })
-
+router.get('/dVM217UcHzCpO4dr6mshiNbxLqTu1i', (req, res) => {
+  res.render("admin/addproduct", { header: true, adminheader: true, })
+})
+router.get('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', (req, res) => {
+  res.render('admin/editproduct', { header: true, adminheader: true, })
+})
+router.post("/dVM217UcHzCpO4dr6mshiNbxLqTu1i", (req, res) => {
+  console.log(req.body);
+  console.log(req.files)
+  res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+})
 module.exports = router;
