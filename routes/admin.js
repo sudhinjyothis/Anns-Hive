@@ -6,7 +6,7 @@ var Handlebars = require("handlebars");
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
+  res.render("admin/dashboard");
 });
 
 module.exports = router;
