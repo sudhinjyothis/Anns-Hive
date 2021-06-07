@@ -3921,6 +3921,16 @@ a.read-more-btn2.btn:hover {
     overflow: auto;
     margin-top: 6px;
   }
+  @keyframes navbarslide {
+    from{
+      opacity: 0;
+      transform: translateX(345px);
+    }to{
+      opacity: 1;
+      transform: none;
+      margin-top: 10px;
+    }
+  }
 
   .w3l-banner-slider-main div#navbarSupportedContent:before {
     content: '';
@@ -7679,7 +7689,7 @@ iframe {
 
 @media all and (max-width: 1080px) {
   .features-4 .features4-grid h5 a {
-    font-size: 16px;
+    font-size: 13px;
     line-height: 20px;
     margin: 0px 0 10px 0;
   }
@@ -12577,6 +12587,15 @@ input[type="button"].btn-block {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+  align-items: center;
+  animation: navbartexttrans .5s forwards;
+}
+@keyframes navbartexttrans {
+  from{
+    opacity: 0;
+  }to{
+    opacity: 1;
+  }
 }
 
 .navbar-nav .nav-link {
@@ -19070,11 +19089,23 @@ a.text-dark:focus {
   margin-top: 5px;
   margin-left: -10px;
   border-radius: 10px;
+  animation: fadein forwards .5s;
 }
 .dropdownmenu{
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: fadein forwards .5s;
+}
+
+@keyframes fadein {
+  from{
+    opacity: 0;
+  }to{
+    opacity: 1;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
 .dropdownmenu a{
   margin: 5px;
