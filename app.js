@@ -7,8 +7,7 @@ var hbs = require("express-handlebars")
 var fileUpload = require("express-fileupload")
 var db = require("./config/connection")
 
-var userRouter = require('./routes/users');
-var adminRouter = require('./routes/admin');
+var Router = require('./routes/router');
 
 var app = express();
 var session = require("express-session")
@@ -33,8 +32,7 @@ db.connect((err) => {
   if (err) console.log("connection error" + err)
   else console.log("connection successfull to port 27017");
 })
-app.use('/', userRouter);
-app.use('/admin', adminRouter);
+app.use('/', Router);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

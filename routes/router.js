@@ -49,5 +49,11 @@ router.get('/contact', (req, res) => {
 router.get('/signin', (req, res) => {
   res.render("users/signin", { header: true })
 })
+router.get('/admin', function (req, res, next) {
+  res.render("admin/dashboard", { header: true, headerblack: true, adminheader: true });
+});
+router.get('/products', (req, res) => {
+  res.render("admin/products", { header: true, adminheader: true, headerblack: true, childroute: true })
+})
 
 module.exports = router;
