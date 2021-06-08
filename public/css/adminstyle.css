@@ -4740,3 +4740,19 @@ ul.dropdown-menu {
         height: 100%;
     }
 }
+.imgwarningtext{
+    margin-bottom: 10px;
+    display: none;
+    opacity: 0;
+}
+.imgwarningtext-show{
+    display: block;
+    animation: warningtxt .5s ease forwards;
+}
+@keyframes warningtxt {
+    from{
+        opacity: 0;
+    }to{
+        opacity: 1;
+    }
+}

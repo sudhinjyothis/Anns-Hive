@@ -55,7 +55,7 @@ router.get('/admin', function (req, res, next) {
 });
 router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', async (req, res) => {
   let products = await productHelper.getAllProducts()
-  res.render("admin/products", { header: true, adminheader: true, products })
+  res.render("admin/products", { header: true, adminheader: true, products, jpegErr: false })
 })
 router.get('/dVM217UcHzCpO4dr6mshiNbxLqTu1i', (req, res) => {
   res.render("admin/addproduct", { header: true, adminheader: true, })
@@ -67,29 +67,36 @@ router.get('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
 // editing a product
 router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
   productHelper.updateProduct(req.query.id, req.body)
+  var jpegErr = false
   try {
     try {
       var tempImage1 = req.files.productImage1
       if (tempImage1.mimetype === "image/jpeg") {
         tempImage1.mv("./public/images/products/" + req.query.id + ".jpg")
+      } else {
+        jpegErr = true
       }
     } catch (err) { console.log(err); }
     try {
       var tempImage2 = req.files.productImage2
       if (tempImage2.mimetype === "image/jpeg") {
         tempImage2.mv("./public/images/products/" + req.query.id + "1" + ".jpg")
+      } else {
+        jpegErr = true
       }
     } catch { }
     try {
       var tempImage3 = req.files.productImage3
       if (tempImage3.mimetype === "image/jpeg") {
         tempImage3.mv("./public/images/products/" + req.query.id + "2" + ".jpg")
+      } else {
+        jpegErr = true
       }
     } catch { }
-    res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+    res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', jpegErr)
   }
   catch (err) {
-    res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+    res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', jpegErr)
     console.log(err);
   }
 })

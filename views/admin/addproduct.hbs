@@ -26,32 +26,42 @@
                         <input type="text" class="form-control" name="productCategory" id="productcategory">
                     </div>
                     <div class="col-md-6 col-12">
-                        <img src="" alt="img" alt="" style="margin-top: 10px;width: 100px;height: 100px;" id="imgView">
+                        <img class="text-warning" src="" alt="please upload jpg"
+                            style="margin-top: 10px;width: 100px;height: 100px;" id="imgView">
                     </div>
                     <div class="col-md-6 col-12">
+                        <span id="imgwarningtext" for="" class="text-danger imgwarningtext">please upload jpg
+                            files!</span>
                         <label for="" class="form-label">image1 <span class="text-warning">(recommended file type :
                                 jpeg)</span></label>
                         <input onchange="viewImage(event)" type="file" class="form-control" name="productImage1"
                             id="productimage1">
                     </div>
                     <div class="col-md-6 col-12">
-                        <img src="" alt="img" alt="" style="margin-top: 10px;width: 100px;height: 100px;" id="imgView1">
+                        <img class="text-warning" src="" alt="please upload jpg"
+                            style="margin-top: 10px;width: 100px;height: 100px;" id="imgView1">
                     </div>
                     <div class="col-12 col-md-6">
+                        <span id="imgwarningtext1" for="" class="text-danger imgwarningtext">please upload jpg
+                            files!</span>
                         <label for="" class="form-label">image2</label>
                         <input onchange="viewImage1(event)" type="file" class="form-control" name="productImage2"
                             id="productimage2" placeholder="1234 Main St">
                     </div>
                     <div class="col-md-6 col-12">
-                        <img src="" alt="img" alt="" style="margin-top: 10px;width: 100px;height: 100px;" id="imgView2">
+                        <img class="text-warning" src="" alt="please upload jpg"
+                            style="margin-top: 10px;width: 100px;height: 100px;" id="imgView2">
                     </div>
                     <div class="col-md-6 col-12">
+                        <span id="imgwarningtext2" for="" class="text-danger imgwarningtext">please upload jpg
+                            files!</span>
                         <label for="" class="form-label">image 3</label>
                         <input onchange="viewImage2(event)" type="file" class="form-control" name="productImage3"
                             id="productimage3">
                     </div>
                     <div class="col-12">
-                        <button style="margin-bottom: 10px;" type="submit" class="btn btn-outline-warning">Add
+                        <button id="imgwarningbtn" style="margin-bottom: 10px;" type="submit"
+                            class="btn btn-outline-warning ">Add
                             Product</button>
                     </div>
                 </form>
