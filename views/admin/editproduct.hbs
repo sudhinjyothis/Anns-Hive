@@ -7,51 +7,55 @@
             </h5>
             <div class="signbg bg p-md-5 p-4 mx-auto mw-100">
                 <!--/SignUp-form-->
-                <form class="row g-3">
+                <form action="/SCmVRbJpEXjopyOHKFMaWTunotqPBj?id={{product._id}}" method="POST"
+                    enctype="multipart/form-data" class="row g-3">
                     <div class="col-md-6 col-6">
-                        <label for="inputEmail4" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="Firstname">
+                        <label for="" class="form-label">Name</label>
+                        <input type="text" class="form-control" name="productName" id="productname"
+                            value="{{product.productName}}">
                     </div>
                     <div class="col-md-6 col-6">
-                        <label for="inputPassword4" class="form-label">Price</label>
-                        <input type="text" class="form-control" id="LastName">
+                        <label for="" class="form-label">Price</label>
+                        <input type="number" class="form-control" name="productPrice" id="productprice"
+                            value="{{product.productPrice}}">
                     </div>
                     <div class="col-md-6 col-12">
-                        <label for="inputEmail4" class="form-label">description</label>
-                        <input type="email" class="form-control" id="inputEmail4">
+                        <label for="" class="form-label">description</label>
+                        <input type="text" class="form-control" name="productDescription" id="productdescription"
+                            value="{{product.productDescription}}">
                     </div>
                     <div class="col-md-6 col-12">
-                        <label for="inputPassword4" class="form-label">Category</label>
-                        <input type="text" class="form-control" id="inputPassword4">
+                        <label for="" class="form-label">Category</label>
+                        <input type="text" class="form-control" name="productCategory" id="productcategory"
+                            value="{{product.productCategory}}">
                     </div>
                     <div class="col-md-6 col-12">
-                        <img src="" alt="img" alt="" style="margin-top: 10px;width: 100px;height: 100px;" id="imgView">
+                        <img src="/images/products/{{product._id}}.jpg" alt="img" alt=""
+                            style="margin-top: 10px;width: 100px;height: 100px;" id="imgView">
                     </div>
                     <div class="col-md-6 col-12">
-                        <label for="inputPassword4" class="form-label">image1</label>
-                        <input onchange="viewImage(event)" type="file" class="form-control" id="inputPassword4">
+                        <label for="" class="form-label">image1<span class="text-warning">(recommended file type :
+                                jpeg)</span></label>
+                        <input onchange="viewImage(event)" type="file" class="form-control" name="productImage1"
+                            id="productimage1">
                     </div>
                     <div class="col-md-6 col-12">
-                        <img src="" alt="img" alt="" style="margin-top: 10px;width: 100px;height: 100px;" id="imgView1">
+                        <img src="/images/products/{{product._id}}1.jpg" alt="img" alt=""
+                            style="margin-top: 10px;width: 100px;height: 100px;" id="imgView1">
                     </div>
                     <div class="col-12 col-md-6">
-                        <label for="inputAddress" class="form-label">image2</label>
-                        <input onchange="viewImage1(event)" type="file" class="form-control" id="inputAddress"
-                            placeholder="1234 Main St">
+                        <label for="" class="form-label">image2</label>
+                        <input onchange="viewImage1(event)" type="file" class="form-control" name="productImage2"
+                            id="productimage2" placeholder="1234 Main St">
                     </div>
                     <div class="col-md-6 col-12">
-                        <img src="" alt="img" alt="" style="margin-top: 10px;width: 100px;height: 100px;" id="imgView2">
+                        <img src="/images/products/{{product._id}}2.jpg" alt=""
+                            style="margin-top: 10px;width: 100px;height: 100px;" id="imgView2">
                     </div>
                     <div class="col-md-6 col-12">
-                        <label for="inputCity" class="form-label">image 3</label>
-                        <input onchange="viewImage2(event)" type="file" class="form-control" id="inputCity">
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <img src="" alt="img" alt="" style="margin-top: 10px;width: 100px;height: 100px;" id="imgView3">
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <label for="inputState" class="form-label">image 4</label>
-                        <input onchange="viewImage3(event)" type="file" class="form-control" id="inputCity">
+                        <label for="" class="form-label">image 3</label>
+                        <input onchange="viewImage2(event)" type="file" class="form-control" name="productImage3"
+                            id="productimage3">
                     </div>
                     <div class="col-12">
                         <button style="margin-bottom: 10px;" type="submit" class="btn btn-outline-warning">Edit

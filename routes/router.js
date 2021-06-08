@@ -3,11 +3,11 @@ var router = express.Router();
 var productHelper = require("../helpers/product-helpers")
 var userHelper = require("../helpers/user-helper");
 var Handlebars = require("handlebars");
+const { response } = require('express');
 /* GET home page. */
 router.get('/', async (req, res) => {
-  await productHelper.getAllProducts().then((products) => {
-    res.render('users/index', { home: true, footer: true, products })
-  })
+  let products = await productHelper.getAllProducts()
+  res.render('users/index', { home: true, footer: true, products })
 })
 router.get('/signup', (req, res) => {
   var indian_states = [
@@ -53,57 +53,79 @@ router.get('/signin', (req, res) => {
 router.get('/admin', function (req, res, next) {
   res.render("admin/dashboard", { header: true, adminheader: true });
 });
-router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', (req, res) => {
-  res.render("admin/products", { header: true, adminheader: true, })
+router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', async (req, res) => {
+  let products = await productHelper.getAllProducts()
+  res.render("admin/products", { header: true, adminheader: true, products })
 })
 router.get('/dVM217UcHzCpO4dr6mshiNbxLqTu1i', (req, res) => {
   res.render("admin/addproduct", { header: true, adminheader: true, })
 })
-router.get('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', (req, res) => {
-  res.render('admin/editproduct', { header: true, adminheader: true, })
+router.get('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
+  let product = await productHelper.getOneProducts(req.query.id)
+  res.render('admin/editproduct', { header: true, adminheader: true, product })
+})
+// editing a product
+router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
+  productHelper.updateProduct(req.query.id, req.body)
+  try {
+    try {
+      var tempImage1 = req.files.productImage1
+      if (tempImage1.mimetype === "image/jpeg") {
+        tempImage1.mv("./public/images/products/" + req.query.id + ".jpg")
+      }
+    } catch { }
+    try {
+      var tempImage2 = req.files.productImage2
+      if (tempImage2.mimetype === "image/jpeg") {
+        tempImage2.mv("./public/images/products/" + req.query.id + "1" + ".jpg")
+      }
+    } catch { }
+    try {
+      var tempImage3 = req.files.productImage3
+      if (tempImage3.mimetype === "image/jpeg") {
+        tempImage3.mv("./public/images/products/" + req.query.id + "2" + ".jpg")
+      }
+    } catch { }
+    res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+  }
+  catch (err) {
+    res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+  }
 })
 // adding a product
 router.post("/dVM217UcHzCpO4dr6mshiNbxLqTu1i", async (req, res) => {
   await productHelper.addProduct(req.body).then((id) => {
-    console.log(req.files.productImage2.mimetype);
     try {
-      var flag = 0
-      var tempImage1 = req.files.productImage1
-      if (tempImage1.mimetype === "image/jpeg") {
-        tempImage1.mv("./public/images/products/" + id + ".jpg", (err, done) => {
-          if (err) {
-            console.log(err);
-            flag += 1
-          }
-        })
-      }
-      var tempImage2 = req.files.productImage2
-      if (tempImage2.mimetype === "image/jpeg") {
-        tempImage2.mv("./public/images/products/" + id + "1" + ".jpg", (err, done) => {
-          if (err) {
-            flag += 1
-            console.log(err);
-          }
-        })
-      }
-      var tempImage3 = req.files.productImage3
-      if (tempImage3.mimetype === "image/jpeg") {
-        tempImage3.mv("./public/images/products/" + id + "2" + ".jpg", (err, done) => {
-          if (err) {
-            flag += 1
-            res.redirect('/dVM217UcHzCpO4dr6mshiNbxLqTu1i')
-          }
-        })
-      }
-      if (flag == 0) {
-        res.redirect('/dVM217UcHzCpO4dr6mshiNbxLqTu1i')
-      } else {
-        console.log("err");
-      }
+      try {
+        var tempImage1 = req.files.productImage1
+        if (tempImage1.mimetype === "image/jpeg") {
+          tempImage1.mv("./public/images/products/" + id + ".jpg")
+        }
+      } catch { }
+      try {
+        var tempImage2 = req.files.productImage2
+        if (tempImage2.mimetype === "image/jpeg") {
+          tempImage2.mv("./public/images/products/" + id + "1" + ".jpg")
+        }
+      } catch { }
+      try {
+        var tempImage3 = req.files.productImage3
+        if (tempImage3.mimetype === "image/jpeg") {
+          tempImage3.mv("./public/images/products/" + id + "2" + ".jpg")
+        }
+      } catch { }
+      res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
     }
     catch (err) {
-      console.log(err);
+      res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
     }
   })
 })
+
+router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwYdelete', (req, res) => {
+  productHelper.deleteProduct(req.query.id).then(() => {
+    res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+  })
+})
+
 module.exports = router;

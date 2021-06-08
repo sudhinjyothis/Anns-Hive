@@ -6,7 +6,7 @@ const objectID = require("mongodb").ObjectID
 module.exports = {
     addProduct: (product) => {
         return new promise((resolve, reject) => {
-            db.get().collection(collection.PRODUCTS_COLLECTION).insertOne(product).then((data) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data) => {
                 resolve(data.ops[0]._id)
             })
         })
@@ -35,10 +35,10 @@ module.exports = {
         return new promise((resolve, reject) => {
             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objectID(proId) }, {
                 $set: {
-                    name: proDetails.name,
-                    description: proDetails.description,
-                    price: proDetails.price,
-                    category: proDetails.category
+                    productName: proDetails.productName,
+                    productDescription: proDetails.productDescription,
+                    productPrice: proDetails.productPrice,
+                    productCategory: proDetails.productCategory
                 }
             }).then((response) => {
                 resolve()

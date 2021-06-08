@@ -24,20 +24,28 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each products}}
                     <tr>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td><img src="/images/products/categories/categories1.jpg" alt=""
-                                style="height: 50px;width:50px;"></td>
+                        <td>{{this.productName}}</td>
+                        <td>{{this.productCategory}}</td>
+                        <td><img src="/images/products/{{this._id}}.jpg" alt="" style="height: 50px;width:50px;"></td>
                         </td>
                         <td style="display: flex;padding: 16px;">
-                            <a href="/SCmVRbJpEXjopyOHKFMaWTunotqPBj" style="color: aliceblue;"
+                            <a href="/SCmVRbJpEXjopyOHKFMaWTunotqPBj?id={{this._id}}" style="color: aliceblue;"
                                 class="btn btn-outline-warning">Edit</a>
-                            <a style="color: aliceblue;margin-left: 10px;" class="btn btn-outline-danger">delete</a>
+                            <a href="/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwYdelete?id={{this._id}}"
+                                onclick="return confirm('Are you sure want to delete {{this.productName}}')"
+                                style="color: aliceblue;margin-left: 10px;" class="btn btn-outline-danger">delete</a>
                         </td>
                     </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>
     </div>
 </section>
+<script>
+    function delete (){
+
+    }
+</script>
