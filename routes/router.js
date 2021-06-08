@@ -73,7 +73,7 @@ router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
       if (tempImage1.mimetype === "image/jpeg") {
         tempImage1.mv("./public/images/products/" + req.query.id + ".jpg")
       }
-    } catch { }
+    } catch (err) { console.log(err); }
     try {
       var tempImage2 = req.files.productImage2
       if (tempImage2.mimetype === "image/jpeg") {
@@ -90,6 +90,7 @@ router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
   }
   catch (err) {
     res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+    console.log(err);
   }
 })
 // adding a product
@@ -101,7 +102,7 @@ router.post("/dVM217UcHzCpO4dr6mshiNbxLqTu1i", async (req, res) => {
         if (tempImage1.mimetype === "image/jpeg") {
           tempImage1.mv("./public/images/products/" + id + ".jpg")
         }
-      } catch { }
+      } catch (err) { console.log(err); }
       try {
         var tempImage2 = req.files.productImage2
         if (tempImage2.mimetype === "image/jpeg") {
@@ -117,6 +118,7 @@ router.post("/dVM217UcHzCpO4dr6mshiNbxLqTu1i", async (req, res) => {
       res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
     }
     catch (err) {
+      console.log(err);
       res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
     }
   })
