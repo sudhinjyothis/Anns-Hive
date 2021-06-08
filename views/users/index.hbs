@@ -98,7 +98,7 @@
                 <div class="col-lg-2 col-md-4 col-3 welcome-image">
                     <div class="boxhny13">
                         <a href="#URL">
-                            <img src="images/categories1.jpg" class="img-fluid" alt="" />
+                            <img src="images/products/categories/categories1.jpg" class="img-fluid" alt="" />
                             <div class="boxhny-content">
                                 <h3 class="title">Shop Now
                             </div>
@@ -111,7 +111,7 @@
                 <div class="col-lg-2 col-md-4 col-3 welcome-image">
                     <div class="boxhny13">
                         <a href="#URL">
-                            <img src="images/categories2.jpg" class="img-fluid" alt="" />
+                            <img src="images/products/categories/categories2.jpg" class="img-fluid" alt="" />
                             <div class="boxhny-content">
                                 <h3 class="title">Shop Now</h3>
                             </div>
@@ -125,7 +125,7 @@
                 <div class="col-lg-2 col-md-4 col-3 welcome-image">
                     <div class="boxhny13">
                         <a href="#URL">
-                            <img src="images/categories3.jpg" class="img-fluid" alt="" />
+                            <img src="images/products/categories/categories3.jpg" class="img-fluid" alt="" />
                             <div class="boxhny-content">
                                 <h3 class="title">Shop Now</h3>
                             </div>
@@ -138,7 +138,7 @@
                 <div class="col-lg-2 col-md-4 col-3 welcome-image">
                     <div class="boxhny13">
                         <a href="#URL">
-                            <img src="images/categories4.jpg" class="img-fluid" alt="" />
+                            <img src="images/products/categories/categories4.jpg" class="img-fluid" alt="" />
                             <div class="boxhny-content">
                                 <h3 class="title">Shop Now</h3>
                             </div>
@@ -150,7 +150,7 @@
                 <div class="col-lg-2 col-md-4 col-3 welcome-image">
                     <div class="boxhny13">
                         <a href="#URL">
-                            <img src="images/categories5.jpg" class="img-fluid" alt="" />
+                            <img src="images/products/categories/categories5.jpg" class="img-fluid" alt="" />
                             <div class="boxhny-content">
                                 <h3 class="title">Shop Now</h3>
                             </div>
@@ -164,7 +164,7 @@
                 <div class="col-lg-2 col-md-4 col-3 welcome-image">
                     <div class="boxhny13">
                         <a href="#URL">
-                            <img src="images/categories6.jpg" class="img-fluid" alt="" />
+                            <img src="images/products/categories/categories6.jpg" class="img-fluid" alt="" />
                             <div class="boxhny-content">
                                 <h3 class="title">Shop Now</h3>
                             </div>
@@ -189,11 +189,12 @@
         <div class="container py-lg-5">
             <div class="ecom-products-grids row mt-lg-5 mt-3">
                 <div class="col-lg-3 col-6 product-incfhny mt-4">
+                    {{#each products}}
                     <div class="product-grid2 transmitv">
                         <div class="product-image2">
                             <a href="#">
-                                <img class="pic-1 img-fluid" src="images/products.jpg">
-                                <img class="pic-2 img-fluid" src="images/products1.jpg">
+                                <img class="pic-1 img-fluid" src="images/products/{{this._id}}.jpg">
+                                <img class="pic-2 img-fluid" src="images/products/{{this._id}}1.jpg">
                             </a>
                             <ul class="social">
                                 <li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
@@ -202,22 +203,17 @@
                                 </li>
                             </ul>
                             <div class="transmitv single-item">
-                                <form action="#" method="post">
-                                    <input type="hidden" name="cmd" value="_cart">
-                                    <input type="hidden" name="add" value="1">
-                                    <input type="hidden" name="transmitv_item" value="Women Maroon Top">
-                                    <input type="hidden" name="amount" value="899.99">
-                                    <button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
-                                        Add to Cart
-                                    </button>
-                                </form>
+                                <button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
+                                    Add to Cart
+                                </button>
                             </div>
                         </div>
                         <div class="product-content">
-                            <h3 class="title"><a href="#">Dream catcher </a></h3>
-                            <span class="price"><del>₹2000</del>₹999</span>
+                            <h3 class="title"><a href="#">{{this.productName}} </a></h3>
+                            <span class="price"><del>₹2000</del>{{this.productPrice}}</span>
                         </div>
                     </div>
+                    {{/each}}
                 </div>
 
             </div>
