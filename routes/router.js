@@ -4,9 +4,10 @@ var productHelper = require("../helpers/product-helpers")
 var userHelper = require("../helpers/user-helper");
 var Handlebars = require("handlebars");
 const { response } = require('express');
+const { data } = require('jquery');
 /* GET home page. */
 router.get('/', async (req, res) => {
-  let products = await productHelper.getAllProducts()
+  let products = await productHelper.getLimitedProducts(2)
   res.render('users/index', { home: true, footer: true, products })
 })
 router.get('/signup', (req, res) => {
@@ -50,12 +51,20 @@ router.get('/contact', (req, res) => {
 router.get('/signin', (req, res) => {
   res.render("users/signin", { header: true })
 })
+router.post('/signup', (req, res) => {
+  userHelper.doSignup(req.body).then((data) => {
+    console.log(data);
+    res.redirect('/')
+  })
+})
+
+// admin routes start
 router.get('/admin', function (req, res, next) {
   res.render("admin/dashboard", { header: true, adminheader: true });
 });
 router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', async (req, res) => {
   let products = await productHelper.getAllProducts()
-  res.render("admin/products", { header: true, adminheader: true, products, jpegErr: false })
+  res.render("admin/products", { header: true, adminheader: true, products })
 })
 router.get('/dVM217UcHzCpO4dr6mshiNbxLqTu1i', (req, res) => {
   res.render("admin/addproduct", { header: true, adminheader: true, })
@@ -136,5 +145,8 @@ router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwYdelete', (req, res) => {
     res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
   })
 })
-
+router.get('/WAQURo05NjNlVfQI92MBh6qnqeV5JE', (req, res) => {
+  res.render('admin/inbox', { header: true, adminheader: true })
+})
+// admin routes end
 module.exports = router;

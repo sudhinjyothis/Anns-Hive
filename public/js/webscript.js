@@ -51,3 +51,9 @@ $(function () {
 $(function () {
     $('#orderTable').DataTable();
 })
+function mailMessage() {
+    document.getElementById('mailMessage').classList.toggle('showMailMessage')
+}
+function mailMessage1() {
+    document.getElementById('mailMessage1').classList.toggle('showMailMessage')
+}

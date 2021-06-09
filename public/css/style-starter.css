@@ -18998,7 +18998,7 @@ a.text-dark:focus {
 }
 @media (max-width:767px) {
   .signuptext{
-    padding-top: 100px;
+    padding-top: 115px;
   }
   .signupcontainer{
     height: 112vh;

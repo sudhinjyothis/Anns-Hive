@@ -6,8 +6,8 @@ const objectId = require("mongodb").ObjectID
 const { response } = require("express")
 const Razorpay = require('razorpay')
 var instance = new Razorpay({
-    key_id: 'rzp_test_J0kuymP1v1hFM0',
-    key_secret: 'EkyokO6IoBrCEpXyJ9UrFesb',
+    key_id: process.env.RAZORPAY_KEYID,
+    key_secret: process.env.RAZORPAY_SECRET,
 });
 module.exports = {
     doSignup: (userdata) => {

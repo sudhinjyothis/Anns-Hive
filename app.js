@@ -6,6 +6,7 @@ var logger = require('morgan');
 var hbs = require("express-handlebars")
 var fileUpload = require("express-fileupload")
 var db = require("./config/connection")
+require('dotenv').config()
 
 var Router = require('./routes/router');
 

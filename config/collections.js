@@ -1,6 +1,6 @@
 module.exports = {
     PRODUCT_COLLECTION: "products",
-    USERS_COLLECTION: "users",
+    USER_COLLECTION: "users",
     CART_COLLECTION: "cart",
-    ORDERS_COLLECTION: "orders"
+    ORDER_COLLECTION: "orders"
 }

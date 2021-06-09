@@ -5,8 +5,8 @@ const state = {
 
 module.exports.connect = function (done) {
     const url = "mongodb+srv://annshive:sin30equaltocos60@cluster0.2ilxg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-    const devurl = "mongodb://localhost:27017"
-    const dbname = "annshive"
+    const devurl = process.env.MONGODB_URL
+    const dbname = process.env.MONGODB_DB
     mongoClient.connect(devurl, { useUnifiedTopology: true }, (err, data) => {
         if (err) return done(err)
         state.db = data.db(dbname)
