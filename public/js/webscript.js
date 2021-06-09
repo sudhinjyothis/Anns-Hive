@@ -45,3 +45,9 @@ function viewImage2(event) {
         document.getElementById("imgwarningbtn").classList.add("disabled")
     }
 }
+$(function () {
+    $('#productTable').DataTable();
+})
+$(function () {
+    $('#orderTable').DataTable();
+})

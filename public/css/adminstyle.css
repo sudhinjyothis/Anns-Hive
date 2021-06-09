@@ -4756,3 +4756,19 @@ ul.dropdown-menu {
         opacity: 1;
     }
 }
+.dataTables_wrapper label{
+    color: #adb5bd;
+    margin-top: 10px;
+}
+.dataTables_wrapper .dataTables_length select{
+    color: #adb5bd;
+}
+.dataTables_wrapper .dataTables_filter input{
+    color: #adb5bd;
+}
+.dataTables_wrapper .dataTables_paginate{
+    padding-top: 1.25em;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{
+    color: #adb5bd;
+}
