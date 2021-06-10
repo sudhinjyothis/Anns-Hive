@@ -1,86 +1,71 @@
 <section class="w3l-banner-slider-main">
-    <div class="inner-block">
-        <!--market updates updates-->
-        <div class="row market-updates" style="display: flex;">
-            <div class="col-md-4 col-4 market-update-gd">
-                <div class="market-update-block clr-block-1">
-                    <div class="col-md-4 market-update-left">
-                        <h3>83</h3>
-                        <h4>Users</h4>
-                    </div>
-                    <div class="col-md-4 market-update-right">
-                        <i class="fa fa-file-text-o"> </i>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-md-4 col-4 market-update-gd">
-                <div class="market-update-block clr-block-2">
-                    <div class="col-md-8 market-update-left">
-                        <h3>135</h3>
-                        <h4>Orders</h4>
-                    </div>
-                    <div class="col-md-4 market-update-right">
-                        <div class="shoppingcarticon">
-                            <i style="text-align: center;" class="fa fa-shopping-cart"> </i>
+    <div class="inboxcontainer">
+        {{!-- user tracking --}}
+        <div class="container">
+            <div class="usertracking">
+                <div class="row">
+                    <div class="totalusers signbg col-md-3">
+                        <h2>Users</h2>
+                        <span>25</span>
+                        <div class="logo">
+                            <i class="fa fa-user"></i>
                         </div>
-
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-4 market-update-gd">
-                <div class="market-update-block clr-block-3">
-                    <div class="col-md-8 market-update-left">
-                        <h3>23</h3>
-                        <h4>Messages</h4>
+                    <div class="ordertracking signbg col-md-3">
+                        <h2>Orders</h2>
+                        <span>25</span>
+                        <div class="logo">
+                            <i class="fa fa-cart-arrow-down"></i>
+                        </div>
                     </div>
-                    <div class="col-md-4 market-update-right">
-                        <i class="fa fa-envelope-o"> </i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--market updates end here-->
-        <!--mainpage chit-chating-->
-        <div class="chit-chat-layer1">
-            <div class="col-md-12 chit-chat-layer1-left">
-                <div class="work-progres">
-                    <div class="chit-chat-heading">
-                        Recent Orders
-                    </div>
-                    <div class="signbg">
-                        <div class="table-responsive">
-                            <table id="orderTable" class="table table-sm table-hover table-dark">
-                                <thead>
-                                    <tr>
-                                        <th>Order Id</th>
-                                        <th>Date</th>
-                                        <th>User</th>
-                                        <th>Address</th>
-                                        <th>Status</th>
-                                        <th>options</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>#asdas1</td>
-                                        <td>02/02/2021</td>
-                                        <td>name</td>
-                                        <td>thissur</td>
-                                        <td>delivered</td>
-                                        <td style="display: flex;padding: 16px;">
-                                            <button class="btn btn-outline-warning">finished</button>
-                                            <button style="margin-left: 10px;"
-                                                class="btn btn-outline-success">Delivered</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="messagetracking signbg col-md-3">
+                        <h2>Inbox</h2>
+                        <span>no unread</span>
+                        <div class="logo">
+                            <i class="fa fa-envelope"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--climate end here-->
+        <div class="orderstable">
+            <div class="container">
+                <div class="col-md-12 ">
+                    <div class="work-progres">
+                        <div class="orderstitle">
+                            <h2>Recent Orders</h2>
+                        </div>
+                        <div class="signbg">
+                            <div class="table-responsive">
+                                <table id="orderTable" class="table table-sm table-hover table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th>Order Id</th>
+                                            <th>Date</th>
+                                            <th>User</th>
+                                            <th>Address</th>
+                                            <th>Status</th>
+                                            <th>options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#asdas1</td>
+                                            <td>02/02/2021</td>
+                                            <td>name</td>
+                                            <td>thissur</td>
+                                            <td>delivered</td>
+                                            <td style="display: flex;padding: 16px;">
+                                                <a href="" class="btn btn-outline-warning text-warning">Track</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>

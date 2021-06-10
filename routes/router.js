@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 var productHelper = require("../helpers/product-helpers")
 var userHelper = require("../helpers/user-helper");
+var html = require("../helpers/html");
 var Handlebars = require("handlebars");
-const { response } = require('express');
-const { data } = require('jquery');
+var sendmail = require("../helpers/sendmail")
+
 /* GET home page. */
 router.get('/', async (req, res) => {
   let products = await productHelper.getLimitedProducts(2)
@@ -51,10 +52,11 @@ router.get('/contact', (req, res) => {
 router.get('/signin', (req, res) => {
   res.render("users/signin", { header: true })
 })
-router.post('/signup', (req, res) => {
-  userHelper.doSignup(req.body).then((data) => {
+router.post('/signup', async (req, res) => {
+  userHelper.doSignup(req.body).then(async (data) => {
     console.log(data);
     res.redirect('/')
+    sendmail.sendMail(req.body.email, "hii").then(result => console.log(result))
   })
 })
 

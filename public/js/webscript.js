@@ -9,7 +9,6 @@ function viewImage(event) {
             warntext1 = false
             document.getElementById("imgwarningbtn").classList.remove("disabled")
         }
-
     } else {
         warntext1 = true
         document.getElementById("imgwarningtext").classList.add("imgwarningtext-show")
