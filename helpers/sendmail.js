@@ -1,24 +1,29 @@
 const nodemailer = require("nodemailer");
 const { google } = require('googleapis')
 const html = require('../helpers/html')
-const CLIENT_ID = '62378267994-dai1c0b351e5ntdme58ag67t4uc4ghjn.apps.googleusercontent.com'
-const CLIENT_SECRET = '0ptpZUBs2rIQMDrrTdqSfhzI'
+const CLIENT_ID = process.env.GMAIL_CLIENT_ID
+const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET
 const REDIRECT_URI = 'https://developers.google.com/oauthplayground'
-const REFRESH_TOKEN = '1//04dNZbEj5fVhOCgYIARAAGAQSNwF-L9Irn_fu3j4hO9xem4o8lZUYs5IKSIutPou_olpvU25XdtHo3ALYZxP6WFIW-qBLgkf4MNw'
+const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
 module.exports = {
     sendMail: async (mailId, verifyToken) => {
         try {
-
+            const accessToken = oAuth2Client.getAccessToken()
             const transport = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'octanesj@gmail.com',
-                    pass: 'tan30equaltocot60'
-
+                    type: 'OAuth2',
+                    user: 'sudhinjyothis@gmail.com',
+                    clientId: CLIENT_ID,
+                    clientSecret: CLIENT_SECRET,
+                    refreshToken: REFRESH_TOKEN,
+                    accessToken: accessToken
                 }
             })
             const mailOptions = {
-                from: 'octanesj@gmail.com',
+                from: 'Sudhinjyothis<sudhinjyothis@gmail.com>',
                 to: mailId,
                 subject: 'hello',
                 text: verifyToken,
