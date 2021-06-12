@@ -50,5 +50,11 @@ module.exports = {
             let product = await db.get().collection(collection.PRODUCT_COLLECTION).find().limit(limit).toArray()
             resolve(product)
         })
+    },
+    getLimitedRandomProducts: (limit) => {
+        return new promise(async (resolve, reject) => {
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([{ $sample: { size: limit } }]).toArray()
+            resolve(product)
+        })
     }
 }

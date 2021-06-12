@@ -13,14 +13,45 @@ module.exports = {
     doSignup: (userdata) => {
         return new Promise(async (resolve, reject) => {
             userdata.password = await bcrypt.hash(userdata.password, 10)
-            db.get().collection(collection.USER_COLLECTION).insertOne(userdata).then((data) => {
+            db.get().collection(collection.USER_COLLECTION).insertOne(
+                {
+                    firstname: userdata.firstname,
+                    lastname: userdata.lastname,
+                    email: userdata.email,
+                    password: userdata.password,
+                    isVerified: false
+
+                }
+            ).then((data) => {
                 resolve(data.ops[0])
             })
         })
     },
+    doSignupGmail: (userdata) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collection.GMAIL_USERS).insertOne(
+                {
+                    firstname: userdata.given_name,
+                    lastname: userdata.family_name,
+                    email: userdata.email,
+                    id: userdata.sub,
+                    isVerified: userdata.email_verified
+                }
+            ).then((data) => {
+                resolve(data.ops[0])
+            })
+        })
+    },
+    doCheckGmail: (userid) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collection.GMAIL_USERS).findOne({ id: userid }).then((data) => {
+                resolve(data)
+            })
+        })
+    }
+    ,
     doLogin: (userdata) => {
         return new Promise(async (resolve, reject) => {
-            let loginStatus = false
             let response = {}
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userdata.email })
             if (user) {

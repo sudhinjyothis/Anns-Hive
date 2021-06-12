@@ -7,9 +7,7 @@ var hbs = require("express-handlebars")
 var fileUpload = require("express-fileupload")
 var db = require("./config/connection")
 require('dotenv').config()
-
 var Router = require('./routes/router');
-
 var app = express();
 var session = require("express-session")
 
@@ -28,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(fileUpload())
-app.use(session({ secret: "Key", cookie: { maxAge: 600000 } }))
+app.use(session({ secret: "de24983a7daf02e8b2fdfba6bd4a8ab4f9ade8bb7c32196bac2444915fece24372c7f6ab7e49a49e8f1f520431a684cb55ccfc4317545579ec3b07129e719d41", cookie: { maxAge: 600000 } }))
 db.connect((err) => {
   if (err) console.log("connection error" + err)
   else console.log("connection successfull to port 27017");

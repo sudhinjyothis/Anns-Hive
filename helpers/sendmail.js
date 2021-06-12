@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const { google } = require('googleapis')
-const html = require('../helpers/html')
+const html = require('./emailHtml')
 const CLIENT_ID = process.env.GMAIL_CLIENT_ID
 const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET
 const REDIRECT_URI = 'https://developers.google.com/oauthplayground'
