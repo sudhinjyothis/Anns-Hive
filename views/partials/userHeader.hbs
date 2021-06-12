@@ -141,20 +141,37 @@
                     <div class="top-right-strip dropdown">
                         <button class="dropdownbtn btn btn-secondary dropdown-toggle" type="button"
                             id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span style="margin-right: 10px;" class="fa fa-user"></span>User
+                            <span style="margin-right: 10px;" class="fa fa-user">
+                            </span>
+                            {{#if user}}
+                            {{user.firstname}}
+                            {{else}}
+                            User
+                            {{/if}}
                         </button>
                         <ul class="dropdownmenushow dropdown-menu dropdown-menu-end"
                             aria-labelledby="dropdownMenuButton1">
                             <div class="dropdownmenu">
+                                {{#if user}}
+                                <a class="" href="/profile">
+                                    My Profile
+                                </a>
+                                <a class=" " href="/mycart">
+                                    My Cart
+                                </a><a class="" href="/signout">
+                                    Sign Out
+                                </a>
+                                {{else}}
                                 <a class="" href="/signup">
                                     Sign Up
                                 </a>
                                 <a class=" " href="/signin">
                                     Sign In
                                 </a>
-                                <a class="" href="">
+                                <a class="" href="/mycart">
                                     My Cart
                                 </a>
+                                {{/if}}
                             </div>
                         </ul>
                     </div>
@@ -228,19 +245,37 @@
                         <div class="top-right-strip dropdown">
                             <button class="dropdownbtn btn btn-secondary dropdown-toggle" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span style="margin-right: 10px;" class="fa fa-user"></span>User
+                                <span style="margin-right: 10px;" class="fa fa-user">
+                                </span>
+                                {{#if user}}
+                                {{user.firstname}}
+                                {{else}}
+                                User
+                                {{/if}}
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                            <ul class="dropdownmenushow dropdown-menu dropdown-menu-end"
+                                aria-labelledby="dropdownMenuButton1">
                                 <div class="dropdownmenu">
+                                    {{#if user}}
+                                    <a class="" href="/profile">
+                                        My Profile
+                                    </a>
+                                    <a class=" " href="/mycart">
+                                        My Cart
+                                    </a><a class="" href="/signout">
+                                        Sign Out
+                                    </a>
+                                    {{else}}
                                     <a class="" href="/signup">
                                         Sign Up
                                     </a>
                                     <a class=" " href="/signin">
                                         Sign In
                                     </a>
-                                    <a class="" href="">
+                                    <a class="" href="/mycart">
                                         My Cart
                                     </a>
+                                    {{/if}}
                                 </div>
                             </ul>
                         </div>
@@ -329,24 +364,41 @@
                         <div class="top-right-strip dropdown">
                             <button class="dropdownbtn btn btn-secondary dropdown-toggle" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span style="margin-right: 10px;" class="fa fa-user"></span>User
+                                <span style="margin-right: 10px;" class="fa fa-user">
+                                </span>
+                                {{#if user}}
+                                {{user.firstname}}
+                                {{else}}
+                                User
+                                {{/if}}
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                            <ul class="dropdownmenushow dropdown-menu dropdown-menu-end"
+                                aria-labelledby="dropdownMenuButton1">
                                 <div class="dropdownmenu">
+                                    {{#if user}}
+                                    <a class="" href="/profile">
+                                        My Profile
+                                    </a>
+                                    <a class=" " href="/mycart">
+                                        My Cart
+                                    </a><a class="" href="/signout">
+                                        Sign Out
+                                    </a>
+                                    {{else}}
                                     <a class="" href="/signup">
                                         Sign Up
                                     </a>
                                     <a class=" " href="/signin">
                                         Sign In
                                     </a>
-                                    <a class="" href="">
+                                    <a class="" href="/mycart">
                                         My Cart
                                     </a>
+                                    {{/if}}
                                 </div>
                             </ul>
                         </div>
                     </div>
-                </div>
             </header>
             <div class="breadcrumb-contentnhy">
                 <div class="container">

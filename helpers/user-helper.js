@@ -12,30 +12,36 @@ var instance = new Razorpay({
 module.exports = {
     doSignup: (userdata) => {
         return new Promise(async (resolve, reject) => {
-            userdata.password = await bcrypt.hash(userdata.password, 10)
-            db.get().collection(collection.USER_COLLECTION).insertOne(
-                {
-                    firstname: userdata.firstname,
-                    lastname: userdata.lastname,
-                    email: userdata.email,
-                    password: userdata.password,
-                    isVerified: false
+            if (userdata.password) {
+                userdata.password = await bcrypt.hash(userdata.password, 10)
+                db.get().collection(collection.USER_COLLECTION).insertOne(
+                    {
+                        firstname: userdata.firstname,
+                        lastname: userdata.lastname,
+                        email: userdata.email,
+                        password: userdata.password,
+                        isVerified: false,
+                        gmailLogin: false
 
-                }
-            ).then((data) => {
-                resolve(data.ops[0])
-            })
+                    }
+                ).then((data) => {
+                    resolve(data.ops[0])
+                })
+            } else {
+                resolve({ err: true })
+            }
         })
     },
     doSignupGmail: (userdata) => {
         return new Promise(async (resolve, reject) => {
-            db.get().collection(collection.GMAIL_USERS).insertOne(
+            db.get().collection(collection.USER_COLLECTION).insertOne(
                 {
                     firstname: userdata.given_name,
                     lastname: userdata.family_name,
                     email: userdata.email,
                     id: userdata.sub,
-                    isVerified: userdata.email_verified
+                    isVerified: userdata.email_verified,
+                    gmailLogin: true
                 }
             ).then((data) => {
                 resolve(data.ops[0])
@@ -44,7 +50,7 @@ module.exports = {
     },
     doCheckGmail: (userid) => {
         return new Promise(async (resolve, reject) => {
-            db.get().collection(collection.GMAIL_USERS).findOne({ id: userid }).then((data) => {
+            db.get().collection(collection.USER_COLLECTION).findOne({ id: userid }).then((data) => {
                 resolve(data)
             })
         })
@@ -53,7 +59,7 @@ module.exports = {
     doLogin: (userdata) => {
         return new Promise(async (resolve, reject) => {
             let response = {}
-            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userdata.email })
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userdata.email, gmailLogin: false })
             if (user) {
                 bcrypt.compare(userdata.password, user.password).then((status) => {
                     if (status) {
@@ -70,6 +76,18 @@ module.exports = {
             }
         })
     },
+    checkEmailExist: (email) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).findOne({ email: email }).then((data) => {
+                if (data) {
+                    resolve({ status: true })
+                } else {
+                    resolve({ status: false })
+                }
+            })
+        })
+    }
+    ,
     addToCart: (proId, userId) => {
         let proObj = {
             item: objectId(proId),

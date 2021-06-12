@@ -6,13 +6,30 @@ var Handlebars = require("handlebars");
 var sendmail = require("../helpers/sendmail");
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
+
+// middlewares
+function activeuser(req, res, next) {
+  if (req.session.user) {
+    next()
+  } else {
+    res.redirect('/signin')
+  }
+}
+function checkusersignin(req, res, next) {
+  if (req.session.user) {
+    res.redirect('/')
+  } else {
+    next()
+  }
+}
+
 /* GET home page. */
 router.get('/', async (req, res) => {
   let products = await productHelper.getLimitedRandomProducts(2)
-  console.log(req.session.gdata);
-  res.render('users/index', { home: true, footer: true, products })
+  let user = req.session.user
+  res.render('users/index', { home: true, footer: true, products, user })
 })
-router.get('/signup', (req, res) => {
+router.get('/signup', checkusersignin, (req, res) => {
   var indian_states = [
     'Arunachal Pradesh',
     'Assam',
@@ -45,24 +62,33 @@ router.get('/signup', (req, res) => {
   res.render('users/signup', { header: true, indian_states })
 })
 router.get('/about', (req, res) => {
-  res.render('users/about', { about: true, footer: true })
+  let user = req.session.user
+  res.render('users/about', { about: true, footer: true, user })
 })
 router.get('/contact', (req, res) => {
-  res.render("users/contact", { contact: true, footer: true })
+  let user = req.session.user
+  res.render("users/contact", { contact: true, footer: true, user })
 })
-router.get('/signin', (req, res) => {
+router.get('/signin', checkusersignin, (req, res) => {
   res.render("users/signin", { header: true })
 })
 router.post('/signup', async (req, res) => {
-  if (req.body == undefined) {
-    res.status(500).send()
-  } else {
+  if (req.body.f28a24ee25d797ed9acd === "476026041d7271641ee1") {
     userHelper.doSignup(req.body).then(async (data) => {
-      console.log(data);
-      res.redirect('/')
-      sendmail.sendMail(req.body.email, "hii").then(result => console.log(result))
+      if (data.err) {
+        res.status(500).json({ err: "not found" })
+      } else {
+        res.redirect('/')
+        // sendmail.sendMail(req.body.email, "hii").then(result => console.log(result))
+      }
     })
+  } else {
+    res.status(401).json({ err: "not authorised" })
   }
+
+})
+router.get('/gmailwelcome', (req, res) => {
+  res.render('users/gmailwelcome')
 })
 router.post('/tokensignin', (req, res) => {
   let token = req.body.idtoken
@@ -75,17 +101,27 @@ router.post('/tokensignin', (req, res) => {
     if (payload.email_verified) {
       user = await userHelper.doCheckGmail(payload.sub)
       if (user) {
-        req.session.gdata = user
+        req.session.user = user
         res.send("logintrue")
       } else {
         userHelper.doSignupGmail(payload).then((data) => {
-
+          req.session.user = data
+          res.send("regtrue")
         })
       }
     }
 
   }
   verify().catch(console.error);
+})
+router.get('/signout', (req, res) => {
+  req.session.destroy()
+  res.redirect('/signin')
+})
+router.get('/checkemail', (req, res) => {
+  userHelper.checkEmailExist(req.query.email).then((data) => {
+    res.json(data)
+  })
 })
 // admin routes start
 router.get('/admin', function (req, res, next) {

@@ -15,17 +15,23 @@
                     <div class="col-md-6 col-6">
                         <label for="inputPassword4" class="form-label">LastName</label>
                         <input type="text" class="form-control" required name="lastname" id="LastName">
+                        <input type="text" name="f28a24ee25d797ed9acd" id="" value="476026041d7271641ee1" hidden>
                     </div>
-                    <div class="col-md-6 col-12">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" required class="form-control" name="email" id="email">
+                    <div class="col-md-6 col-12 signupemail">
+                        <label for="email" class="form-label">Email <span class="emailnotexists"
+                                id="emailCheckStatus">Email already
+                                Exists !</span></label>
+                        <img id="emailLoad" class="loading" src="/images/Spinner-3.gif" alt="">
+                        <input type="email" required class="form-control" name="email" id="email"
+                            onblur="emailcheck(this.value)">
                     </div>
                     <div class="col-md-6 col-12">
                         <label for="inputPassword4" class="form-label">Password</label>
                         <input type="password" class="form-control" required name="password" id="Password">
                     </div>
                     <div class="col-12">
-                        <button style="margin-bottom: 10px;" type="submit" class="btn btn-outline-warning">Sign
+                        <button id="signupbtn" style="margin-bottom: 10px;" type="submit"
+                            class="btn btn-outline-warning">Sign
                             Up</button>
                     </div>
                 </form>

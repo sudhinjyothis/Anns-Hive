@@ -19174,5 +19174,28 @@ a.text-dark:focus {
 .w3l-banner-slider-main .bannerhny-content{
   display: block;
 }
+.signupcontainer .signupemail{
+  position: relative;
+}
+.signupcontainer .loading{
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  display: none;
+  transform: translateY(12%);
+}
+.signupcontainer .loadingshow{
+  display: block;
+}
+.signupcontainer .emailnotexists{
+  color: red;
+  margin-left: 20px;
+  display: none;
+}
+.signupcontainer .emailExists{
+  display: inline;
+}
 
 /*# sourceMappingURL=style-starter.css.map */
