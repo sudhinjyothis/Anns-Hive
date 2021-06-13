@@ -5,7 +5,7 @@ function signOut() {
 function onSignIn(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/tokensignin');
+    xhr.open('POST', '/gmailsignin');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.responseText === "logintrue") {
@@ -13,7 +13,7 @@ function onSignIn(googleUser) {
             location.href = "/"
         } else if (xhr.responseText === "regtrue") {
             signOut()
-            location.href = "/gmailwelcome"
+            location.href = "/gmailsetup"
         }
     };
     xhr.send('idtoken=' + id_token);
@@ -36,6 +36,18 @@ function emailcheck(value) {
                 document.getElementById("emailLoad").classList.remove('loadingshow')
                 document.getElementById("signupbtn").classList.remove('disabled')
             }
+        }
+    })
+}
+function createGmail() {
+    $.ajax({
+        url: "/creategmail",
+        method: "post",
+        success: () => {
+            location.href = '/'
+        },
+        error: () => {
+            location.href = '/signup'
         }
     })
 }

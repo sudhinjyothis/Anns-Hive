@@ -22,7 +22,13 @@ function checkusersignin(req, res, next) {
     next()
   }
 }
-
+function checkgmailsignup(req, res, next) {
+  if (req.session.cookie) {
+    next()
+  } else {
+    res.redirect('/signin')
+  }
+}
 /* GET home page. */
 router.get('/', async (req, res) => {
   let products = await productHelper.getLimitedRandomProducts(2)
@@ -69,28 +75,47 @@ router.get('/contact', (req, res) => {
   let user = req.session.user
   res.render("users/contact", { contact: true, footer: true, user })
 })
-router.get('/signin', checkusersignin, (req, res) => {
+router.get('/signin', (req, res) => {
   res.render("users/signin", { header: true })
 })
+router.get('/gmailsetup', checkgmailsignup, (req, res) => {
+  let user = {
+    name: req.session.gmailreg.name,
+    email: req.session.gmailreg.email
+  }
+  res.render('users/gmailsetup', { user })
+})
+router.get('/signout', (req, res) => {
+  req.session.destroy()
+  res.redirect('/signin')
+})
+router.get('/checkemail', (req, res) => {
+  userHelper.checkEmailExist(req.query.email).then((data) => {
+    res.json(data)
+  })
+})
+// POST
 router.post('/signup', async (req, res) => {
-  if (req.body.f28a24ee25d797ed9acd === "476026041d7271641ee1") {
-    userHelper.doSignup(req.body).then(async (data) => {
-      if (data.err) {
-        res.status(500).json({ err: "not found" })
-      } else {
-        res.redirect('/')
-        // sendmail.sendMail(req.body.email, "hii").then(result => console.log(result))
-      }
-    })
+  let user = userHelper.checkEmailExist(req.body.email)
+  if (user) {
+    res.redirect('/signup')
   } else {
-    res.status(401).json({ err: "not authorised" })
+    if (req.body.f28a24ee25d797ed9acd === "476026041d7271641ee1") {
+      userHelper.doSignup(req.body).then(async (data) => {
+        if (data.err) {
+          res.status(500).json({ err: "not found" })
+        } else {
+          res.redirect('/')
+          // sendmail.sendMail(req.body.email, "hii").then(result => console.log(result))
+        }
+      })
+    } else {
+      res.status(500).json({ err: "Bad call" })
+    }
   }
 
 })
-router.get('/gmailwelcome', (req, res) => {
-  res.render('users/gmailwelcome')
-})
-router.post('/tokensignin', (req, res) => {
+router.post('/gmailsignin', (req, res) => {
   let token = req.body.idtoken
   async function verify() {
     const ticket = await client.verifyIdToken({
@@ -101,27 +126,36 @@ router.post('/tokensignin', (req, res) => {
     if (payload.email_verified) {
       user = await userHelper.doCheckGmail(payload.sub)
       if (user) {
+        user.id = ""
         req.session.user = user
         res.send("logintrue")
       } else {
-        userHelper.doSignupGmail(payload).then((data) => {
-          req.session.user = data
-          res.send("regtrue")
-        })
+        req.session.gmailreg = payload
+        res.send("regtrue")
       }
+    } else {
+      res.json({ status: "email not verified" })
     }
 
   }
   verify().catch(console.error);
 })
-router.get('/signout', (req, res) => {
-  req.session.destroy()
-  res.redirect('/signin')
-})
-router.get('/checkemail', (req, res) => {
-  userHelper.checkEmailExist(req.query.email).then((data) => {
-    res.json(data)
-  })
+router.post('/creategmail', async (req, res) => {
+  let user = req.session.gmailreg
+  if (user) {
+    let userExist = await userHelper.doCheckGmail(user.sub)
+    if (userExist) {
+      res.redirect('/')
+    } else {
+      userHelper.doSignupGmail(user).then((data) => {
+        req.session.gmailreg = null
+        req.session.user = data
+        res.send(200)
+      })
+    }
+  } else {
+    res.send(500)
+  }
 })
 // admin routes start
 router.get('/admin', function (req, res, next) {

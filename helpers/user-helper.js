@@ -49,13 +49,12 @@ module.exports = {
         })
     },
     doCheckGmail: (userid) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).findOne({ id: userid }).then((data) => {
                 resolve(data)
             })
         })
-    }
-    ,
+    },
     doLogin: (userdata) => {
         return new Promise(async (resolve, reject) => {
             let response = {}

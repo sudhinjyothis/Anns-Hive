@@ -3,12 +3,14 @@
         <div class="signinwrap wrap">
             <h5 class="signintext text-center mb-4">
                 <img class="signlogo" src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
-                SignUp
+                Create your account
             </h5>
             <div class="signbg bg p-md-5  mx-auto mw-100">
                 <!--/SignUp-form-->
-                <p style="color: #adb5bd">Profile registration successfull</p>
-                <a href="/" class="btn btn-success">procced to AnnsHive</a>
+                <p style="color: #adb5bd">sign in successfull create ur annshive acount</p>
+                <h6 style="color: #adb5bd">name : {{user.name}}</h6>
+                <h6 style="color: #adb5bd;margin-bottom: 10px;">email : {{user.email}}</h6>
+                <button onclick="createGmail()" class="btn btn-success">Create Account</button>
                 <!--//SignUp-form-->
             </div>
             <!---->
