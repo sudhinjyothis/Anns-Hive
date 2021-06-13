@@ -5,7 +5,7 @@ function signOut() {
 function onSignIn(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/gmailsignin');
+    xhr.open('POST', '/api/gmailsignin');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.responseText === "logintrue") {
@@ -21,7 +21,7 @@ function onSignIn(googleUser) {
 function emailcheck(value) {
     document.getElementById("emailLoad").classList.add('loadingshow')
     $.ajax({
-        url: "/checkemail",
+        url: "/api/checkemail",
         data: {
             email: value
         },
@@ -41,7 +41,7 @@ function emailcheck(value) {
 }
 function createGmail() {
     $.ajax({
-        url: "/creategmail",
+        url: "/api/creategmail",
         method: "post",
         success: () => {
             location.href = '/'

@@ -85,6 +85,15 @@ module.exports = {
                 }
             })
         })
+    },
+    userEmailVerificationCheck: (email) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).findOne({ email: email }).then((data) => {
+                if (data) {
+                    resolve({ status: data.isVerified })
+                }
+            })
+        })
     }
     ,
     addToCart: (proId, userId) => {

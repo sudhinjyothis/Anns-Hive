@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const jwt = require('jsonwebtoken')
+const cipher = require('./cipher')
 const { google } = require('googleapis')
 const CLIENT_ID = process.env.GMAIL_CLIENT_ID
 const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET
@@ -13,8 +14,8 @@ module.exports = {
             email: mailId,
             y5NyX1jsf5ABbUkd: process.env.ANNSHIVE_EMAILVERIFY_CLIENTID
         }
-        const token = jwt.sign(AnnshivePayload, process.env.ANNSHIVE_EMAILVERIFY_TOKEN_ID, { expiresIn: '10m' })
-        const url = `/verifyemailaddress?token=${token}`
+        const jwttoken = await jwt.sign(AnnshivePayload, process.env.ANNSHIVE_EMAILVERIFY_TOKEN_ID, { expiresIn: '10s' })
+        const token = cipher.encrypt(jwttoken)
         try {
             const accessToken = oAuth2Client.getAccessToken()
             const transport = nodemailer.createTransport({
@@ -37,18 +38,18 @@ module.exports = {
                 <!DOCTYPE html>
                 <html
                     style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                
+
                 <head>
                     <meta name="viewport" content="width=device-width" />
                     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                     <title>annshive verify</title>
-                
-                
+
+
                     <style type="text/css">
                         img {
                             max-width: 100%;
                         }
-                
+
                         body {
                             -webkit-font-smoothing: antialiased;
                             -webkit-text-size-adjust: none;
@@ -56,87 +57,109 @@ module.exports = {
                             height: 100%;
                             line-height: 1.6em;
                         }
-                
+
                         body {
                             background-color: #f6f6f6;
                         }
-                
+
+                        .btn-primary {
+                            text-decoration: none;
+                            border: none;
+                            text-align: center;
+                            background: none;
+                            cursor: pointer;
+                            padding: 0;
+                            outline: none;
+                            color: #fff;
+                            background: rgba(255, 255, 255, 0.141);
+                            padding: 15px 20px;
+                            border-radius: 10px;
+                            transition: background-color ease-in .2s;
+                            font-weight: 600;
+                            font-size: 16px;
+                        }
+
+                        .btn-primary:hover {
+                            color: #fff;
+                            background-color: #ff7315;
+                        }
+
                         @media only screen and (max-width: 640px) {
                             body {
                                 padding: 0 !important;
                             }
-                
+
                             h1 {
                                 font-weight: 800 !important;
                                 margin: 20px 0 5px !important;
                             }
-                
+
                             h2 {
                                 font-weight: 800 !important;
                                 margin: 20px 0 5px !important;
                             }
-                
+
                             h3 {
                                 font-weight: 800 !important;
                                 margin: 20px 0 5px !important;
                             }
-                
+
                             h4 {
                                 font-weight: 800 !important;
                                 margin: 20px 0 5px !important;
                             }
-                
+
                             h1 {
                                 font-size: 22px !important;
                             }
-                
+
                             h2 {
                                 font-size: 18px !important;
                             }
-                
+
                             h3 {
                                 font-size: 16px !important;
                             }
-                
+
                             .container {
                                 padding: 0 !important;
                                 width: 100% !important;
                             }
-                
+
                             .content {
                                 padding: 0 !important;
                             }
-                
+
                             .content-wrap {
                                 padding: 10px !important;
                             }
-                
+
                             .invoice {
                                 width: 100% !important;
                             }
                         }
                     </style>
                 </head>
-                
+
                 <body
-                    style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #f6f6f6; margin: 0;"
+                    style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #3a3535; margin: 0;"
                     bgcolor="#f6f6f6">
-                
+
                     <table class="body-wrap"
-                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f6f6f6; margin: 0;"
+                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #3a3535; margin: 0;"
                         bgcolor="#f6f6f6">
                         <tr
                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                             <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;"
-                                valign="top"></td>
+                                valign="top">
+                            </td>
                             <td class="container" width="600"
                                 style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;"
                                 valign="top">
                                 <div class="content"
                                     style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
-                                    <table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope
-                                        itemtype="http://schema.org/ConfirmAction"
-                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 1px solid #e9e9e9;"
+                                    <table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action"
+                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 10px; background-color: #464242c7; margin: 0;padding: 13px;"
                                         bgcolor="#fff">
                                         <tr
                                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -147,39 +170,35 @@ module.exports = {
                                                     style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
                                                 <table width="100%" cellpadding="0" cellspacing="0"
                                                     style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                    <tr style="text-align: center;">
+                                                        <td
+                                                            style="padding-bottom: 20px;font-size: 2em;font-family: sans-serif;font-weight: bolder;color: #f6f6f6;">
+                                                            Anns<span style="color: #ff7315;">H</span>ive
+                                                        </td>
+                                                    </tr>
                                                     <tr
-                                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;color: #f6f6f6;">
                                                         <td class="content-block"
-                                                            style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
+                                                            style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 30px;"
                                                             valign="top">
                                                             Please confirm your email address by clicking the link below.
                                                         </td>
                                                     </tr>
                                                     <tr
                                                         style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                                                        <td class="content-block"
-                                                            style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
-                                                            valign="top">
-                                                            Confirm your email address to get started
-                                                        </td>
-                                                    </tr>
-                                                    <tr
-                                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                         <td class="content-block" itemprop="handler" itemscope
-                                                            itemtype="http://schema.org/HttpActionHandler"
                                                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
                                                             valign="top">
-                                                            <a href="http://www.mailgun.com" class="btn-primary" itemprop="url"
-                                                                style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #348eda; margin: 0; border-color: #348eda; border-style: solid; border-width: 10px 20px;">Confirm
-                                                                email address</a>
+                                                            <a style="color: #f6f6f6" href="http://localhost:3000/api/verifyemail?token=${token}" class="btn-primary">Confirm
+                                                                    email address</a>                                                           
                                                         </td>
                                                     </tr>
                                                     <tr
-                                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0px;color: #f6f6f6;">
                                                         <td class="content-block"
-                                                            style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
+                                                            style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin-top: 0px; padding: 10px 0 0;"
                                                             valign="top">
-                                                            &mdash; Annshive
+                                                            privacy policy .... etc here
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -193,7 +212,6 @@ module.exports = {
                         </tr>
                     </table>
                 </body>
-                
                 </html>`
             }
             const result = await transport.sendMail(mailOptions)

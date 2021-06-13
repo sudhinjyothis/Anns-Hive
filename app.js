@@ -7,7 +7,8 @@ var hbs = require("express-handlebars")
 var fileUpload = require("express-fileupload")
 var db = require("./config/connection")
 require('dotenv').config()
-var Router = require('./routes/router');
+var Render = require('./routes/render');
+var api = require('./routes/api');
 var app = express();
 var session = require("express-session")
 
@@ -31,7 +32,8 @@ db.connect((err) => {
   if (err) console.log("connection error" + err)
   else console.log("connection successfull to port 27017");
 })
-app.use('/', Router);
+app.use('/', Render);
+app.use('/api', api)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

@@ -6,6 +6,7 @@
 var app = require('../app');
 var debug = require('debug')('e-commerce:server');
 var http = require('http');
+var https = require('https')
 const fs = require('fs')
 const path = require('path')
 
@@ -20,11 +21,11 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-// var server = https.createServer({
-//   key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
-//   cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
-// }, app);
-var server = http.createServer(app);
+var server = https.createServer({
+  key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
+}, app);
+// var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
