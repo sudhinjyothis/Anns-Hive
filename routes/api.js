@@ -7,15 +7,18 @@ var Handlebars = require("handlebars");
 var sendmail = require("../helpers/sendmail");
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
+// signout the user
 router.get('/signout', (req, res) => {
     req.session.destroy()
     res.redirect('/signin')
 })
+// check if email already exists on registration
 router.get('/checkemail', (req, res) => {
     userHelper.checkEmailExist(req.query.email).then((data) => {
         res.json(data)
     })
 })
+// verify email during registration (not completed)
 router.get('/verifyemail', (req, res) => {
     if (req.query.token) {
         jwtauth.verifyJwtToken(req.query.token).then((data) => {
@@ -34,12 +37,13 @@ router.get('/verifyemail', (req, res) => {
             }
         }).catch(() => {
             res.redirect('/tokenexpired')
-            // redirect to rendered expiry page
+            // redirect to rendered expiry page (token expiry not rendered)
         })
     } else {
         res.status(400).json({ err: "bad request" })
     }
 })
+// registering new user
 router.post('/signup', async (req, res) => {
     let user = await userHelper.checkEmailExist(req.body.email)
     if (user.status) {
@@ -51,7 +55,9 @@ router.post('/signup', async (req, res) => {
                     res.status(500).json({ err: "not found" })
                 } else {
                     req.session.verifyEmail = req.body.email
+                    // verification page to be redirected
                     res.redirect('/')
+                    // sending gmail
                     sendmail.sendMail(req.body.email).then(result => console.log(result))
                 }
             })
@@ -60,9 +66,11 @@ router.post('/signup', async (req, res) => {
         }
     }
 })
+// gmail sign in route
 router.post('/gmailsignin', (req, res) => {
     let token = req.body.idtoken
     async function verify() {
+        // recieving google sign information as token
         const ticket = await client.verifyIdToken({
             idToken: token,
             audience: process.env.SIGNIN_CLIENTID,
@@ -85,6 +93,7 @@ router.post('/gmailsignin', (req, res) => {
     }
     verify().catch(console.error);
 })
+// register user if not exitst after gmail sign in
 router.post('/creategmail', async (req, res) => {
     let user = req.session.gmailreg
     if (user) {
@@ -102,7 +111,7 @@ router.post('/creategmail', async (req, res) => {
         res.send(500)
     }
 })
-// editing a product
+// editing a product in admin page
 router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
     productHelper.updateProduct(req.query.id, req.body)
     var jpegErr = false
@@ -138,7 +147,7 @@ router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
         console.log(err);
     }
 })
-// adding a product
+// adding a product in admin page 
 router.post("/dVM217UcHzCpO4dr6mshiNbxLqTu1i", async (req, res) => {
     await productHelper.addProduct(req.body).then((id) => {
         try {
@@ -168,6 +177,7 @@ router.post("/dVM217UcHzCpO4dr6mshiNbxLqTu1i", async (req, res) => {
         }
     })
 })
+// deleting a product in admin page 
 router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwYdelete', (req, res) => {
     productHelper.deleteProduct(req.query.id).then(() => {
         res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')

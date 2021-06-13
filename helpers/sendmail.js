@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const jwt = require('jsonwebtoken')
 const cipher = require('./cipher')
 const { google } = require('googleapis')
+// google authentication
 const CLIENT_ID = process.env.GMAIL_CLIENT_ID
 const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET
 const REDIRECT_URI = 'https://developers.google.com/oauthplayground'
@@ -10,13 +11,16 @@ const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_U
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
 module.exports = {
     sendMail: async (mailId) => {
+        // creating tokens
         const AnnshivePayload = {
             email: mailId,
             y5NyX1jsf5ABbUkd: process.env.ANNSHIVE_EMAILVERIFY_CLIENTID
         }
         const jwttoken = await jwt.sign(AnnshivePayload, process.env.ANNSHIVE_EMAILVERIFY_TOKEN_ID, { expiresIn: '10s' })
+        // encrypting created tokens
         const token = cipher.encrypt(jwttoken)
         try {
+            // authenticating gmail api
             const accessToken = oAuth2Client.getAccessToken()
             const transport = nodemailer.createTransport({
                 service: 'gmail',
@@ -29,6 +33,7 @@ module.exports = {
                     accessToken: accessToken
                 }
             })
+            // generating an email
             const mailOptions = {
                 from: 'Sudhinjyothis<sudhinjyothis@gmail.com>',
                 to: mailId,
@@ -214,6 +219,7 @@ module.exports = {
                 </body>
                 </html>`
             }
+            // sending email
             const result = await transport.sendMail(mailOptions)
             return result
 

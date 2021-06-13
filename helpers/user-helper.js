@@ -5,11 +5,13 @@ const { resolve, reject } = require("promise")
 const objectId = require("mongodb").ObjectID
 const { response } = require("express")
 const Razorpay = require('razorpay')
+// creating razorpay instance 
 var instance = new Razorpay({
     key_id: process.env.RAZORPAY_KEYID,
     key_secret: process.env.RAZORPAY_SECRET,
 });
 module.exports = {
+    // registering a user
     doSignup: (userdata) => {
         return new Promise(async (resolve, reject) => {
             if (userdata.password) {
@@ -32,6 +34,7 @@ module.exports = {
             }
         })
     },
+    // registering user while sign in with gmail
     doSignupGmail: (userdata) => {
         return new Promise(async (resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).insertOne(
@@ -48,6 +51,7 @@ module.exports = {
             })
         })
     },
+    //fetching gmail using specific ID
     doCheckGmail: (userid) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).findOne({ id: userid }).then((data) => {
@@ -55,6 +59,7 @@ module.exports = {
             })
         })
     },
+    // logging a user 
     doLogin: (userdata) => {
         return new Promise(async (resolve, reject) => {
             let response = {}
@@ -75,6 +80,7 @@ module.exports = {
             }
         })
     },
+    // to fecth the user with gmail
     checkEmailExist: (email) => {
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.USER_COLLECTION).findOne({ email: email }).then((data) => {
@@ -86,6 +92,7 @@ module.exports = {
             })
         })
     },
+    // fetching user email verification detail
     userEmailVerificationCheck: (email) => {
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.USER_COLLECTION).findOne({ email: email }).then((data) => {
@@ -96,6 +103,7 @@ module.exports = {
         })
     }
     ,
+    // adding a product to cart
     addToCart: (proId, userId) => {
         let proObj = {
             item: objectId(proId),
@@ -132,6 +140,7 @@ module.exports = {
             }
         })
     },
+    // fetching all cart products
     getAllCart: (userId) => {
         return new Promise(async (resolve, reject) => {
             let cartItems = await db.get().collection(collection.CART_COLLECTION).aggregate([
@@ -165,6 +174,7 @@ module.exports = {
             resolve(cartItems)
         })
     },
+    // fetching cart count
     getCartCount: (userId) => {
         return new Promise(async (resolve, reject) => {
             let count = 0
@@ -177,6 +187,7 @@ module.exports = {
             }
         })
     },
+    // changing a product quantity
     changeProductQuantity: (details) => {
         details.quantity = parseInt(details.quantity)
         return new Promise((resolve, reject) => {
@@ -187,6 +198,7 @@ module.exports = {
             })
         })
     },
+    // deleting a product in cart
     cartDeleteProduct: (details) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(details.cartId) }, {
@@ -196,6 +208,7 @@ module.exports = {
             })
         })
     },
+    // fetching total amount of a cart linked to a specific user
     getTotalAmount: (userId) => {
         return new Promise(async (resolve, reject) => {
             let total = await db.get().collection(collection.CART_COLLECTION).aggregate([
@@ -240,13 +253,14 @@ module.exports = {
         })
 
     },
+    // fetching cart products[array] of a specifi user
     getUserProductList: (userId) => {
         return new Promise(async (resolve, reject) => {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) })
             resolve(cart.products)
         })
-    }
-    ,
+    },
+    // placing an order
     placeOrder: (order, products, total) => {
         return new Promise((resolve, reject) => {
             let status = order['paymentMethod'] === "COD" ? "placed" : "pending"
@@ -270,12 +284,14 @@ module.exports = {
         })
 
     },
+    // fetching order details 
     getOrderDetails: (orderId) => {
         return new Promise(async (resolve, reject) => {
             let order = await db.get().collection(collection.ORDERS_COLLECTION).findOne({ _id: objectId(orderId) })
             resolve(order)
         })
     },
+    // fetching ordered product details 
     getOrderedProductDetails: (orderId) => {
         return new Promise(async (resolve, reject) => {
             let order = await db.get().collection(collection.ORDERS_COLLECTION).aggregate([
@@ -309,12 +325,14 @@ module.exports = {
             resolve(order)
         })
     },
+    // fetching all the orders of a specific user
     getUserOrders: (userId) => {
         return new Promise(async (resolve, reject) => {
             let orders = await db.get().collection(collection.ORDERS_COLLECTION).find({ userId: objectId(userId), status: 'placed' }).toArray()
             resolve(orders)
         })
     },
+    // generating razorpay payment 
     generateRazorpay: (orderId, total) => {
         return new Promise((resolve, reject) => {
             var options = {
@@ -327,6 +345,7 @@ module.exports = {
             });
         })
     },
+    // verifying razorpay payment
     verifyPayment: (details) => {
         return new Promise(async (resolve, reject) => {
             const { createHmac, } = await import('crypto');
@@ -340,6 +359,7 @@ module.exports = {
             }
         })
     },
+    // changing payment status 
     changePaymentStatus: (orderId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDERS_COLLECTION).updateOne({ _id: objectId(orderId) }, {
@@ -351,6 +371,7 @@ module.exports = {
             })
         })
     },
+    // deleting a cart 
     deleteCartItemsWhenOrder: (userId) => {
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(userId) })
