@@ -96,7 +96,7 @@ router.get('/checkemail', (req, res) => {
 })
 // POST
 router.post('/signup', async (req, res) => {
-  let user = userHelper.checkEmailExist(req.body.email)
+  let user = await userHelper.checkEmailExist(req.body.email)
   if (user) {
     res.redirect('/signup')
   } else {
