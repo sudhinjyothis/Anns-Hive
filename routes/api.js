@@ -3,7 +3,6 @@ var router = express.Router();
 var productHelper = require("../helpers/product-helpers")
 var userHelper = require("../helpers/user-helper");
 var jwtauth = require('../helpers/jwttokens')
-var Handlebars = require("handlebars");
 var sendmail = require("../helpers/sendmail");
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
