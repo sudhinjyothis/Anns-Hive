@@ -30,8 +30,8 @@ function checkgmailsignup(req, res, next) {
   }
 }
 /* GET home page. */
-router.get('/', (req, res) => {
-  let products = productHelper.getLimitedRandomProducts(2)
+router.get('/', async (req, res) => {
+  let products = await productHelper.getLimitedRandomProducts(2)
   let user = req.session.user
   res.render('users/index', { home: true, footer: true, products, user })
 })
