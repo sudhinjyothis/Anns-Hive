@@ -23,7 +23,7 @@ function checkusersignin(req, res, next) {
   }
 }
 function checkgmailsignup(req, res, next) {
-  if (req.session.cookie) {
+  if (req.session.gmailreg) {
     next()
   } else {
     res.redirect('/signin')
