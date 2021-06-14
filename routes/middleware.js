@@ -1,5 +1,5 @@
 module.exports = {
-    // to handle multiple sign up request 
+    //checks if the user is already signed in or not 
     activeuser: (req, res, next) => {
         if (req.session.user) {
             next()
@@ -7,7 +7,7 @@ module.exports = {
             res.redirect('/signin')
         }
     },
-    // checks if the user is already signed in or not
+    // to handle multiple sign up request 
     checkusersignin: (req, res, next) => {
         if (req.session.user) {
             res.redirect('/')

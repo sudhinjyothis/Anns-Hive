@@ -4,6 +4,7 @@ var productHelper = require("../helpers/product-helpers")
 var userHelper = require("../helpers/user-helper");
 var jwtauth = require('../helpers/jwttokens')
 var sendmail = require("../helpers/sendmail");
+var cipher = require('../helpers/cipher')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
 // signout the user
@@ -18,23 +19,28 @@ router.get('/checkemail', (req, res) => {
     })
 })
 // verify email during registration (not completed)
-router.get('/verifyemail', (req, res) => {
+router.get('/verifyemail', async (req, res) => {
     if (req.query.token) {
-        jwtauth.verifyJwtToken(req.query.token).then((data) => {
-            console.log(data);
+        let token = await cipher.decrypt(req.query.token)
+        jwtauth.verifyJwtToken(token).then((data) => {
             if (data) {
                 req.session.verifyEmail = null
                 if (data.y5NyX1jsf5ABbUkd = process.env.ANNSHIVE_EMAILVERIFY_CLIENTID) {
-                    userHelper.userEmailVerificationCheck(data.email).then((verification) => {
-                        if (verification) {
+                    userHelper.userEmailVerificationCheck(data.email).then((verify) => {
+                        if (verify.status) {
                             res.redirect('/')
                         } else {
-                            console.log(verification);
+                            userHelper.userEmailVerification(data.email).then((verify) => {
+                                if (verify.verified) {
+                                    res.redirect('/emailverificationsuccess')
+                                }
+                            })
                         }
                     })
                 }
             }
-        }).catch(() => {
+        }).catch((err) => {
+            console.log(err);
             res.redirect('/tokenexpired')
             // redirect to rendered expiry page (token expiry not rendered)
         })
@@ -110,6 +116,8 @@ router.post('/creategmail', async (req, res) => {
         res.send(500)
     }
 })
+
+// admin routes
 // editing a product in admin page
 router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
     productHelper.updateProduct(req.query.id, req.body)

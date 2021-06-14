@@ -18,8 +18,7 @@ module.exports = {
                 userdata.password = await bcrypt.hash(userdata.password, 10)
                 db.get().collection(collection.USER_COLLECTION).insertOne(
                     {
-                        firstname: userdata.firstname,
-                        lastname: userdata.lastname,
+                        name: userdata.name,
                         email: userdata.email,
                         password: userdata.password,
                         isVerified: false,
@@ -39,8 +38,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).insertOne(
                 {
-                    firstname: userdata.given_name,
-                    lastname: userdata.family_name,
+                    name: userdata.name,
                     email: userdata.email,
                     id: userdata.sub,
                     isVerified: userdata.email_verified,
@@ -99,6 +97,17 @@ module.exports = {
                 if (data) {
                     resolve({ status: data.isVerified })
                 }
+            })
+        })
+    },
+    userEmailVerification: (email) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).updateOne({ email: email }, {
+                $set: {
+                    isVerified: true
+                }
+            }).then(() => {
+                resolve({ verified: true })
             })
         })
     }

@@ -11,6 +11,9 @@ const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
 router.get('/', async (req, res) => {
   let products = await productHelper.getLimitedRandomProducts(2)
   let user = req.session.user
+  try {
+    user.name = user.name.split(' ')[0]
+  } catch { }
   res.render('users/index', { home: true, footer: true, products, user })
 })
 // renders signup page
@@ -60,13 +63,19 @@ router.get('/contact', (req, res) => {
 router.get('/signin', (req, res) => {
   res.render("users/signin", { header: true })
 })
-// register user if not exists while gmail sign in page
+// renders register user if not exists while gmail sign in page
 router.get('/gmailsetup', middleware.checkgmailsignup, (req, res) => {
   let user = {
     name: req.session.gmailreg.name,
     email: req.session.gmailreg.email
   }
   res.render('users/gmailsetup', { user })
+})
+router.get('/emailverificationsuccess', (req, res) => {
+  res.render('users/verificationsuccess')
+})
+router.get('/tokenexpired', (req, res) => {
+  res.render('/users/tokenexpired')
 })
 // admin routes start
 // renders admin dashboard

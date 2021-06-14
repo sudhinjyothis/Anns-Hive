@@ -16,9 +16,9 @@ module.exports = {
             email: mailId,
             y5NyX1jsf5ABbUkd: process.env.ANNSHIVE_EMAILVERIFY_CLIENTID
         }
-        const jwttoken = await jwt.sign(AnnshivePayload, process.env.ANNSHIVE_EMAILVERIFY_TOKEN_ID, { expiresIn: '10s' })
+        const jwttoken = await jwt.sign(AnnshivePayload, process.env.ANNSHIVE_EMAILVERIFY_TOKEN_ID, { expiresIn: '5m' })
         // encrypting created tokens
-        const token = cipher.encrypt(jwttoken)
+        const token = await cipher.encrypt(jwttoken)
         try {
             // authenticating gmail api
             const accessToken = oAuth2Client.getAccessToken()
@@ -38,7 +38,7 @@ module.exports = {
                 from: 'Sudhinjyothis<sudhinjyothis@gmail.com>',
                 to: mailId,
                 subject: 'Verify Email address',
-                text: `This is to verify your email addresss with annshive it seems that html in our mail doesnt support on your browser, kindly copy and paste the given url and verify your account `,
+                text: `This is to verify your email addresss with annshive it seems that html in our mail doesnt support on your browser, kindly copy and paste the given url and verify your account https://localhost:3000/api/verifyemail?token=${token}`,
                 html: `
                 <!DOCTYPE html>
                 <html
@@ -194,7 +194,7 @@ module.exports = {
                                                         <td class="content-block" itemprop="handler" itemscope
                                                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
                                                             valign="top">
-                                                            <a style="color: #f6f6f6" href="http://localhost:3000/api/verifyemail?token=${token}" class="btn-primary">Confirm
+                                                            <a style="color: #f6f6f6" href="https://localhost:3000/api/verifyemail?token=${token}" class="btn-primary">Confirm
                                                                     email address</a>                                                           
                                                         </td>
                                                     </tr>

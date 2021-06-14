@@ -19066,6 +19066,27 @@ a.text-dark:focus {
   border-radius: 10px;
   padding: 13px;
 }
+.signupbg{
+  background-color: #464242c7;
+  border-radius: 10px;
+  width: 50%;
+  padding: 13px;
+}
+.signinbg{
+  background-color: #464242c7;
+  border-radius: 10px;
+  width: 65%;
+  padding: 13px;
+}
+@media (max-width:767px) {
+  .signupbg{
+    width: 100%;
+  }
+  .signinbg{
+    width: 100%;
+    padding: 20px;
+  }
+}
 .signlogo{
   margin-right: 10px;
 }
