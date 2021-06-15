@@ -7,7 +7,7 @@
             </h5>
             <div class="signupbg bg p-md-5 p-4 mx-auto mw-100">
                 <!--/SignUp-form-->
-                <form action="/api/signup" method="POST" class="row g-3">
+                <form class="row g-3">
                     <div class="col-md-12 col-12">
                         <label for="inputEmail4" class="form-label">Name</label>
                         <input type="text" class="form-control" required name="name" id="name">
@@ -17,19 +17,26 @@
                                 id="emailCheckStatus">Email already
                                 Exists !</span></label>
                         <img id="emailLoad" class="loading" src="/images/Spinner-3.gif" alt="">
-                        <input type="email" required class="form-control" name="email" id="email"
+                        <input type="email" required class="form-control" name="email" id="signupemail"
                             onblur="emailcheck(this.value)">
-                        <input type="text" name="f28a24ee25d797ed9acd" id="" value="476026041d7271641ee1" hidden>
                     </div>
                     <div class="col-md-12 col-12">
                         <label for="inputPassword4" class="form-label">Password</label>
                         <input type="password" class="form-control" required name="password" id="Password">
                     </div>
                     <div class="col-md-12 col-12">
-                        <label for="inputPassword4" class="form-label">Confirm Password</label>
+                        <label class="form-label">Confirm Password<span class="emailnotexists"
+                                id="passwordcheck">Password
+                                doesnt
+                                match!</span></label>
                         <input type="password" class="form-control" required name="confirmpassword"
                             id="confirmPassword">
                     </div>
+                    <span style="margin-top: 10px;margin-left: 10px;" class="emailnotexists" id="captchacheck">Please
+                        Verify you are not a
+                        robot</span>
+                    <div style="margin-left: 10px;overflow: hidden;" class="g-recaptcha"
+                        data-sitekey="6Le02TQbAAAAABaqUAYIM2HA2KN-hQ6ylzGQ4qWi"></div>
                     <div class="col-12">
                         <button id="signupbtn" style="margin-bottom: 10px;" type="submit"
                             class="btn btn-outline-warning">Sign Up</button>
@@ -45,3 +52,4 @@
         </div>
     </div>
 </section>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>

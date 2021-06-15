@@ -5,11 +5,13 @@ var userHelper = require("../helpers/user-helper");
 var jwtauth = require('../helpers/jwttokens')
 var sendmail = require("../helpers/sendmail");
 var cipher = require('../helpers/cipher')
+require('dotenv').config()
 const { OAuth2Client } = require('google-auth-library');
+const axios = require('axios')
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
 // signout the user
 router.get('/signout', (req, res) => {
-    req.session.destroy()
+    req.session.user = null
     res.redirect('/signin')
 })
 // check if email already exists on registration
@@ -30,8 +32,9 @@ router.get('/verifyemail', async (req, res) => {
                         if (verify.status) {
                             res.redirect('/')
                         } else {
-                            userHelper.userEmailVerification(data.email).then((verify) => {
-                                if (verify.verified) {
+                            userHelper.userEmailVerification(data.email).then((response) => {
+                                if (response.verified) {
+                                    req.session.user = response.user
                                     res.redirect('/emailverificationsuccess')
                                 }
                             })
@@ -40,32 +43,66 @@ router.get('/verifyemail', async (req, res) => {
                 }
             }
         }).catch((err) => {
-            console.log(err);
             res.redirect('/tokenexpired')
-            // redirect to rendered expiry page (token expiry not rendered)
         })
     } else {
         res.status(400).json({ err: "bad request" })
     }
 })
+router.get('/sendemailverify', (req, res) => {
+    if (req.session.verifyEmail) {
+        res.redirect('/verificationsend')
+        sendmail.sendMail(req.session.verifyEmail)
+    }
+    else {
+        res.redirect('manualemailverify')
+    }
+})
+router.post('/manualemailverify', (req, res) => {
+    userHelper.userEmailVerificationCheck(req.body.Email).then((response) => {
+        if (response.status === true) {
+            res.redirect('/')
+        } else if (response.status === false) {
+            res.redirect('/verificationsend')
+            sendmail.sendMail(req.body.Email)
+        } else {
+            res.redirect('/')
+        }
+    })
+})
 // registering new user
 router.post('/signup', async (req, res) => {
+    // checking if user exists
     let user = await userHelper.checkEmailExist(req.body.email)
     if (user.status) {
         res.redirect('/signup')
     } else {
-        if (req.body.f28a24ee25d797ed9acd === "476026041d7271641ee1") {
-            userHelper.doSignup(req.body).then(async (data) => {
-                if (data.err) {
-                    res.status(500).json({ err: "not found" })
-                } else {
-                    req.session.verifyEmail = req.body.email
-                    // verification page to be redirected
-                    res.redirect('/')
-                    // sending gmail
-                    sendmail.sendMail(req.body.email).then(result => console.log(result))
-                }
-            })
+        // checking if inputed passwords are same
+        if (req.body.password === req.body.confirmpassword) {
+            // verifying Captcha
+            if (req.body.captcha === "" || req.body.captcha === undefined || req.body.captcha === null) {
+                res.send(500).json({ err: "invalid captcha" })
+            } else {
+                const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_KEY}&response=${req.body.captcha}`
+                axios.post(verifyUrl).then((response) => {
+                    if (response.data.success) {
+                        userHelper.doSignup(req.body).then(async (data) => {
+                            if (data.err) {
+                                res.sendStatus(500, { err: 'notfound' })
+                            } else {
+                                req.session.verifyEmail = req.body.email
+                                res.sendStatus(200, { proceed: true })
+                                // sending gmail
+                                sendmail.sendMail(req.body.email)
+                            }
+                        })
+                    } else {
+                        res.sendStatus(500, { err: 'timedout' })
+                    }
+                })
+
+            }
+
         } else {
             res.status(500).json({ err: "Bad call" })
         }
@@ -78,18 +115,24 @@ router.post('/gmailsignin', (req, res) => {
         // recieving google sign information as token
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.SIGNIN_CLIENTID,
+            audience: process.env.SIGNIN_CLIENTID
         });
         const payload = ticket.getPayload();
         if (payload.email_verified) {
-            user = await userHelper.doCheckGmail(payload.sub)
+            let user = await userHelper.doCheckGmail(payload.sub)
             if (user) {
                 user.id = ""
                 req.session.user = user
                 res.send("logintrue")
             } else {
-                req.session.gmailreg = payload
-                res.send("regtrue")
+                userHelper.checkEmailExist(payload.email).then((response) => {
+                    if (response.status) {
+                        res.send("userExists")
+                    } else {
+                        req.session.gmailreg = payload
+                        res.send("regtrue")
+                    }
+                })
             }
         } else {
             res.json({ status: "email not verified" })

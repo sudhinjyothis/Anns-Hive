@@ -83,7 +83,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.USER_COLLECTION).findOne({ email: email }).then((data) => {
                 if (data) {
-                    resolve({ status: true })
+                    resolve({ status: true, user: data })
                 } else {
                     resolve({ status: false })
                 }
@@ -96,6 +96,8 @@ module.exports = {
             await db.get().collection(collection.USER_COLLECTION).findOne({ email: email }).then((data) => {
                 if (data) {
                     resolve({ status: data.isVerified })
+                } else {
+                    resolve({ status: "no user found" })
                 }
             })
         })
@@ -106,8 +108,9 @@ module.exports = {
                 $set: {
                     isVerified: true
                 }
-            }).then(() => {
-                resolve({ verified: true })
+            }).then(async () => {
+                let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: email })
+                resolve({ verified: true, user: user })
             })
         })
     }

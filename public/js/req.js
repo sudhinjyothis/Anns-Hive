@@ -14,6 +14,9 @@ function onSignIn(googleUser) {
         } else if (xhr.responseText === "regtrue") {
             signOut()
             location.href = "/gmailsetup"
+        } else if (xhr.responseText === "userExists") {
+            signOut()
+            location.href = "/gmailsignuserexists"
         }
     };
     xhr.send('idtoken=' + id_token);
@@ -25,7 +28,7 @@ function emailcheck(value) {
         data: {
             email: value
         },
-        method: "get",
+        method: "GET",
         success: (response) => {
             if (response.status) {
                 document.getElementById("emailCheckStatus").classList.add("emailExists")
@@ -42,7 +45,7 @@ function emailcheck(value) {
 function createGmail() {
     $.ajax({
         url: "/api/creategmail",
-        method: "post",
+        method: "POST",
         success: () => {
             location.href = '/'
         },
@@ -51,3 +54,42 @@ function createGmail() {
         }
     })
 }
+
+$(document).ready(() => {
+    $('#confirmPassword').blur((e) => {
+        if ($('#confirmPassword').val() != $('#Password').val()) {
+            $('#passwordcheck').addClass('emailExists')
+            $('#signupbtn').addClass('disabled')
+        } else {
+            $('#passwordcheck').removeClass('emailExists')
+            $('#signupbtn').removeClass('disabled')
+        }
+    })
+    $('#signupbtn').click((e) => {
+        e.preventDefault()
+        var captcha = $('#g-recaptcha-response').val()
+        if (captcha) {
+            $('#captchacheck').removeClass('emailExists')
+            $.ajax({
+                url: '/api/signup',
+                method: 'POST',
+                data: {
+                    name: $('#name').val(),
+                    email: $('#signupemail').val(),
+                    password: $('#Password').val(),
+                    confirmpassword: $('#confirmPassword').val(),
+                    captcha: captcha
+                },
+                success: (response) => {
+                    console.log(response);
+                },
+                error: (response) => {
+                    console.log(response);
+                    location.href = "/signup"
+                }
+            })
+        } else {
+            $('#captchacheck').addClass('emailExists')
+        }
+    })
+})

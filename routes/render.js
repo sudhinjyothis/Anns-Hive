@@ -5,6 +5,7 @@ var middleware = require('./middleware')
 var userHelper = require("../helpers/user-helper");
 var Handlebars = require("handlebars");
 const { OAuth2Client } = require('google-auth-library');
+require('dotenv').config()
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
 
 /* GET home page. */
@@ -71,11 +72,26 @@ router.get('/gmailsetup', middleware.checkgmailsignup, (req, res) => {
   }
   res.render('users/gmailsetup', { user })
 })
+// emailverification success page
 router.get('/emailverificationsuccess', (req, res) => {
   res.render('users/verificationsuccess')
 })
+// token expired page
 router.get('/tokenexpired', (req, res) => {
-  res.render('/users/tokenexpired')
+  res.render('users/tokenexpired')
+})
+// email already exists page
+router.get('/gmailsignuserexists', (req, res) => {
+  res.render('users/gmailsignuserexists')
+})
+// verification send page
+router.get('/verificationsend', (req, res) => {
+  email = req.session.verifyEmail
+  res.render('users/verificationsend', { email })
+})
+// manual email verification
+router.get('/manualemailverify', (req, res) => {
+  res.render('users/emailVerificationInitialise')
 })
 // admin routes start
 // renders admin dashboard

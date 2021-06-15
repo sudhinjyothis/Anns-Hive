@@ -8,16 +8,9 @@
         </div>
         <div class="errorbg">
             <p style="color: #adb5bd;margin-top: 10px;">
-                Oops Token expired Sign in to get verified
+                Oops Token expired ! .
             </p>
-            <form action="/verifyemailafterexpired" method="POST">
-                <div class="col-md-12 col-12">
-                    <label for="inputEmail4" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="Firstname">
-                    <input type="text" name="f28a24ee25d797ed9acd" id="" value="476026041d7271641ee1" hidden>
-                </div>
-                <button type="submit" style="color: white" class="btn btn-success">Verify</button>
-            </form>
+            <a href="/api/sendemailverify" class="btn btn-success">Resend email</a>
         </div>
     </div>
 </section>

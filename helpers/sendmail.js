@@ -2,12 +2,13 @@ const nodemailer = require("nodemailer");
 const jwt = require('jsonwebtoken')
 const cipher = require('./cipher')
 const { google } = require('googleapis')
+require('dotenv').config()
 // google authentication
 const CLIENT_ID = process.env.GMAIL_CLIENT_ID
 const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET
-const REDIRECT_URI = 'https://developers.google.com/oauthplayground'
+const REDIRECT_URL = 'https://developers.google.com/oauthplayground'
 const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN
-const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
 module.exports = {
     sendMail: async (mailId) => {
@@ -26,7 +27,7 @@ module.exports = {
                 service: 'gmail',
                 auth: {
                     type: 'OAuth2',
-                    user: 'sudhinjyothis@gmail.com',
+                    user: 'annshiveauth@gmail.com',
                     clientId: CLIENT_ID,
                     clientSecret: CLIENT_SECRET,
                     refreshToken: REFRESH_TOKEN,
@@ -35,7 +36,7 @@ module.exports = {
             })
             // generating an email
             const mailOptions = {
-                from: 'Sudhinjyothis<sudhinjyothis@gmail.com>',
+                from: 'Annshive<annshiveauth@gmail.com>',
                 to: mailId,
                 subject: 'Verify Email address',
                 text: `This is to verify your email addresss with annshive it seems that html in our mail doesnt support on your browser, kindly copy and paste the given url and verify your account https://localhost:3000/api/verifyemail?token=${token}`,
@@ -194,7 +195,7 @@ module.exports = {
                                                         <td class="content-block" itemprop="handler" itemscope
                                                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
                                                             valign="top">
-                                                            <a style="color: #f6f6f6" href="https://localhost:3000/api/verifyemail?token=${token}" class="btn-primary">Confirm
+                                                            <a style="color: #f6f6f6" href="https://localhost:3000/api/verifyemail?token=${token}" class="btn-primary">Verify
                                                                     email address</a>                                                           
                                                         </td>
                                                     </tr>
@@ -221,7 +222,7 @@ module.exports = {
             }
             // sending email
             const result = await transport.sendMail(mailOptions)
-            return result
+            return result => console.log(result);
 
         } catch (err) {
             return err

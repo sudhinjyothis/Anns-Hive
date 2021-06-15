@@ -1,0 +1,24 @@
+<section class="signincontainer">
+    <div class="container">
+        <div class="signinwrap wrap">
+            <h5 class="signintext text-center mb-4">
+                <img class="signlogo" src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
+                Verify
+            </h5>
+            <div class="signinbg bg p-md-5  mx-auto mw-100">
+                <!--/SignUp-form-->
+                <form class="row g-3" action="/api/manualemailverify" method="POST">
+                    <div class="col-md-12 col-12">
+                        <label for="inputEmail4" class="form-label">Email</label>
+                        <input type="text" class="form-control" name="Email" id="Email">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-outline-warning">Verify</button>
+                    </div>
+                </form>
+                <!--//SignUp-form-->
+            </div>
+            <!---->
+        </div>
+    </div>
+</section>
