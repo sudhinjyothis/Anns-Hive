@@ -5,7 +5,6 @@ var userHelper = require("../helpers/user-helper");
 var jwtauth = require('../helpers/jwttokens')
 var sendmail = require("../helpers/sendmail");
 var cipher = require('../helpers/cipher')
-require('dotenv').config()
 const { OAuth2Client } = require('google-auth-library');
 const axios = require('axios')
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
@@ -83,24 +82,24 @@ router.post('/signup', async (req, res) => {
             if (req.body.captcha === "" || req.body.captcha === undefined || req.body.captcha === null) {
                 res.send(500).json({ err: "invalid captcha" })
             } else {
-                const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_KEY}&response=${req.body.captcha}`
-                axios.post(verifyUrl).then((response) => {
+                const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=6Le02TQbAAAAALxo62Dtgb9Yz9uQJNDTwr-uokBg&response=${req.body.captcha}`
+                await axios.post(verifyUrl).then((response) => {
                     if (response.data.success) {
-                        userHelper.doSignup(req.body).then(async (data) => {
-                            if (data.err) {
-                                res.sendStatus(500, { err: 'notfound' })
-                            } else {
-                                req.session.verifyEmail = req.body.email
-                                res.sendStatus(200, { proceed: true })
-                                // sending gmail
-                                sendmail.sendMail(req.body.email)
-                            }
-                        })
-                    } else {
-                        res.sendStatus(500, { err: 'timedout' })
+                        req.session.captcha = true
                     }
                 })
-
+                if (req.session.captcha) {
+                    userHelper.doSignup(req.body).then(async (data) => {
+                        if (data.err) {
+                            res.sendStatus(500)
+                        } else {
+                            req.session.verifyEmail = req.body.email
+                            res.sendStatus(200)
+                            // sending gmail
+                            sendmail.sendMail(req.body.email)
+                        }
+                    })
+                }
             }
 
         } else {

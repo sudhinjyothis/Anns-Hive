@@ -4,10 +4,10 @@ const cipher = require('./cipher')
 const { google } = require('googleapis')
 require('dotenv').config()
 // google authentication
-const CLIENT_ID = process.env.GMAIL_CLIENT_ID
-const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET
+const CLIENT_ID = "123042431395-ncf9764jcblg8nrc7ekmba6vljenurrg.apps.googleusercontent.com"
+const CLIENT_SECRET = "aZj968Eg4iVMAkwlgfJGahBt"
 const REDIRECT_URL = 'https://developers.google.com/oauthplayground'
-const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN
+const REFRESH_TOKEN = "1//04N_BVdDawFH6CgYIARAAGAQSNwF-L9IrWZmGO2Cgzk7W_wAVKJJ7l5omavkg4NZ6B_OlIbUuWbAevWD75n36ov-STjEvn4M83Ho"
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
 module.exports = {
@@ -222,7 +222,8 @@ module.exports = {
             }
             // sending email
             const result = await transport.sendMail(mailOptions)
-            return result => console.log(result);
+            console.log(result);
+            return result
 
         } catch (err) {
             return err

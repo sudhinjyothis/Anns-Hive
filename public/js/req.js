@@ -68,6 +68,7 @@ $(document).ready(() => {
     $('#signupbtn').click((e) => {
         e.preventDefault()
         var captcha = $('#g-recaptcha-response').val()
+        console.log(captcha);
         if (captcha) {
             $('#captchacheck').removeClass('emailExists')
             $.ajax({
