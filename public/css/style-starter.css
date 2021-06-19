@@ -18983,12 +18983,13 @@ a.text-dark:focus {
 }
 .signupcontainer{
   background-color: #3a3535;
-  height: 100vh;
+  height: 100%;
+  padding-bottom: 36px;
 }
 .signuptext{
   color: #d39e00;
   font-size: 2rem;
-  padding-top: 122px;
+  padding-top: 94px;
 }
 .team-social{
   margin-top: 1rem ;
@@ -19229,7 +19230,50 @@ a.text-dark:focus {
     .errorbg .errtohomebtn{
       margin-top: 10px;
     }
+    .w3l-banner-slider-main .navbar-light .navbar-nav .nav-link{
+      color: #f4f4f4;
+    }
 }
-
+.wrap form .commonerrormsg{
+  color: var(--red);
+}
+.commonerrormsg{
+  margin-top: 10px;
+  display: none;
+  margin-bottom: 0;
+  background-color: #616161c7;
+  padding: 5px 20px ;
+  text-align: center;
+  border-radius: 10px;
+  animation: slidedown .3s ease forwards;
+  color: red;
+}
+@keyframes slidedown {
+  from{
+    opacity: 0;
+    transform: translateY(-50px);
+  }to{
+    opacity: 1;
+    transform: none;
+  }
+}
+.signinerrmsg{
+  margin-top: 0;
+  display: none;
+  margin-bottom: 0;
+  background-color: #616161c7;
+  padding: 5px 20px ;
+  text-align: center;
+  border-radius: 10px;
+  animation: fadein 0.5s ease forwards;
+  color: red;
+}
+@keyframes fadein {
+  from{
+    opacity: 0;
+  }to{
+    opacity: 1;
+  }
+}
 
 /*# sourceMappingURL=style-starter.css.map */

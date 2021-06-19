@@ -65,6 +65,7 @@ module.exports = {
             if (user) {
                 bcrypt.compare(userdata.password, user.password).then((status) => {
                     if (status) {
+                        user.password = null
                         response.user = user
                         response.status = true
                         resolve(response)

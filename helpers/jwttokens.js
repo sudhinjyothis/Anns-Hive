@@ -1,6 +1,5 @@
 let jwt = require('jsonwebtoken')
 let cipher = require('./cipher')
-require('dotenv').config()
 module.exports = {
     // verifying created JWT Tokens
     verifyJwtToken: (token) => {

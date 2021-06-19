@@ -8,20 +8,24 @@
             <div class="signinbg bg p-md-5  mx-auto mw-100">
                 <!--/SignUp-form-->
                 <form class="row g-3">
+                    <div style="margin: 0;" class="col-md-8">
+                        <label style="color: var(--red);" class="signinerrmsg" id="signinErrMsg">Invalid Email or
+                            Password</label>
+                    </div>
                     <div class="col-md-12 col-12">
                         <label for="inputEmail4" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="Firstname">
+                        <input type="text" class="form-control" id="signinEmail">
                     </div>
                     <div class="col-md-12 col-12">
                         <label for="inputPassword4" class="form-label">Password</label>
-                        <input type="text" class="form-control" id="LastName">
+                        <input type="password" class="form-control" id="signinPassword">
                     </div>
                     <div style="margin-left: 20px;" class="form-check">
                         <input type="checkbox" class="form-check-input" id="rememberMeCheck">
                         <label class="form-check-label" for="rememberMeCheck">Remember me</label>
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-outline-warning">Sign In</button>
+                        <button type="submit" id="signinBtn" class="btn btn-outline-warning">Sign In</button>
                     </div>
                 </form>
                 <label style="margin-top: 10px;color: #adb5bd;" class="form-label">Sign in with google /

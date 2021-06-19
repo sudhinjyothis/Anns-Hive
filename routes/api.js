@@ -15,10 +15,27 @@ router.get('/signout', (req, res) => {
 })
 // check if email already exists on registration
 router.get('/checkemail', (req, res) => {
-    userHelper.checkEmailExist(req.query.email).then((data) => {
-        res.json(data)
-    })
+    if (req.query.email.indexOf('@') == -1) {
+        res.json({ status: "invalidEmail" })
+    } else {
+        userHelper.checkEmailExist(req.query.email).then((data) => {
+            res.json(data)
+        })
+    }
 })
+// check empty values
+router.post('/checkempty', (req, res) => {
+    userText = req.body.toCheck.replace(/^\s+/, '').replace(/\s+$/, '');
+    if (userText === '') {
+        // text was all whitespace
+        res.json({ status: "empty" })
+    } else {
+        // text has real content, now free of leading/trailing whitespace
+        res.json({ status: "notEmpty" })
+    }
+
+})
+
 // verify email during registration (not completed)
 router.get('/verifyemail', async (req, res) => {
     if (req.query.token) {
@@ -54,7 +71,7 @@ router.get('/sendemailverify', (req, res) => {
         sendmail.sendMail(req.session.verifyEmail)
     }
     else {
-        res.redirect('manualemailverify')
+        res.redirect('/manualemailverify')
     }
 })
 router.post('/manualemailverify', (req, res) => {
@@ -97,6 +114,7 @@ router.post('/signup', async (req, res) => {
                             res.sendStatus(200)
                             // sending gmail
                             sendmail.sendMail(req.body.email)
+                            req.session.catch = null
                         }
                     })
                 }
@@ -157,6 +175,28 @@ router.post('/creategmail', async (req, res) => {
     } else {
         res.send(500)
     }
+})
+// signin
+router.post('/signin', (req, res) => {
+    userHelper.userEmailVerificationCheck(req.body.email).then((verification) => {
+        if (verification.status === true) {
+            userHelper.doLogin(req.body).then((response) => {
+                if (response.status) {
+                    if (req.body.rememberMe === 'false') {
+                        req.session.cookie.sameSite = true
+                        req.session.cookie.expires = false
+                    }
+                    req.session.user = response.user
+                    res.json({ status: true })
+                } else {
+                    res.json({ status: false })
+                }
+            })
+        } else {
+            req.session.verifyEmail = req.body.email
+            res.json({ status: "notVerified" })
+        }
+    })
 })
 
 // admin routes

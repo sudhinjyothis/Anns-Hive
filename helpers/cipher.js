@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-require('dotenv').config()
 const algorithm = 'aes-256-ctr';
 const secretKey = process.env.ENCRYPTION_KEY;
 let encryptionkey = crypto.createHash('sha256').update(String(secretKey)).digest('base64').substr(0, 32);

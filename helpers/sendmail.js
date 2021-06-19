@@ -35,7 +35,7 @@ module.exports = {
             })
             // generating an email
             const mailOptions = {
-                from: 'Annshive<annshiveauth@gmail.com>',
+                from: 'Annshive<theannshiveauth@gmail.com>',
                 to: mailId,
                 subject: 'Verify Email address',
                 text: `This is to verify your email addresss with annshive it seems that html in our mail doesnt support on your browser, kindly copy and paste the given url and verify your account https://localhost:3000/api/verifyemail?token=${token}`,
@@ -147,11 +147,11 @@ module.exports = {
                 </head>
 
                 <body
-                    style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #3a3535; margin: 0;"
+                    style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #f4f4f4; margin: 0;"
                     bgcolor="#f6f6f6">
 
                     <table class="body-wrap"
-                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #3a3535; margin: 0;"
+                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f4f4f4; margin: 0;"
                         bgcolor="#f6f6f6">
                         <tr
                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -221,7 +221,6 @@ module.exports = {
             }
             // sending email
             const result = await transport.sendMail(mailOptions)
-            console.log(result);
             return result
 
         } catch (err) {

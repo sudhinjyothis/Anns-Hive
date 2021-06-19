@@ -21,27 +21,6 @@ function onSignIn(googleUser) {
     };
     xhr.send('idtoken=' + id_token);
 }
-function emailcheck(value) {
-    document.getElementById("emailLoad").classList.add('loadingshow')
-    $.ajax({
-        url: "/api/checkemail",
-        data: {
-            email: value
-        },
-        method: "GET",
-        success: (response) => {
-            if (response.status) {
-                document.getElementById("emailCheckStatus").classList.add("emailExists")
-                document.getElementById("signupbtn").classList.add('disabled')
-                document.getElementById("emailLoad").classList.remove('loadingshow')
-            } else {
-                document.getElementById("emailCheckStatus").classList.remove("emailExists")
-                document.getElementById("emailLoad").classList.remove('loadingshow')
-                document.getElementById("signupbtn").classList.remove('disabled')
-            }
-        }
-    })
-}
 function createGmail() {
     $.ajax({
         url: "/api/creategmail",
@@ -54,43 +33,157 @@ function createGmail() {
         }
     })
 }
-
+// Jquery
 $(document).ready(() => {
-    $('#confirmPassword').blur((e) => {
-        if ($('#confirmPassword').val() != $('#Password').val()) {
-            $('#passwordcheck').addClass('emailExists')
-            $('#signupbtn').addClass('disabled')
-        } else {
-            $('#passwordcheck').removeClass('emailExists')
-            $('#signupbtn').removeClass('disabled')
-        }
-    })
+    // signUp
+    // signup button err handling
     $('#signupbtn').click((e) => {
         e.preventDefault()
+        // checking if fields are empty 
         var captcha = $('#g-recaptcha-response').val()
-        console.log(captcha);
-        if (captcha) {
-            $('#captchacheck').removeClass('emailExists')
+        if ($('#name').val() === undefined || $('#name').val() === null || $('#name').val().length == 0) {
+            $('#errlab1').css('display', 'inline-block')
+        } else if ($('#signupemail').val() === undefined || $('#signupemail').val() === null || $('#signupemail').val().length === 0) {
+            $('#errlab2').css('display', 'inline-block')
+        } else if ($('#Password').val() === undefined || $('#Password').val() === null || $('#Password').val().length === 0) {
+            $('#errlab3').css('display', 'inline-block')
+        } else if ($('#Password').val().length < 6) {
+            $('#passreq1').css('display', 'inline-block')
+        } else if (!/([A-Z])/.test($('#Password').val())) {
+            $('#passreq3').css('display', 'inline-block')
+        } else if (!/([0-9])/.test($('#Password').val())) {
+            $('#passreq2').css('display', 'inline-block')
+        } else if ($.trim($('#name').val()) == '') {
+            $('#errlab1').css('display', 'inline-block')
+        } else if ($('#confirmPassword').val() != $('#Password').val()) {
+            $('#passwordcheck').css('display', "inline-block")
+        }
+        else {
+            if (captcha) {
+                $('#captchacheck').css('display', 'none')
+                $.ajax({
+                    url: '/api/signup',
+                    method: 'POST',
+                    data: {
+                        name: $('#name').val(),
+                        email: $('#signupemail').val(),
+                        password: $('#Password').val(),
+                        confirmpassword: $('#confirmPassword').val(),
+                        captcha: captcha
+                    },
+                    success: (response) => {
+                        location.href = '/verificationsend'
+                    },
+                    error: (response) => {
+                        location.href = "/signup"
+                    }
+                })
+            } else {
+                $('#captchacheck').css('display', 'inline-block')
+            }
+        }
+    })
+    // on blur error handling
+    $('#name').blur(() => {
+        if ($('#name').val() === undefined || $('#name').val() === null || $('#name').val().length === 0) {
+            $('#errlab1').css('display', 'inline-block')
+        } else {
+            if ($.trim($('#name').val()) == '') {
+                $('#errlab1').css('display', 'inline-block')
+            } else {
+                $('#errlab1').css('display', 'none')
+            }
+        }
+    })
+    $('#signupemail').blur(() => {
+        if ($('#signupemail').val() === undefined || $('#signupemail').val() === null || $('#signupemail').val().length == 0) {
+            $("#emailCheckStatus").css('display', 'none')
+            $('#invalidEmail').css('display', 'none')
+            $('#errlab2').css('display', 'inline-block')
+        } else {
+            $('#errlab2').css('display', 'none')
+            $("#emailLoad").addClass('loadingshow')
             $.ajax({
-                url: '/api/signup',
-                method: 'POST',
+                url: "/api/checkemail",
                 data: {
-                    name: $('#name').val(),
-                    email: $('#signupemail').val(),
-                    password: $('#Password').val(),
-                    confirmpassword: $('#confirmPassword').val(),
-                    captcha: captcha
+                    email: $('#signupemail').val()
                 },
+                method: "GET",
                 success: (response) => {
-                    console.log(response);
-                },
-                error: (response) => {
-                    console.log(response);
-                    location.href = "/signup"
+                    if (response.status == true) {
+                        $('#invalidEmail').css('display', 'none')
+                        $("#emailCheckStatus").css('display', 'inline-block')
+                        $('#signupbtn').addClass('disabled')
+                        $("#emailLoad").removeClass('loadingshow')
+                    } else if (response.status === 'invalidEmail') {
+                        $("#emailCheckStatus").css('display', 'none')
+                        $("#emailLoad").removeClass('loadingshow')
+                        $('#invalidEmail').css('display', 'inline-block')
+                    }
+                    else {
+                        $("#emailCheckStatus").css('display', 'none')
+                        $('#signupbtn').removeClass('disabled')
+                        $("#emailLoad").removeClass('loadingshow')
+                        $('#invalidEmail').css('display', 'none')
+                    }
                 }
             })
-        } else {
-            $('#captchacheck').addClass('emailExists')
         }
+    })
+    $('#Password').blur(() => {
+        if ($('#Password').val() === undefined || $('#Password').val() === null || $('#Password').val().length === 0) {
+            $('#errlab3').css('display', 'inline-block')
+        } else {
+            $('#errlab3').css('display', 'none')
+            if ($('#Password').val().length < 6) {
+                $('#passreq1').css('display', 'inline-block')
+                $('#passreq2').css('display', 'none')
+                $('#passreq3').css('display', 'none')
+            } else if (!/([A-Z])/.test($('#Password').val())) {
+                $('#passreq3').css('display', 'inline-block')
+                $('#passreq1').css('display', 'none')
+                $('#passreq2').css('display', 'none')
+            } else if (!/([0-9])/.test($('#Password').val())) {
+                $('#passreq2').css('display', 'inline-block')
+                $('#passreq1').css('display', 'none')
+                $('#passreq3').css('display', 'none')
+            } else {
+                $('#passreq1').css('display', 'none')
+                $('#passreq2').css('display', 'none')
+                $('#passreq3').css('display', 'none')
+            }
+        }
+    })
+    $('#confirmPassword').blur((e) => {
+        if ($('#confirmPassword').val() != $('#Password').val()) {
+            $('#errlab4').css('display', 'none')
+            $('#passwordcheck').css('display', "inline-block")
+        } else {
+            $('#passwordcheck').css('display', "none")
+        }
+    })
+
+    // signIn
+    $('#signinBtn').click((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/api/signin',
+            method: "POST",
+            data: {
+                email: $('#signinEmail').val(),
+                password: $('#signinPassword').val(),
+                rememberMe: $('#rememberMeCheck').is(":checked")
+            },
+            success: (response) => {
+                if (response.status === true) {
+                    location.href = '/'
+                } else if (response.status === "notVerified") {
+                    location.href = '/notverified'
+                }
+                else {
+                    $('#signinErrMsg').css('display', 'inline-block')
+                }
+            }
+        })
     })
 })

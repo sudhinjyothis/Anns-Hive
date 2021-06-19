@@ -10,31 +10,49 @@
                 <form class="row g-3">
                     <div class="col-md-12 col-12">
                         <label for="inputEmail4" class="form-label">Name</label>
-                        <input type="text" class="form-control" required name="name" id="name">
+                        <input type="text" class="form-control" name="name" id="name" required>
+                        <label class="commonerrormsg" id="errlab1">Name cannot be empty !</label>
                     </div>
                     <div class="col-md-12 col-12 signupemail">
-                        <label for="email" class="form-label">Email <span class="emailnotexists"
-                                id="emailCheckStatus">Email already
-                                Exists !</span></label>
+                        <label for="email" class="form-label">Email </label>
                         <img id="emailLoad" class="loading" src="/images/Spinner-3.gif" alt="">
-                        <input type="email" required class="form-control" name="email" id="signupemail"
-                            onblur="emailcheck(this.value)">
+                        <input type="email" required class="form-control" name="email" id="signupemail">
+                        <label class="commonerrormsg" id="emailCheckStatus">Email alreadyExists !</label>
+                        <label class="commonerrormsg" id="errlab2">Email cannot be empty !</label>
+                        <label class="commonerrormsg" id="invalidEmail">Invalid Email Address</label>
                     </div>
                     <div class="col-md-12 col-12">
                         <label for="inputPassword4" class="form-label">Password</label>
-                        <input type="password" class="form-control" required name="password" id="Password">
+                        <input type="password" maxlength="16" class="form-control" required name="password"
+                            id="Password">
+                        <label class="commonerrormsg" id="errlab3">password cannot be empty !</label>
+                        <label class="commonerrormsg" id="passreq1">Minimum of 6 characters required</label>
+                        <label class="commonerrormsg" id="passreq2">Should contain atleast one integer</label>
+                        <label class="commonerrormsg" id="passreq3">Should contain atleast one uppercase
+                            character</label>
                     </div>
                     <div class="col-md-12 col-12">
-                        <label class="form-label">Confirm Password<span class="emailnotexists"
-                                id="passwordcheck">Password
-                                doesnt
-                                match!</span></label>
-                        <input type="password" class="form-control" required name="confirmpassword"
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" maxlength="16" class="form-control" required name="confirmpassword"
                             id="confirmPassword">
+                        <label class="commonerrormsg" id="passwordcheck">Password doesnt match!</label>
+                        <label style="margin-top: 10px;margin-left: 10px;">
+                            <ul>
+                                <li>
+                                    Minimum 6 characters and maximum 16 characters
+                                </li>
+                                <li>
+                                    Should contain atleast one integer
+                                </li>
+                                <li>
+                                    Should contain atleast one uppercase character
+                                </li>
+                            </ul>
+                        </label>
                     </div>
-                    <span style="margin-top: 10px;margin-left: 10px;" class="emailnotexists" id="captchacheck">Please
-                        Verify you are not a
-                        robot</span>
+                    <div class="col-md-8">
+                        <label class="commonerrormsg" id="captchacheck">Please Verify you are not a robot</label>
+                    </div>
                     <div style="margin-left: 10px;overflow: hidden;" class="g-recaptcha"
                         data-sitekey="6Le02TQbAAAAABaqUAYIM2HA2KN-hQ6ylzGQ4qWi"></div>
                     <div class="col-12">

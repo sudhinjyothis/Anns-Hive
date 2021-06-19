@@ -5,7 +5,6 @@ var middleware = require('./middleware')
 var userHelper = require("../helpers/user-helper");
 var Handlebars = require("handlebars");
 const { OAuth2Client } = require('google-auth-library');
-require('dotenv').config()
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
 
 /* GET home page. */
@@ -93,6 +92,11 @@ router.get('/verificationsend', (req, res) => {
 router.get('/manualemailverify', (req, res) => {
   res.render('users/emailVerificationInitialise')
 })
+// not verified page 
+router.get('/notverified', (req, res) => {
+  res.render('users/notverified')
+})
+
 // admin routes start
 // renders admin dashboard
 router.get('/admin', function (req, res, next) {
