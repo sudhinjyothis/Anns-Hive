@@ -10,6 +10,7 @@ require('dotenv').config()
 var Render = require('./routes/render');
 var api = require('./routes/api');
 var app = express();
+var passport = require('passport')
 var session = require("express-session")
 
 // view engine setup
@@ -27,6 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(fileUpload())
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(session({ secret: "de24983a7daf02e8b2fdfba6bd4a8ab4f9ade8bb7c32196bac2444915fece24372c7f6ab7e49a49e8f1f520431a684cb55ccfc4317545579ec3b07129e719d41", cookie: { maxAge: 604800000 }, resave: true, saveUninitialized: false }))
 db.connect((err) => {
   if (err) console.log("connection error" + err)

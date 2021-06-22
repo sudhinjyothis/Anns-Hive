@@ -1,3 +1,4 @@
+var userHelper = require("../helpers/user-helper");
 module.exports = {
     //checks if the user is already signed in or not 
     activeuser: (req, res, next) => {
@@ -16,12 +17,28 @@ module.exports = {
         }
     },
     // to handle rendering gmail registration page
-    checkgmailsignup: (req, res, next) => {
-        if (req.session.gmailreg) {
+    checksocialsignup: (req, res, next) => {
+        if (req.session.socialreg) {
             next()
         } else {
             res.redirect('/signin')
         }
+    },
+    checksignupauth: (req, res, next) => {
+        if (req.session.signupauth === true) {
+            next()
+        } else {
+            res.redirect('/')
+        }
+    },
+    checkaddress: async (req, res, next) => {
+        await userHelper.fetchUserById(req.session.user._id).then((data) => {
+            if (data.address) {
+                next()
+            } else {
+                res.redirect('/profile')
+            }
+        })
     }
 
 }

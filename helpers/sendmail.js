@@ -194,7 +194,7 @@ module.exports = {
                                                         <td class="content-block" itemprop="handler" itemscope
                                                             style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
                                                             valign="top">
-                                                            <a style="color: #f6f6f6" href="https://anns-hive.herokuapp.com/api/verifyemail?token=${token}" class="btn-primary">Verify
+                                                            <a style="color: #f6f6f6" href="https://localhost:3000/api/verifyemail?token=${token}" class="btn-primary">Verify
                                                                     email address</a>                                                           
                                                         </td>
                                                     </tr>

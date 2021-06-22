@@ -22,8 +22,9 @@ module.exports = {
                         email: userdata.email,
                         password: userdata.password,
                         isVerified: false,
-                        gmailLogin: false
-
+                        gmailLogin: false,
+                        fbLogin: false,
+                        address: null
                     }
                 ).then((data) => {
                     resolve(data.ops[0])
@@ -42,15 +43,33 @@ module.exports = {
                     email: userdata.email,
                     id: userdata.sub,
                     isVerified: userdata.email_verified,
-                    gmailLogin: true
+                    gmailLogin: true,
+                    address: null
                 }
             ).then((data) => {
                 resolve(data.ops[0])
             })
         })
     },
-    //fetching gmail using specific ID
-    doCheckGmail: (userid) => {
+    // registering user while sign in with facebook
+    doSignupFacebook: (userdata) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).insertOne(
+                {
+                    name: userdata.name,
+                    email: userdata.email,
+                    id: userdata.id,
+                    isVerified: true,
+                    fbLogin: true,
+                    address: null
+                }
+            ).then((data) => {
+                resolve(data.ops[0])
+            })
+        })
+    },
+    //fetching Social logins using specific ID
+    doCheckSocial: (userid) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).findOne({ id: userid }).then((data) => {
                 resolve(data)
@@ -61,7 +80,7 @@ module.exports = {
     doLogin: (userdata) => {
         return new Promise(async (resolve, reject) => {
             let response = {}
-            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userdata.email, gmailLogin: false })
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userdata.email, gmailLogin: false, fbLogin: false })
             if (user) {
                 bcrypt.compare(userdata.password, user.password).then((status) => {
                     if (status) {
@@ -91,6 +110,13 @@ module.exports = {
             })
         })
     },
+    fetchUserById: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).findOne({ _id: objectId(userId) }).then((data) => {
+                resolve(data)
+            })
+        })
+    },
     // fetching user email verification detail
     userEmailVerificationCheck: (email) => {
         return new Promise(async (resolve, reject) => {
@@ -114,8 +140,29 @@ module.exports = {
                 resolve({ verified: true, user: user })
             })
         })
-    }
-    ,
+    },
+    // adding address 
+    addAddress: (userId, address) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).updateOne({ _id: objectId(userId) }, {
+                $set: {
+                    address: {
+                        name: address.addressname,
+                        email: address.addressemail,
+                        mobile: address.addressmobile,
+                        mobile2: address.addressmobile2,
+                        line1: address.addressline1,
+                        line2: address.addressline2,
+                        state: address.addressstate,
+                        city: address.addresscity,
+                        pincode: address.addresspin
+                    }
+                }
+            }).then(() => {
+                resolve({ status: "added" })
+            })
+        })
+    },
     // adding a product to cart
     addToCart: (proId, userId) => {
         let proObj = {

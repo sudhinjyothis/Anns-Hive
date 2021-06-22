@@ -18982,7 +18982,7 @@ a.text-dark:focus {
   background-color: #ff7315;
 }
 .signupcontainer{
-  background-color: #3a3535;
+  background-color: #f4f4f4;
   height: 100%;
   padding-bottom: 36px;
 }
@@ -18995,14 +18995,11 @@ a.text-dark:focus {
   margin-top: 1rem ;
 }
 .wrap form label{
-  color: #adb5bd;
+  color: #505050;
 }
 @media (max-width:767px) {
   .signuptext{
     padding-top: 115px;
-  }
-  .signupcontainer{
-    height: 112vh;
   }
 }
 .userbtnshide{
@@ -19068,13 +19065,13 @@ a.text-dark:focus {
   padding: 13px;
 }
 .signupbg{
-  background-color: #464242c7;
+  background-color: #ffa310ad;
   border-radius: 10px;
   width: 50%;
   padding: 13px;
 }
 .signinbg{
-  background-color: #464242c7;
+  background-color: #ffa310ad;
   border-radius: 10px;
   width: 65%;
   padding: 13px;
@@ -19108,7 +19105,7 @@ a.text-dark:focus {
   margin-bottom: 10px;
 }
 .signincontainer{
-  background-color: #3a3535;
+  background-color: #f4f4f4;
   height: 100vh;
 }
 .dropdown-menu.show{
@@ -19220,11 +19217,10 @@ a.text-dark:focus {
   display: inline;
 }
 .errorbg{
-  background-color: #464242c7;
+  background-color: #ffa310ad;
   border-radius: 10px;
   padding: 13px;
   text-align: center;
-  padding: 50px;
 }
 @media (max-width:767px) {
     .errorbg .errtohomebtn{
@@ -19235,13 +19231,13 @@ a.text-dark:focus {
     }
 }
 .wrap form .commonerrormsg{
-  color: var(--red);
+  color: #000000;
 }
 .commonerrormsg{
   margin-top: 10px;
   display: none;
   margin-bottom: 0;
-  background-color: #616161c7;
+  background-color: #dc3545a8;
   padding: 5px 20px ;
   text-align: center;
   border-radius: 10px;
@@ -19261,19 +19257,52 @@ a.text-dark:focus {
   margin-top: 0;
   display: none;
   margin-bottom: 0;
-  background-color: #616161c7;
+  background-color: #dc3545a8;
   padding: 5px 20px ;
   text-align: center;
   border-radius: 10px;
-  animation: fadein 0.5s ease forwards;
+  animation: fadein 0.2s ease forwards;
   color: red;
 }
-@keyframes fadein {
-  from{
-    opacity: 0;
-  }to{
-    opacity: 1;
-  }
+.gpaymethod{
+  background-color: #acb2b7;
+  padding: 3px;
+  border-radius: 2px;
+  font-weight: 700;
+  transform: translateY(-6px);
+  transition: background-color .3s ease;
 }
-
+.gpaymethod a:hover{
+  color: #232020;
+}
+.gpaymethod:hover {
+  background-color: #a09292;
+}
+.facebookbtn{
+  padding: 5px 20px;
+}
+.facebookbtn a{
+  margin-bottom: 10px;
+}
+.facebookbtn span{
+  background-color: white;
+  padding: 4px 8px;
+  margin-right: 10px;
+  border-radius: 50%;
+  color: #007bff;
+  
+}
+.addressbg{
+  background-color: #ffa310ad;
+  border-radius: 10px;
+  width: 100%;
+  padding: 13px;
+}
+.form-label.required:after { 
+  color: red;
+  content: "*";
+  position: absolute;
+  margin-left: 8px;
+  top:0px;
+}
 /*# sourceMappingURL=style-starter.css.map */

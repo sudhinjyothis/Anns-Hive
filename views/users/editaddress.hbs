@@ -1,0 +1,67 @@
+<section style="height: 100vh;" class="signupcontainer">
+    <div class="container">
+        <div class="wrap">
+            <h5 id="address" class="signuptext text-center mb-4">
+                <img class="signlogo" src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
+                Edit Address
+            </h5>
+            <div class="addressbg bg p-md-5 p-4 mx-auto mw-100 ">
+                <!--/SignUp-form-->
+                <form class="row g-3">
+                    <div class="col-md-6 col-12">
+                        <label class="form-label required">Name</label>
+                        <input type="text" value="{{address.name}}" class="form-control " name="addressname"
+                            id="addressname" required>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label required">Email</label>
+                        <input value="{{address.email}}" type="email" class="form-control" name="addressemail"
+                            id="addressemail" required>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label required">Phone number</label>
+                        <input value="{{address.mobile}}" type="number" maxlength="13" class="form-control"
+                            name="addressmobile" id="addressmobile" required>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">Alternate number (optional)</label>
+                        <input value="{{address.mobile2}}" type="number" maxlength="13" class="form-control"
+                            name="addressmobile2" id="addressmobile2">
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label required">Address Line 1 </label>
+                        <input value="{{address.line1}}" type="text" class="form-control" name="addressline1"
+                            id="addressline1" required>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">Address Line 2 </label>
+                        <input value="{{address.line2}}" type="text" class="form-control" name="addressline2"
+                            id="addressline2">
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <label class="form-label required">State</label>
+                        <select id="addressstate" class="form-select" aria-label="Default select example" required>
+                            <option value="{{address.state}}">{{address.state}}</option>
+                            {{#each indianStates}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <label class="form-label required">City</label>
+                        <input value="{{address.city}}" type="text" class="form-control" name="addresscity"
+                            id="addresscity" required>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <label class="form-label required">Pincode</label>
+                        <input value="{{address.pincode}}" type="number" class="form-control" name="addresspin"
+                            id="addresspin" required>
+                    </div>
+                    <div class="col-md-4">
+                        <button id="editaddressbtn" type="submit" class="btn btn-dark">Edit address</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

@@ -35,6 +35,21 @@ function createGmail() {
 }
 // Jquery
 $(document).ready(() => {
+    // fbsetup
+    $('#fbsetupbtn').click((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: "/api/createfb",
+            method: "POST",
+            success: () => {
+                location.href = '/'
+            },
+            error: () => {
+                location.href = '/signup'
+            }
+        })
+
+    })
     // signUp
     // signup button err handling
     $('#signupbtn').click((e) => {
@@ -166,24 +181,78 @@ $(document).ready(() => {
     // signIn
     $('#signinBtn').click((e) => {
         e.preventDefault()
+        if ($.trim($('#signinEmail').val()) == '') {
+            $('#signinErrMsg').css('display', 'inline-block')
+        } else {
+            $.ajax({
+                url: '/api/signin',
+                method: "POST",
+                data: {
+                    email: $('#signinEmail').val(),
+                    password: $('#signinPassword').val(),
+                    rememberMe: $('#rememberMeCheck').is(":checked")
+                },
+                success: (response) => {
+                    if (response.status === true) {
+                        location.href = '/'
+                    } else if (response.status === "notVerified") {
+                        location.href = '/notverified'
+                    }
+                    else {
+                        $('#signinErrMsg').css('display', 'inline-block')
+                    }
+                }
+            })
+        }
+    })
+    // add address btn 
+    $('#addaddressbtn').click((e) => {
+        e.preventDefault()
         $.ajax({
-            url: '/api/signin',
-            method: "POST",
+            url: '/api/addaddress',
+            method: 'POST',
             data: {
-                email: $('#signinEmail').val(),
-                password: $('#signinPassword').val(),
-                rememberMe: $('#rememberMeCheck').is(":checked")
+                addressname: $('#addressname').val(),
+                addressemail: $('#addressemail').val(),
+                addressmobile: $('#addressmobile').val(),
+                addressmobile2: $('#addressmobile2').val(),
+                addressline1: $('#addressline1').val(),
+                addressline2: $('#addressline2').val(),
+                addressstate: $("#addressstate option:selected").text(),
+                addresscity: $('#addresscity').val(),
+                addresspin: $('#addresspin').val()
             },
             success: (response) => {
-                if (response.status === true) {
-                    location.href = '/'
-                } else if (response.status === "notVerified") {
-                    location.href = '/notverified'
-                }
-                else {
-                    $('#signinErrMsg').css('display', 'inline-block')
+                if (response.status === "added") {
+                    location.href = '/profile'
                 }
             }
+
+        })
+    })
+    // edit address 
+    $('#editaddressbtn').click((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/api/addaddress',
+            method: 'POST',
+            data: {
+                addressname: $('#addressname').val(),
+                addressemail: $('#addressemail').val(),
+                addressmobile: $('#addressmobile').val(),
+                addressmobile2: $('#addressmobile2').val(),
+                addressline1: $('#addressline1').val(),
+                addressline2: $('#addressline2').val(),
+                addressstate: $("#addressstate option:selected").text(),
+                addresscity: $('#addresscity').val(),
+                addresspin: $('#addresspin').val()
+            },
+            success: (response) => {
+                if (response.status === "added") {
+                    location.href = '/profile'
+                }
+            }
+
         })
     })
 })

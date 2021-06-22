@@ -9,7 +9,7 @@
                 <!--/SignUp-form-->
                 <form class="row g-3">
                     <div style="margin: 0;" class="col-md-8">
-                        <label style="color: var(--red);" class="signinerrmsg" id="signinErrMsg">Invalid Email or
+                        <label style="color: #000000;" class="signinerrmsg" id="signinErrMsg">Invalid Email or
                             Password</label>
                     </div>
                     <div class="col-md-12 col-12">
@@ -25,19 +25,23 @@
                         <label class="form-check-label" for="rememberMeCheck">Remember me</label>
                     </div>
                     <div class="col-12">
-                        <button type="submit" id="signinBtn" class="btn btn-outline-warning">Sign In</button>
+                        <button type="submit" id="signinBtn" class="btn btn-dark">Sign In</button>
                     </div>
                 </form>
-                <label style="margin-top: 10px;color: #adb5bd;" class="form-label">Sign in with google /
+                <label style="margin-top: 10px;color: #505050;" class="form-label">Sign in with google /
                     facebook</label>
                 <div class="socialmedialogin">
                     <div class="googlesign g-signin2" data-onsuccess="onSignIn"></div>
                     <div class="">
-                        <div class="fb-login-button" data-width="" data-size="medium" data-button-type="login_with"
-                            data-layout="default" data-auto-logout-link="false" data-use-continue-as="true"></div>
+                        {{!-- <div class="fb-login-button" data-width="" data-size="medium"
+                            data-button-type="login_with" data-layout="default" data-auto-logout-link="false"
+                            data-use-continue-as="true"></div> --}}
+                        <a href="/api/facebookauth" class="facebookbtn btn btn-primary"><span
+                                class="fa fa-facebook"></span> Sign
+                            in</a>
                     </div>
                 </div>
-                <a href="/signup" style="color: #adb5bd;text-decoration: underline;">New to this site? sign up</a>
+                <a href="/signup" style="color: #505050;text-decoration: underline;">New to this site? sign up</a>
                 <!--//SignUp-form-->
             </div>
             <!---->
@@ -45,6 +49,8 @@
     </div>
 </section>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+{{!--
 <script async defer crossorigin="anonymous"
     src='https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v10.0&appId=901671164022470&autoLogAppEvents=1'
-    nonce="NuZK1uGj"></script>
+    nonce="NuZK1uGj"></script> --}}

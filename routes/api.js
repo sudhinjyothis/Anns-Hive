@@ -5,9 +5,81 @@ var userHelper = require("../helpers/user-helper");
 var jwtauth = require('../helpers/jwttokens')
 var sendmail = require("../helpers/sendmail");
 var cipher = require('../helpers/cipher')
+const passport = require('passport')
+const facebookStrategy = require('passport-facebook')
 const { OAuth2Client } = require('google-auth-library');
-const axios = require('axios')
+const axios = require('axios');
+const middleware = require('./middleware');
 const client = new OAuth2Client(process.env.SIGNIN_CLIENTID);
+let facebookuser
+// facbook login
+passport.use(new facebookStrategy({
+
+    // pull in our app id and secret from our auth.js file
+    clientID: process.env.FACEBOOK_CLIENTID,
+    clientSecret: process.env.FACEBOOK_CLIENTSECRET,
+    callbackURL: "https://localhost:3000/api/facebookCallback",
+    profileFields: ['id', 'displayName', 'name', 'gender', 'email'],
+    enableProof: true
+
+},// facebook will send back the token and profile
+    (token, refreshToken, profile, done) => {
+        facebookuser = profile._json
+        return done(null, profile)
+    }
+));
+passport.serializeUser(function (user, done) {
+    done(null, user.id);
+});
+// used to deserialize the user
+passport.deserializeUser(function (id, done) {
+    User.findById(id, function (err, user) {
+        done(err, user);
+    });
+});
+router.get('/facebookauth', passport.authenticate('facebook', { scope: 'email' }), (req, res) => {
+    req.session.socialregauth = true
+});
+router.get('/facebookCallback',
+    passport.authenticate('facebook', {
+        failureRedirect: '/signin'
+    }), async (req, res) => {
+        userHelper.doCheckSocial(facebookuser.id).then((user) => {
+            if (user) {
+                req.session.user = user
+                res.redirect('/')
+            } else {
+                req.session.socialreg = facebookuser
+                userHelper.checkEmailExist(facebookuser.email).then((response) => {
+                    if (response.status) {
+                        res.redirect('/gmailsignuserexists')
+                    } else {
+                        res.redirect('/fbsetup')
+                    }
+                })
+            }
+        })
+    }
+);
+// fbsignup
+router.post('/createfb', async (req, res) => {
+    let user = req.session.socialreg
+    if (user) {
+        let userExist = await userHelper.doCheckSocial(user.id)
+        if (userExist) {
+            res.redirect('/')
+        } else {
+            userHelper.doSignupFacebook(user).then((data) => {
+                req.session.socialreg = null
+                req.session.user = data
+                res.sendStatus(200)
+            })
+        }
+    } else {
+        res.send(500)
+    }
+})
+
 // signout the user
 router.get('/signout', (req, res) => {
     req.session.user = null
@@ -35,7 +107,6 @@ router.post('/checkempty', (req, res) => {
     }
 
 })
-
 // verify email during registration (not completed)
 router.get('/verifyemail', async (req, res) => {
     if (req.query.token) {
@@ -50,6 +121,7 @@ router.get('/verifyemail', async (req, res) => {
                         } else {
                             userHelper.userEmailVerification(data.email).then((response) => {
                                 if (response.verified) {
+                                    response.user.password = null
                                     req.session.user = response.user
                                     res.redirect('/emailverificationsuccess')
                                 }
@@ -88,6 +160,7 @@ router.post('/manualemailverify', (req, res) => {
 })
 // registering new user
 router.post('/signup', async (req, res) => {
+    req.session.signupauth = true
     // checking if user exists
     let user = await userHelper.checkEmailExist(req.body.email)
     if (user.status) {
@@ -97,7 +170,7 @@ router.post('/signup', async (req, res) => {
         if (req.body.password === req.body.confirmpassword) {
             // verifying Captcha
             if (req.body.captcha === "" || req.body.captcha === undefined || req.body.captcha === null) {
-                res.send(500).json({ err: "invalid captcha" })
+                res.json({ err: "invalid captcha" })
             } else {
                 const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=6Le02TQbAAAAALxo62Dtgb9Yz9uQJNDTwr-uokBg&response=${req.body.captcha}`
                 await axios.post(verifyUrl).then((response) => {
@@ -114,7 +187,7 @@ router.post('/signup', async (req, res) => {
                             res.sendStatus(200)
                             // sending gmail
                             sendmail.sendMail(req.body.email)
-                            req.session.catch = null
+                            req.session.captcha = false
                         }
                     })
                 }
@@ -125,6 +198,8 @@ router.post('/signup', async (req, res) => {
         }
     }
 })
+// facebook login
+
 // gmail sign in route
 router.post('/gmailsignin', (req, res) => {
     let token = req.body.idtoken
@@ -135,10 +210,10 @@ router.post('/gmailsignin', (req, res) => {
             audience: process.env.SIGNIN_CLIENTID
         });
         const payload = ticket.getPayload();
+        req.session.socialreg = payload
         if (payload.email_verified) {
-            let user = await userHelper.doCheckGmail(payload.sub)
+            let user = await userHelper.doCheckSocial(payload.sub)
             if (user) {
-                user.id = ""
                 req.session.user = user
                 res.send("logintrue")
             } else {
@@ -146,7 +221,6 @@ router.post('/gmailsignin', (req, res) => {
                     if (response.status) {
                         res.send("userExists")
                     } else {
-                        req.session.gmailreg = payload
                         res.send("regtrue")
                     }
                 })
@@ -160,16 +234,16 @@ router.post('/gmailsignin', (req, res) => {
 })
 // register user if not exitst after gmail sign in
 router.post('/creategmail', async (req, res) => {
-    let user = req.session.gmailreg
+    let user = req.session.socialreg
     if (user) {
-        let userExist = await userHelper.doCheckGmail(user.sub)
+        let userExist = await userHelper.doCheckSocial(user.sub)
         if (userExist) {
             res.redirect('/')
         } else {
             userHelper.doSignupGmail(user).then((data) => {
-                req.session.gmailreg = null
+                req.session.socialreg = null
                 req.session.user = data
-                res.send(200)
+                res.sendStatus(200)
             })
         }
     } else {
@@ -198,7 +272,12 @@ router.post('/signin', (req, res) => {
         }
     })
 })
-
+// adding address
+router.post('/addaddress', (req, res) => {
+    userHelper.addAddress(req.session.user._id, req.body).then((response) => {
+        res.json(response)
+    })
+})
 // admin routes
 // editing a product in admin page
 router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {

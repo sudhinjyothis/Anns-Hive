@@ -1,0 +1,143 @@
+<section class="signupcontainer">
+    <div class="container">
+        <div class="wrap">
+            <h5 class="signuptext text-center mb-4">
+                <img class="signlogo" src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
+                Profile
+            </h5>
+            <div class="signupbg bg p-md-5 p-4 mx-auto mw-100 ">
+                <!--/SignUp-form-->
+                {{#if socialmedia}}
+                <form class="row g-3">
+                    <div class="col-md-12 col-12">
+                        <label for="inputEmail4" class="form-label">Name</label>
+                        <input type="text" value="{{user.name}}" class="form-control" name="name" disabled>
+                    </div>
+                    <div class="col-md-12 col-12 ">
+                        <label for="email" class="form-label">Email </label>
+                        <input type="email" class="form-control" value="{{user.email}}" name="email" disabled>
+                    </div>
+                    <div class="col-md-12 col-12 signupemail">
+                        <label class="form-label">Mobile</label>
+                        <div style="display: flex;">
+                            {{#if user.mobile}}
+                            <input type="number" class="form-control" value="{{user.mobile}}" name="mobile" disabled>
+                            <a style="margin-left: 20px;" href="" class="btn btn-dark">Edit</a>
+                            {{else}}
+                            <input type="text" class="form-control" value="please add your mobile number" name="email"
+                                disabled>
+                            <a style="margin-left: 20px;" href="" class="btn btn-dark">Add</a>
+                            {{/if}}
+                        </div>
+                    </div>
+                </form>
+                {{else}}
+                <form class="row g-3">
+                    <div class="col-md-12 col-12">
+                        <label for="inputEmail4" class="form-label">Name</label>
+                        <div style="display: flex;">
+                            <input type="text" value="{{user.name}}" class="form-control" name="name" disabled>
+                            <a style="margin-left: 20px;" href="" class="btn btn-dark">Edit</a>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-12 ">
+                        <label for="email" class="form-label">Email </label>
+                        <div style="display: flex;">
+                            <input type="email" class="form-control" value="{{user.email}}" name="email" disabled>
+                            <a style="margin-left: 20px;" href="" class="btn btn-dark">Edit</a>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-12 signupemail">
+                        <label for="email" class="form-label">Mobile</label>
+                        <div style="display: flex;">
+                            {{#if user.mobile}}
+                            <input type="text" class="form-control" value="{{user.mobile}}" name="mobile"
+                                id="editmobile" disabled>
+                            <a style="margin-left: 20px;" href="" class="btn btn-dark">Edit</a>
+                            {{else}}
+                            <input type="email" class="form-control" value="please add your mobile number" name="email"
+                                disabled>
+                            <a style="margin-left: 20px;" href="" class="btn btn-dark">Add</a>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-12">
+                        <label for="inputPassword4" class="form-label">Password</label>
+                        <div style="display: flex;">
+                            <input type="password" maxlength="16" class="form-control" name="password" id="editPassword"
+                                value="123456213" disabled>
+                            <a style="margin-left: 20px;" href="" class="btn btn-dark">Edit</a>
+                        </div>
+                    </div>
+                </form>
+                {{/if}}
+            </div>
+            <h5 id="address" class="signuptext text-center mb-4">
+                <img class="signlogo" src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
+                Address
+            </h5>
+            <div class="addressbg bg p-md-5 p-4 mx-auto mw-100 ">
+                <!--/SignUp-form-->
+                {{#if address}}
+                <form class="row g-3">
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" name="addressname" id="addressname"
+                            value="{{address.name}}" disabled>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="addressemail" id="addressemail"
+                            value="{{address.email}}" disabled>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">Phone number</label>
+                        <input type="number" maxlength="13" class="form-control" name="addressmobile" id="addressmobile"
+                            value="{{address.mobile}}" disabled>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">Alternate number (optional)</label>
+                        <input type="number" maxlength="13" class="form-control" name="addressmobile2"
+                            id="addressmobile2" value="{{address.mobile2}}" disabled>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">Address Line 1 </label>
+                        <input type="text" class="form-control" name="addressline1" id="addressline1"
+                            value="{{address.line1}}" disabled>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <label class="form-label">Address Line 2 </label>
+                        <input type="text" class="form-control" name="addressline2" id="addressline2"
+                            value="{{address.line2}}" disabled>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <label class="form-label">State</label>
+                        <input type="text" class="form-control" name="addressstate" id="addressstate"
+                            value="{{address.state}}" disabled>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <label class="form-label">City</label>
+                        <input type="text" class="form-control" name="addresscity" id="addresscity"
+                            value="{{address.city}}" disabled>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <label class="form-label">Pincode</label>
+                        <input type="number" class="form-control" name="addresspin" id="addresspin"
+                            value="{{address.pincode}}" disabled>
+                    </div>
+                    <div class="col-md-4 col-6">
+                        <a href="/editaddress" class="btn btn-dark">Edit Address</a>
+                    </div>
+                </form>
+                {{else}}
+                <div class="noaddress" style="text-align: center;">
+                    <h3>No address found , please add your shipping address</h3>
+                    <a style="margin-top: 10px;" href="/addaddress" class="btn btn-dark">Add
+                        address</a>
+                </div>
+
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>
