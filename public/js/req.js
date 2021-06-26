@@ -101,11 +101,14 @@ $(document).ready(() => {
     // on blur error handling
     $('#name').blur(() => {
         if ($('#name').val() === undefined || $('#name').val() === null || $('#name').val().length === 0) {
+            $('#name').addClass('is-invalid')
             $('#errlab1').css('display', 'inline-block')
         } else {
             if ($.trim($('#name').val()) == '') {
+                $('#name').addClass('is-invalid')
                 $('#errlab1').css('display', 'inline-block')
             } else {
+                $('#name').removeClass('is-invalid')
                 $('#errlab1').css('display', 'none')
             }
         }
@@ -115,7 +118,9 @@ $(document).ready(() => {
             $("#emailCheckStatus").css('display', 'none')
             $('#invalidEmail').css('display', 'none')
             $('#errlab2').css('display', 'inline-block')
+            $('#signupemail').addClass('is-invalid')
         } else {
+            $('#signupemail').removeClass('is-invalid')
             $('#errlab2').css('display', 'none')
             $("#emailLoad").addClass('loadingshow')
             $.ajax({
@@ -126,19 +131,20 @@ $(document).ready(() => {
                 method: "GET",
                 success: (response) => {
                     if (response.status == true) {
+                        $('#signupemail').addClass('is-invalid')
                         $('#invalidEmail').css('display', 'none')
                         $("#emailCheckStatus").css('display', 'inline-block')
                         $('#signupbtn').addClass('disabled')
-                        $("#emailLoad").removeClass('loadingshow')
                     } else if (response.status === 'invalidEmail') {
+                        $('#signupemail').addClass('is-invalid')
                         $("#emailCheckStatus").css('display', 'none')
-                        $("#emailLoad").removeClass('loadingshow')
                         $('#invalidEmail').css('display', 'inline-block')
                     }
                     else {
+                        $('#signupemail').removeClass('is-invalid')
+                        $('#signupemail').addClass('is-valid')
                         $("#emailCheckStatus").css('display', 'none')
                         $('#signupbtn').removeClass('disabled')
-                        $("#emailLoad").removeClass('loadingshow')
                         $('#invalidEmail').css('display', 'none')
                     }
                 }
@@ -147,22 +153,27 @@ $(document).ready(() => {
     })
     $('#Password').blur(() => {
         if ($('#Password').val() === undefined || $('#Password').val() === null || $('#Password').val().length === 0) {
+            $('#Password').addClass('is-invalid')
             $('#errlab3').css('display', 'inline-block')
         } else {
             $('#errlab3').css('display', 'none')
             if ($('#Password').val().length < 6) {
+                $('#Password').addClass('is-invalid')
                 $('#passreq1').css('display', 'inline-block')
                 $('#passreq2').css('display', 'none')
                 $('#passreq3').css('display', 'none')
             } else if (!/([A-Z])/.test($('#Password').val())) {
+                $('#Password').addClass('is-invalid')
                 $('#passreq3').css('display', 'inline-block')
                 $('#passreq1').css('display', 'none')
                 $('#passreq2').css('display', 'none')
             } else if (!/([0-9])/.test($('#Password').val())) {
+                $('#Password').addClass('is-invalid')
                 $('#passreq2').css('display', 'inline-block')
                 $('#passreq1').css('display', 'none')
                 $('#passreq3').css('display', 'none')
             } else {
+                $('#Password').removeClass('is-invalid')
                 $('#passreq1').css('display', 'none')
                 $('#passreq2').css('display', 'none')
                 $('#passreq3').css('display', 'none')
@@ -171,15 +182,18 @@ $(document).ready(() => {
     })
     $('#confirmPassword').blur((e) => {
         if ($('#confirmPassword').val() != $('#Password').val()) {
+            $('#confirmPassword').addClass('is-invalid')
             $('#errlab4').css('display', 'none')
             $('#passwordcheck').css('display', "inline-block")
         } else {
+            $('#confirmPassword').removeClass('is-invalid')
             $('#passwordcheck').css('display', "none")
         }
     })
 
     // signIn
     $('#signinBtn').click((e) => {
+        $('#signinErrMsg').css('display', 'none')
         e.preventDefault()
         if ($.trim($('#signinEmail').val()) == '') {
             $('#signinErrMsg').css('display', 'inline-block')
@@ -209,22 +223,63 @@ $(document).ready(() => {
     $('#addaddressbtn').click((e) => {
         e.preventDefault()
         $.ajax({
-            url: '/api/addaddress',
+            url: '/api/checkaddressemail',
             method: 'POST',
             data: {
-                addressname: $('#addressname').val(),
-                addressemail: $('#addressemail').val(),
-                addressmobile: $('#addressmobile').val(),
-                addressmobile2: $('#addressmobile2').val(),
-                addressline1: $('#addressline1').val(),
-                addressline2: $('#addressline2').val(),
-                addressstate: $("#addressstate option:selected").text(),
-                addresscity: $('#addresscity').val(),
-                addresspin: $('#addresspin').val()
+                email: $('#addressemail').val()
             },
             success: (response) => {
-                if (response.status === "added") {
-                    location.href = '/profile'
+                if (response.status) {
+                    $('#addressemail').addClass('is-invalid')
+                    $('#emailExists').css('display', 'inline-block')
+                } else {
+                    $('#addressemail').removeClass('is-invalid')
+                    $('#addressemail').addClass('is-valid')
+                    $('#emailExists').css('display', 'none')
+                    $.ajax({
+                        url: '/api/addaddress',
+                        method: 'POST',
+                        data: {
+                            addressname: $('#addressname').val(),
+                            addressemail: $('#addressemail').val(),
+                            addressmobile: $('#addressmobile').val(),
+                            addressmobile2: $('#addressmobile2').val(),
+                            addressline1: $('#addressline1').val(),
+                            addressline2: $('#addressline2').val(),
+                            addressstate: $("#addressstate option:selected").text(),
+                            addresscity: $('#addresscity').val(),
+                            addresspin: $('#addresspin').val()
+                        },
+                        success: (response) => {
+                            if (response.status === "added") {
+                                location.href = '/profile'
+                            }
+                        }
+
+                    })
+                }
+            }
+
+        })
+    })
+    // existing email
+    $('#addressemail').blur(() => {
+        $.ajax({
+            url: '/api/checkaddressemail',
+            method: 'POST',
+            data: {
+                email: $('#addressemail').val()
+            },
+            success: (response) => {
+                if (response.status) {
+                    $('#addressemail').addClass('is-invalid')
+                    $('#emailExists').css('display', 'inline-block')
+                    $('#addaddressbtn').addClass('disabled')
+                } else {
+                    $('#addressemail').removeClass('is-invalid')
+                    $('#addressemail').addClass('is-valid')
+                    $('#emailExists').css('display', 'none')
+                    $('#addaddressbtn').removeClass('disabled')
                 }
             }
 
@@ -234,7 +289,7 @@ $(document).ready(() => {
     $('#editaddressbtn').click((e) => {
         e.preventDefault()
         $.ajax({
-            url: '/api/addaddress',
+            url: '/api/editaddress',
             method: 'POST',
             data: {
                 addressname: $('#addressname').val(),
@@ -245,7 +300,8 @@ $(document).ready(() => {
                 addressline2: $('#addressline2').val(),
                 addressstate: $("#addressstate option:selected").text(),
                 addresscity: $('#addresscity').val(),
-                addresspin: $('#addresspin').val()
+                addresspin: $('#addresspin').val(),
+                position: $('#position').val()
             },
             success: (response) => {
                 if (response.status === "added") {
@@ -255,4 +311,64 @@ $(document).ready(() => {
 
         })
     })
+    // showing hiding password
+    $('#passwordeye').click(function () {
+        $('#signinPassword').attr('type', $('#signinPassword').is(':password') ? 'text' : 'password');
+        if ($('#signinPassword').attr('type') === 'password') {
+            $('#passwordeye').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            $('#passwordeye').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
 })
+function cartDeleteProduct(cartId, proId) {
+    $.ajax({
+        url: '/api/deletecartproduct',
+        method: 'POST',
+        data: {
+            cartId: cartId,
+            proId: proId
+        },
+        success: (response) => {
+            location.href = '/mycart'
+        }
+        // location.href = '/mycart'
+
+
+    })
+}
+function addToCart(proId) {
+    $.ajax({
+        url: '/api/addtocart',
+        method: 'POST',
+        data: {
+            id: proId
+        },
+        success: (response) => {
+            if (response) {
+                location.href = `/addedtocat?id=${proId}`
+            }
+        }
+
+    })
+}
+function changeQuantity(cartId, proId, qty) {
+    if (qty <= 0) {
+        cartDeleteProduct(cartId, proId)
+    } else {
+        $.ajax({
+            url: '/api/changeproductquantity',
+            method: "POST",
+            data: {
+                cartId: cartId,
+                proId: proId,
+                qty: qty
+            },
+            success: (total) => {
+                $('#cartTotallabel').text(`₹${total.total}`)
+
+            }
+        })
+
+    }
+}

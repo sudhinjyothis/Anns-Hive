@@ -1,7 +1,7 @@
-<section style="height: 100vh;" class="signupcontainer">
+<section class="editaddresscontainer">
     <div class="container">
         <div class="wrap">
-            <h5 id="address" class="signuptext text-center mb-4">
+            <h5 id="address" style="padding-top: 175px;" class="signuptext text-center mb-4">
                 <img class="signlogo" src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
                 Edit Address
             </h5>
@@ -57,6 +57,7 @@
                         <input value="{{address.pincode}}" type="number" class="form-control" name="addresspin"
                             id="addresspin" required>
                     </div>
+                    <input id="position" type="number" hidden value="{{position}}">
                     <div class="col-md-4">
                         <button id="editaddressbtn" type="submit" class="btn btn-dark">Edit address</button>
                     </div>

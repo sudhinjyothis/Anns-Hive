@@ -79,56 +79,67 @@
             <div class="addressbg bg p-md-5 p-4 mx-auto mw-100 ">
                 <!--/SignUp-form-->
                 {{#if address}}
+                {{#if limitExceeded}}
+                <div class="d-flex align-content-end">
+                    <h2 for="">Maximum address allowed is 5</h2>
+                    <a style="margin-right: 0;margin-left: auto;" href="/" class="btn btn-dark disabled">Add
+                        address</a>
+                </div>
+                {{else}}
+                <div class="d-flex align-content-end">
+                    <a style="margin-right: 0;margin-left: auto;" href="/addaddress" class="btn btn-dark">Add
+                        address</a>
+                </div>
+                {{/if}}
+                {{#each address}}
+                <h5 style="margin-top: 20px;">Address - {{increment @index}}</h5>
                 <form class="row g-3">
                     <div class="col-md-6 col-12">
                         <label class="form-label">Name</label>
-                        <input type="text" class="form-control" name="addressname" id="addressname"
-                            value="{{address.name}}" disabled>
+                        <input type="text" class="form-control" name="addressname" value="{{this.name}}" disabled>
                     </div>
                     <div class="col-md-6 col-12">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="addressemail" id="addressemail"
-                            value="{{address.email}}" disabled>
+                        <input type="email" class="form-control" name="addressemail" value="{{this.email}}" disabled>
                     </div>
                     <div class="col-md-6 col-12">
                         <label class="form-label">Phone number</label>
-                        <input type="number" maxlength="13" class="form-control" name="addressmobile" id="addressmobile"
-                            value="{{address.mobile}}" disabled>
+                        <input type="number" maxlength="13" class="form-control" name="addressmobile"
+                            value="{{this.mobile}}" disabled>
                     </div>
                     <div class="col-md-6 col-12">
                         <label class="form-label">Alternate number (optional)</label>
                         <input type="number" maxlength="13" class="form-control" name="addressmobile2"
-                            id="addressmobile2" value="{{address.mobile2}}" disabled>
+                            value="{{address.mobile2}}" disabled>
                     </div>
                     <div class="col-md-6 col-12">
                         <label class="form-label">Address Line 1 </label>
-                        <input type="text" class="form-control" name="addressline1" id="addressline1"
-                            value="{{address.line1}}" disabled>
+                        <input type="text" class="form-control" name="addressline1" value="{{this.line1}}" disabled>
                     </div>
                     <div class="col-md-6 col-12">
                         <label class="form-label">Address Line 2 </label>
-                        <input type="text" class="form-control" name="addressline2" id="addressline2"
-                            value="{{address.line2}}" disabled>
+                        <input type="text" class="form-control" name="addressline2" value="{{this.line2}}" disabled>
                     </div>
                     <div class="col-md-4 col-12">
                         <label class="form-label">State</label>
-                        <input type="text" class="form-control" name="addressstate" id="addressstate"
-                            value="{{address.state}}" disabled>
+                        <input type="text" class="form-control" name="addressstate" value="{{this.state}}" disabled>
                     </div>
                     <div class="col-md-4 col-12">
                         <label class="form-label">City</label>
-                        <input type="text" class="form-control" name="addresscity" id="addresscity"
-                            value="{{address.city}}" disabled>
+                        <input type="text" class="form-control" name="addresscity" value="{{this.city}}" disabled>
                     </div>
                     <div class="col-md-4 col-12">
                         <label class="form-label">Pincode</label>
-                        <input type="number" class="form-control" name="addresspin" id="addresspin"
-                            value="{{address.pincode}}" disabled>
+                        <input type="number" class="form-control" name="addresspin" value="{{this.pincode}}" disabled>
                     </div>
-                    <div class="col-md-4 col-6">
-                        <a href="/editaddress" class="btn btn-dark">Edit Address</a>
+                    <div class="col-md-6 col-12 addressctrlbtn">
+                        <a href="/editaddress?id={{@index}}" class="btn btn-dark">Edit Address</a>
+                        <a style="margin-left: 10px;" href="/api/deleteaddress?email={{this.email}}"
+                            onclick="return confirm('Are you sure want to delete {{this.name}}')" class=" btn
+                            btn-danger">Delete Address</a>
                     </div>
                 </form>
+                {{/each}}
                 {{else}}
                 <div class="noaddress" style="text-align: center;">
                     <h3>No address found , please add your shipping address</h3>

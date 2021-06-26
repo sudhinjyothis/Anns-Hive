@@ -24,7 +24,7 @@ module.exports = {
                         isVerified: false,
                         gmailLogin: false,
                         fbLogin: false,
-                        address: null
+                        address: []
                     }
                 ).then((data) => {
                     resolve(data.ops[0])
@@ -44,7 +44,7 @@ module.exports = {
                     id: userdata.sub,
                     isVerified: userdata.email_verified,
                     gmailLogin: true,
-                    address: null
+                    address: []
                 }
             ).then((data) => {
                 resolve(data.ops[0])
@@ -61,7 +61,7 @@ module.exports = {
                     id: userdata.id,
                     isVerified: true,
                     fbLogin: true,
-                    address: null
+                    address: []
                 }
             ).then((data) => {
                 resolve(data.ops[0])
@@ -145,7 +145,7 @@ module.exports = {
     addAddress: (userId, address) => {
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.USER_COLLECTION).updateOne({ _id: objectId(userId) }, {
-                $set: {
+                $push: {
                     address: {
                         name: address.addressname,
                         email: address.addressemail,
@@ -160,6 +160,49 @@ module.exports = {
                 }
             }).then(() => {
                 resolve({ status: "added" })
+            })
+        })
+    },
+    // edit address 
+    updateAddress: (userId, position, address) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).updateOne({ _id: objectId(userId) }, {
+                $set: {
+                    [`address.${position}`]: {
+                        name: address.addressname,
+                        email: address.addressemail,
+                        mobile: address.addressmobile,
+                        mobile2: address.addressmobile2,
+                        line1: address.addressline1,
+                        line2: address.addressline2,
+                        state: address.addressstate,
+                        city: address.addresscity,
+                        pincode: address.addresspin
+                    }
+                }
+            }).then(() => {
+                resolve({ status: "added" })
+            })
+        })
+    },
+    deleteAddress: (userId, email) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).updateOne({ _id: objectId(userId) }, {
+                $pull: { address: { email: email } }
+            }).then(() => {
+                resolve({ status: "added" })
+            })
+        })
+    },
+    // fetching address with email
+    checkAddressEmail: (userId, email) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).findOne({ _id: objectId(userId), "address.email": email }).then((address) => {
+                if (address) {
+                    resolve({ status: true })
+                } else {
+                    resolve({ status: false })
+                }
             })
         })
     },
@@ -251,8 +294,8 @@ module.exports = {
     changeProductQuantity: (details) => {
         details.quantity = parseInt(details.quantity)
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(details.cartId), 'products.item': objectId(details.productId) }, {
-                $inc: { 'products.$.quantity': parseInt(details.value) }
+            db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(details.cartId), 'products.item': objectId(details.proId) }, {
+                $set: { 'products.$.quantity': parseInt(details.qty) }
             }).then((response) => {
                 resolve(true)
             })
@@ -262,7 +305,7 @@ module.exports = {
     cartDeleteProduct: (details) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(details.cartId) }, {
-                $pull: { products: { item: objectId(details.productId) } }
+                $pull: { products: { item: objectId(details.proId) } }
             }).then((response) => {
                 resolve({ productRemoved: true })
             })
@@ -301,7 +344,7 @@ module.exports = {
                 {
                     $group: {
                         _id: null,
-                        total: { $sum: { $multiply: [{ $toInt: '$quantity' }, { $toInt: '$product.price' }] } }
+                        total: { $sum: { $multiply: [{ $toInt: '$quantity' }, { $toInt: '$product.productPrice' }] } }
                     }
                 }
             ]).toArray()

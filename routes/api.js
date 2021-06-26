@@ -252,30 +252,75 @@ router.post('/creategmail', async (req, res) => {
 })
 // signin
 router.post('/signin', (req, res) => {
-    userHelper.userEmailVerificationCheck(req.body.email).then((verification) => {
-        if (verification.status === true) {
-            userHelper.doLogin(req.body).then((response) => {
-                if (response.status) {
-                    if (req.body.rememberMe === 'false') {
-                        req.session.cookie.sameSite = true
-                        req.session.cookie.expires = false
-                    }
+    userHelper.doLogin(req.body).then((response) => {
+        if (response.status) {
+            if (req.body.rememberMe === 'false') {
+                req.session.cookie.sameSite = true
+                req.session.cookie.expires = false
+            }
+            userHelper.userEmailVerificationCheck(req.body.email).then((verification) => {
+                if (verification.status === true) {
                     req.session.user = response.user
                     res.json({ status: true })
                 } else {
-                    res.json({ status: false })
+                    req.session.verifyEmail = req.body.email
+                    res.json({ status: "notVerified" })
                 }
             })
         } else {
-            req.session.verifyEmail = req.body.email
-            res.json({ status: "notVerified" })
+            res.json({ status: false })
         }
     })
 })
 // adding address
 router.post('/addaddress', (req, res) => {
-    userHelper.addAddress(req.session.user._id, req.body).then((response) => {
+    userHelper.fetchUserById(req.session.user._id).then((data) => {
+        if (data.address.length <= 5) {
+            userHelper.checkAddressEmail(req.session.user._id, req.body.email).then((response) => {
+                if (!response.status) {
+                    userHelper.addAddress(req.session.user._id, req.body).then((response) => {
+                        res.json(response)
+                    })
+                }
+            })
+        }
+    })
+})
+router.post('/editaddress', (req, res) => {
+    userHelper.updateAddress(req.session.user._id, req.body.position, req.body).then((response) => {
         res.json(response)
+    })
+})
+router.get('/deleteaddress', async (req, res) => {
+    user = req.session.user
+    await userHelper.deleteAddress(user._id, req.query.email).then(() => {
+    })
+    res.redirect('/profile')
+})
+// check address email exists
+router.post('/checkaddressemail', (req, res) => {
+    userHelper.checkAddressEmail(req.session.user._id, req.body.email).then((response) => {
+        res.json(response)
+    })
+})
+// add to cart 
+router.post('/addtocart', middleware.activeuser, (req, res) => {
+    userHelper.addToCart(req.body.id, req.session.user._id).then(() => {
+        res.json({ success: true })
+    })
+})
+// delete a specific product from cart 
+router.post('/deletecartproduct', (req, res) => {
+    userHelper.cartDeleteProduct(req.body).then((response) => {
+        res.json(response)
+    })
+})
+// change product quantity
+router.post('/changeproductquantity', middleware.activeuser, (req, res) => {
+    userHelper.changeProductQuantity(req.body).then(() => {
+        userHelper.getTotalAmount(req.session.user._id).then((total) => {
+            res.json({ total: total })
+        })
     })
 })
 // admin routes
