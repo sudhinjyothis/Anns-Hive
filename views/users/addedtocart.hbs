@@ -3,7 +3,8 @@
         <div class="signinwrap wrap" style="padding-bottom: 20px;">
             <h5 class="signintext text-center ">
                 <img class="signlogo" src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
-                Added to cart
+                Added to cart <i id="addedtocarttickmark" class="fa fa-check-circle"
+                    style="color: rgb(20, 235, 20);"></i>
             </h5>
         </div>
         <div class="addedtocartbg">
@@ -11,14 +12,14 @@
                 <div class="prodetails d-flex">
                     <a href=""><img src="images/products/{{product._id}}.jpg" alt=""></a>
                     <div class="prodetails1">
-                        <a href="">{{product.productName}}</a>
-                        <p>{{product.productCategory}}</p>
-                        <p>{{product.productPrice}}</p>
+                        <a href="">{{product.name}}</a>
+                        <p>{{product.category}}</p>
+                        <p>₹{{product.selling_price}}</p>
                     </div>
                 </div>
                 <div class="navigations">
                     <a style="color: white" class="btn btn-dark" href="/mycart">Cart</a>
-                    <a href="" class="btn btn-dark">Checkout</a>
+                    <a href="/checkout" class="btn btn-dark">Checkout</a>
                 </div>
             </div>
         </div>
@@ -53,8 +54,8 @@
                             </div>
                         </div>
                         <div class="product-content">
-                            <h3 class="title"><a href="#">{{this.productName}} </a></h3> <span
-                                class="price"><del>₹2000</del>{{this.productPrice}}</span>
+                            <h3 class="title"><a href="#">{{this.name}} </a></h3> <span
+                                class="price"><del>₹2000</del>{{this.selling_price}}</span>
                         </div>
                     </div>
                 </div>

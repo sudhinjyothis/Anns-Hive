@@ -1,0 +1,44 @@
+<section class="editaddresscontainer">
+    <div class="container">
+        <div class="signinwrap wrap" style="padding-bottom: 20px;">
+            <h5 class="signintext text-center ">
+                <img class="signlogo" src="images/logo.png" alt="Logo" title="Your logo" style="height:35px;" />
+                Thank You , your order #{{order.shiprocketOrderId}} was placed successfully <i id="addedtocarttickmark"
+                    class="fa fa-check-circle" style="color: rgb(20, 235, 20);"></i>
+            </h5>
+        </div>
+        <div style="display: flex;justify-content: center;">
+            <div class="ordersuccessbg">
+                <div class="ordersuccess mb-3">
+                    <p>order#{{order.shiprocketOrderId}}</p>
+                </div>
+                {{#each products}}
+                <div class="ordersuccessproduct mt-3"
+                    style="display: flex;align-items: center;justify-content: space-between;">
+                    <div class="leftside" style="display: flex; align-items: center;">
+                        <img style="width: 60px;" src="images/products/60dc0fd9d76e8f2a540a1c2e.jpg" alt="">
+                        <div class="ml-2">
+                            <h6 style="margin-bottom: 5px;">{{this.product.name}}</h6>
+                            <h6 style="font-size: 13px;font-weight: 200;margin-bottom: 5px">{{this.product.category}}
+                            </h6>
+                            <h6 style="font-size: 13px;font-weight: 200;">Qty : {{this.units}}</h6>
+                        </div>
+                    </div>
+                    <div class="rightside">
+                        <h6>₹{{this.product.selling_price}}</h6>
+                    </div>
+                </div>
+                {{/each}}
+                <hr size="2" width="100%" color="white">
+                <div class="ordersuccesstotal"
+                    style="display: flex;align-items: center;justify-content: space-between;">
+                    <h6>Total</h6>
+                    <h6>₹{{order.total}}</h6>
+                </div>
+                <div class="ordertrackbtn mt-2 d-flex justify-content-center">
+                    <a href="" class="btn btn-dark">Track Order</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

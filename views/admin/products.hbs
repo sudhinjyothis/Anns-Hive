@@ -25,16 +25,16 @@
                     <tbody>
                         {{#each products}}
                         <tr>
-                            <td>{{this.productName}}</td>
-                            <td>{{this.productCategory}}</td>
-                            <td><img src="/api/images1/?id=test" alt="" style="height: 50px;width:50px;">
+                            <td>{{this.name}}</td>
+                            <td>{{this.category}}</td>
+                            <td><img src="images/products/{{this._id}}.jpg" alt="" style="height: 50px;width:50px;">
                             </td>
                             </td>
                             <td style="display: flex;padding: 16px;">
                                 <a href="/SCmVRbJpEXjopyOHKFMaWTunotqPBj?id={{this._id}}" style="color: aliceblue;"
                                     class="btn btn-outline-warning">Edit</a>
                                 <a href="/api/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwYdelete?id={{this._id}}"
-                                    onclick="return confirm('Are you sure want to delete {{this.productName}}')"
+                                    onclick="return confirm('Are you sure want to delete {{this.name}}')"
                                     style="color: aliceblue;margin-left: 10px;"
                                     class="btn btn-outline-danger">delete</a>
                             </td>

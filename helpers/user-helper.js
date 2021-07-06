@@ -199,10 +199,25 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.USER_COLLECTION).findOne({ _id: objectId(userId), "address.email": email }).then((address) => {
                 if (address) {
-                    resolve({ status: true })
+                    resolve({ status: true, })
                 } else {
                     resolve({ status: false })
                 }
+            })
+        })
+    },
+    // fetching address 
+    fetchAddress: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).findOne({ _id: objectId(userId) }).then((user) => {
+                resolve(user.address)
+            })
+        })
+    },
+    fetchSingleAddress: (userId, email, index) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_COLLECTION).findOne({ _id: objectId(userId), "address.email": email }).then((address) => {
+                resolve(address.address[parseInt(index)])
             })
         })
     },
@@ -333,18 +348,18 @@ module.exports = {
                         from: collection.PRODUCT_COLLECTION,
                         localField: "item",
                         foreignField: "_id",
-                        as: "product"
+                        as: "products"
                     }
                 },
                 {
                     $project: {
-                        item: 1, quantity: 1, product: { $arrayElemAt: ["$product", 0] }
+                        item: 1, quantity: 1, product: { $arrayElemAt: ["$products", 0] }
                     }
                 },
                 {
                     $group: {
                         _id: null,
-                        total: { $sum: { $multiply: [{ $toInt: '$quantity' }, { $toInt: '$product.productPrice' }] } }
+                        total: { $sum: { $multiply: [{ $toInt: '$quantity' }, { $toInt: '$product.selling_price' }] } }
                     }
                 }
             ]).toArray()
@@ -364,19 +379,24 @@ module.exports = {
         })
     },
     // placing an order
-    placeOrder: (order, products, total) => {
+    placeOrder: (userId, address, products, total) => {
         return new Promise((resolve, reject) => {
-            let status = order['paymentMethod'] === "COD" ? "placed" : "pending"
             let orderObj = {
                 deliveryDetails: {
-                    mobile: order.mobile,
-                    address: order.address,
-                    pincode: order.pincode
+                    name: address.addressname,
+                    email: address.addressemail,
+                    mobile: address.addressmobile,
+                    mobile2: address.addressmobile2,
+                    line1: address.addressline1,
+                    line2: address.addressline2,
+                    state: address.addressstate,
+                    city: address.addresscity,
+                    pin: address.addresspin,
                 },
-                userId: objectId(order.userId),
-                paymentMethod: order['paymentMethod'],
+                userId: objectId(userId),
+                paymentMethod: 'prepaid',
                 products: products,
-                status: status,
+                status: "pending",
                 total: total,
                 date: new Date()
             }
@@ -386,6 +406,25 @@ module.exports = {
             })
         })
 
+    },
+    generateOrderNumber: (orderId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderNumber = Date.now().toString() // '1492341545873'
+            // adding digits from orderid
+            var tempString = parseInt(orderId, 16).toString()
+            var tempInt = tempString.split('e')[0].split('.')[1].slice(10)
+            // pad with extra random digit
+            orderNumber += orderNumber + Math.floor(Math.random() * 10)
+            // format
+            orderNumber = tempInt + orderNumber
+            orderNumber = orderNumber.slice(0, 17)
+            db.get().collection(collection.ORDERS_COLLECTION).updateOne({ _id: objectId(orderId) }, {
+                $set: {
+                    orderid: orderNumber
+                }
+            })
+            resolve(orderNumber)
+        })
     },
     // fetching order details 
     getOrderDetails: (orderId) => {
@@ -408,7 +447,7 @@ module.exports = {
                 {
                     $project: {
                         item: "$products.item",
-                        quantity: "$products.quantity"
+                        units: "$products.quantity"
                     }
                 },
                 {
@@ -421,7 +460,7 @@ module.exports = {
                 },
                 {
                     $project: {
-                        item: 1, quantity: 1, product: { $arrayElemAt: ["$product", 0] }
+                        item: 1, units: 1, product: { $arrayElemAt: ["$product", 0] }
                     }
                 }
             ]).toArray()
@@ -431,7 +470,7 @@ module.exports = {
     // fetching all the orders of a specific user
     getUserOrders: (userId) => {
         return new Promise(async (resolve, reject) => {
-            let orders = await db.get().collection(collection.ORDERS_COLLECTION).find({ userId: objectId(userId), status: 'placed' }).toArray()
+            let orders = await db.get().collection(collection.ORDERS_COLLECTION).find({ userId: objectId(userId), status: 'paid' }).toArray()
             resolve(orders)
         })
     },
@@ -452,7 +491,7 @@ module.exports = {
     verifyPayment: (details) => {
         return new Promise(async (resolve, reject) => {
             const { createHmac, } = await import('crypto');
-            let hmac = createHmac('sha256', 'EkyokO6IoBrCEpXyJ9UrFesb');
+            let hmac = createHmac('sha256', process.env.RAZORPAY_SECRET);
             hmac.update(details['payment[razorpay_order_id]'] + "|" + details['payment[razorpay_payment_id]']);
             hmac = hmac.digest('hex')
             if (hmac == details['payment[razorpay_signature]']) {
@@ -467,10 +506,21 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDERS_COLLECTION).updateOne({ _id: objectId(orderId) }, {
                 $set: {
-                    status: 'placed'
+                    status: 'paid'
                 }
             }).then(() => {
                 resolve(orderId)
+            })
+        })
+    },
+    addPaymentId: (orderId, paymentId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDERS_COLLECTION).updateOne({ _id: objectId(orderId) }, {
+                $set: {
+                    paymentId: paymentId
+                }
+            }).then(() => {
+                resolve()
             })
         })
     },
@@ -480,5 +530,24 @@ module.exports = {
             await db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(userId) })
             resolve()
         })
+    },
+    addOrderShipId: (orderId, response) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDERS_COLLECTION).updateOne({ _id: objectId(orderId) }, {
+                $set: {
+                    shiprocketOrderId: response.order_id,
+                    shiprocketShipmentId: response.shipment_id
+                }
+            }).then(() => {
+                resolve()
+            })
+        })
+    },
+    deletePendingOrders: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collection.ORDERS_COLLECTION).deleteMany({ userId: objectId(userId), status: 'pending' })
+            resolve()
+        })
     }
+
 }

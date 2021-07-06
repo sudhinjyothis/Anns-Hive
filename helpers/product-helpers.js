@@ -7,7 +7,17 @@ module.exports = {
     // adding a new product
     addProduct: (product) => {
         return new promise((resolve, reject) => {
-            db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).insertOne({
+                name: product.name,
+                description: product.description,
+                selling_price: product.selling_price,
+                category: product.category,
+                sku: "test",
+                hsn: 1234,
+                tax: '',
+                discount: ''
+
+            }).then((data) => {
                 resolve(data.ops[0]._id)
             })
         })
@@ -40,10 +50,14 @@ module.exports = {
         return new promise((resolve, reject) => {
             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objectID(proId) }, {
                 $set: {
-                    productName: proDetails.productName,
-                    productDescription: proDetails.productDescription,
-                    productPrice: proDetails.productPrice,
-                    productCategory: proDetails.productCategory
+                    name: proDetails.productName,
+                    description: proDetails.productDescription,
+                    selling_price: proDetails.productPrice,
+                    category: proDetails.productCategory,
+                    sku: "test",
+                    hsn: 1234,
+                    tax: '',
+                    discount: ''
                 }
             }).then((response) => {
                 resolve()
@@ -63,5 +77,33 @@ module.exports = {
             let product = await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([{ $sample: { size: limit } }]).toArray()
             resolve(product)
         })
+    },
+    getProductInCart: (proId) => {
+        return new promise((resolve, reject) => {
+            let cart = db.get().collection(collection.CART_COLLECTION).find({}, {
+                products: {
+                    $elemMatch:
+                    {
+                        item: proId
+                    }
+                }
+            }).toArray()
+            resolve(cart)
+        })
+    },
+    returnProductsShiprocket: (products) => {
+        order_items = []
+        products.forEach(element => {
+            order_items.push({
+                name: element.product.name,
+                sku: element.product._id,
+                units: element.units,
+                selling_price: element.product.selling_price,
+                discount: element.product.discount,
+                tax: element.product.tax,
+                hsn: element.product._id1
+            })
+        });
+        return order_items
     }
 }

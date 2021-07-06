@@ -81,9 +81,6 @@
     padding-bottom:10px;
     color: #ff7315;
 }
-.totaluser,.ordertracking,.messagetracking{
-    margin-left: 130px;
-}
 .usertracking{
     height: 100%;
     width: 100%;
@@ -107,4 +104,9 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+}
+@media (max-width:767px) {
+    .inboxtracking{
+        margin-top: 20px;
+    }
 }

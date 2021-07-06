@@ -56,3 +56,20 @@ function mailMessage() {
 function mailMessage1() {
     document.getElementById('mailMessage1').classList.toggle('showMailMessage')
 }
+var swiper = new Swiper(".mySwiper", {
+    slidesPerView: 'auto',
+    spaceBetween: 30,
+    autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+    },
+    pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+    },
+});
+$(document).ready(() => {
+    $('#feedbackMessage').keydown(() => {
+        $('#feedbacklength').text(`${$('#feedbackMessage').val().length}`)
+    })
+})

@@ -1,0 +1,124 @@
+<section style="overflow-x: hidden;" class="checkoutbg">
+    <div style="margin-top: 70px;" class="row addresscards">
+        <h6 class="checkoutaddresstext">You can choose your address from below or manually enter it in the respective
+            fields</h6>
+        {{#if address}}
+        {{#each address}}
+        <div onclick="addressClick('{{this.email}}',{{@index}})" class="addresscard col-md-4 col-5">
+            <p>
+                {{this.name}}
+            </p>
+            <p>
+                {{this.email}}
+            </p>
+            <p>
+                {{this.city}}
+            </p>
+            <p>
+                {{this.state}}
+            </p>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="col-md-5 checkoutaddresstext">
+            <p style="margin: 0;">No address found kindly add your shipping address</p>
+            <a style="margin-top: 10px;" href="/profile#address" class="btn btn-dark">Add address</a>
+        </div>
+        {{/if}}
+    </div>
+    <div class="checkoutdetails">
+        <div class="row">
+            <div class="addressdetails col-md-6">
+                <div class="checkoutaddressdetailsbg bg p-md-5 p-4 mw-100 ">
+                    <form class="row g-3">
+                        <div class="col-md-6 col-12">
+                            <label class="form-label required">Name</label>
+                            <input type="text" class="form-control" value="{{defaultAddress.name}}" name="addressname"
+                                id="addressname" required>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-control" value="{{defaultAddress.email}}"
+                                name="addressemail" id="checkoutaddressemail" required>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label class="form-label required">Phone number</label>
+                            <input type="number" value="{{defaultAddress.mobile}}" maxlength="13" class="form-control"
+                                name="addressmobile" id="addressmobile" required>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label class="form-label">Alternate number (optional)</label>
+                            <input type="number" maxlength="13" class="form-control" value="{{defaultAddress.mobile2}}"
+                                name="addressmobile2" id="addressmobile2">
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label class="form-label required">Address Line 1 </label>
+                            <input type="text" class="form-control" value="{{defaultAddress.line1}}" name="addressline1"
+                                id="addressline1" required>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label class="form-label">Address Line 2 </label>
+                            <input type="text" class="form-control" value="{{defaultAddress.line2}}" name="addressline2"
+                                id="addressline2">
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label class="form-label required">State</label>
+                            <select id="addressstate" class="form-select" aria-label="Default select example" required>
+                                <option value="{{defaultAddress.state}}" selected>{{defaultAddress.state}}</option>
+                                {{#each indianStates}}
+                                <option value="{{this}}">{{this}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label class="form-label required">City</label>
+                            <input type="text" class="form-control" name="addresscity" value="{{defaultAddress.city}}"
+                                id="addresscity" required>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label class="form-label required">Pincode</label>
+                            <input type="number" class="form-control" value="{{defaultAddress.pincode}}"
+                                name="addresspin" id="addresspin" required>
+                            <label style="display: inline-block;" class="commonerrormsg" id="pincodeErr">Estimated
+                                delivery days :
+                                {{shippingCompany.estimated_delivery_days}}</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="paymentdetails col-md-4" style="margin-top: 20px;">
+                <div class="checkoutaddressdetailsbg bg p-md-10 p-sm-4 p-4  mw-100 ">
+                    <h4 style="text-align: center;">Order Summary</h4>
+                    <div class="orderdetails">
+                        <div class="orderdetailslabels">
+                            <label style="display: block;margin-left: 20px;" for="">Total</label>
+                            <label>₹<span>{{total}}</span></label>
+                        </div>
+                        <div class="orderdetailslabels">
+                            {{#if freeShipping}}
+                            <label style="display: block;margin-left: 20px;" for="">Shipping</label>
+                            <label>Free</label>
+                            {{else}}
+                            <label style="display: block;margin-left: 20px;" for="">Shipping</label>
+                            <label>₹<span>{{shippingCompany.rate}}</span></label>
+                            {{/if}}
+                        </div>
+                        <hr size="1" width="90%" color="black">
+                        <div class="orderdetailslabels">
+                            {{#if freeShipping}}
+                            <label style="display: block;margin-left: 20px;" for="">SubTotal</label>
+                            <label>₹<span id="subTotal">{{total}}</span></label>
+                            {{else}}
+                            <label style="display: block;margin-left: 20px;" for="">SubTotal</label>
+                            <label>₹<span id="subTotal">{{sum total shippingCompany.rate}}</span></label>
+                            {{/if}}
+                        </div>
+                        {{!-- <span style="margin-left: 68px;">:</span> --}}
+                        <button id="placeorderbtn" class="btn btn-dark placeorderbtn">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>

@@ -5,6 +5,7 @@ var userHelper = require("../helpers/user-helper");
 var jwtauth = require('../helpers/jwttokens')
 var sendmail = require("../helpers/sendmail");
 var cipher = require('../helpers/cipher')
+const fs = require('fs')
 const passport = require('passport')
 const facebookStrategy = require('passport-facebook')
 const { OAuth2Client } = require('google-auth-library');
@@ -44,7 +45,7 @@ router.get('/facebookCallback',
     passport.authenticate('facebook', {
         failureRedirect: '/signin'
     }), async (req, res) => {
-        userHelper.doCheckSocial(facebookuser.id).then((user) => {
+        userHelper.doCheckSocial(facebookuser.id).then(async (user) => {
             if (user) {
                 req.session.user = user
                 res.redirect('/')
@@ -69,7 +70,7 @@ router.post('/createfb', async (req, res) => {
         if (userExist) {
             res.redirect('/')
         } else {
-            userHelper.doSignupFacebook(user).then((data) => {
+            userHelper.doSignupFacebook(user).then(async (data) => {
                 req.session.socialreg = null
                 req.session.user = data
                 res.sendStatus(200)
@@ -119,7 +120,7 @@ router.get('/verifyemail', async (req, res) => {
                         if (verify.status) {
                             res.redirect('/')
                         } else {
-                            userHelper.userEmailVerification(data.email).then((response) => {
+                            userHelper.userEmailVerification(data.email).then(async (response) => {
                                 if (response.verified) {
                                     response.user.password = null
                                     req.session.user = response.user
@@ -172,7 +173,7 @@ router.post('/signup', async (req, res) => {
             if (req.body.captcha === "" || req.body.captcha === undefined || req.body.captcha === null) {
                 res.json({ err: "invalid captcha" })
             } else {
-                const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=6Le02TQbAAAAALxo62Dtgb9Yz9uQJNDTwr-uokBg&response=${req.body.captcha}`
+                const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=6LcD5WAbAAAAAGMzzS054K3TKpLEVLiyY8fHh2uH&response=${req.body.captcha}`
                 await axios.post(verifyUrl).then((response) => {
                     if (response.data.success) {
                         req.session.captcha = true
@@ -240,7 +241,7 @@ router.post('/creategmail', async (req, res) => {
         if (userExist) {
             res.redirect('/')
         } else {
-            userHelper.doSignupGmail(user).then((data) => {
+            userHelper.doSignupGmail(user).then(async (data) => {
                 req.session.socialreg = null
                 req.session.user = data
                 res.sendStatus(200)
@@ -258,7 +259,7 @@ router.post('/signin', (req, res) => {
                 req.session.cookie.sameSite = true
                 req.session.cookie.expires = false
             }
-            userHelper.userEmailVerificationCheck(req.body.email).then((verification) => {
+            userHelper.userEmailVerificationCheck(req.body.email).then(async (verification) => {
                 if (verification.status === true) {
                     req.session.user = response.user
                     res.json({ status: true })
@@ -323,43 +324,150 @@ router.post('/changeproductquantity', middleware.activeuser, (req, res) => {
         })
     })
 })
-// admin routes
-// editing a product in admin page
-router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
-    productHelper.updateProduct(req.query.id, req.body)
-    var jpegErr = false
-    try {
-        try {
-            var tempImage1 = req.files.productImage1
-            if (tempImage1.mimetype === "image/jpeg") {
-                tempImage1.mv("./public/images/products/" + req.query.id + ".jpg")
-            } else {
-                jpegErr = true
-            }
-        } catch (err) { console.log(err); }
-        try {
-            var tempImage2 = req.files.productImage2
-            if (tempImage2.mimetype === "image/jpeg") {
-                tempImage2.mv("./public/images/products/" + req.query.id + "1" + ".jpg")
-            } else {
-                jpegErr = true
-            }
-        } catch { }
-        try {
-            var tempImage3 = req.files.productImage3
-            if (tempImage3.mimetype === "image/jpeg") {
-                tempImage3.mv("./public/images/products/" + req.query.id + "2" + ".jpg")
-            } else {
-                jpegErr = true
-            }
-        } catch { }
-        res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', jpegErr)
+// address fetching 
+router.post('/getaddress', (req, res) => {
+    userHelper.fetchSingleAddress(req.session.user._id, req.body.email, req.body.index).then((address) => {
+        res.json(address)
+    })
+})
+// placing order
+router.post('/placeorder', middleware.activeuser, async (req, res) => {
+    await userHelper.deletePendingOrders(req.session.user._id)
+    let products = await userHelper.getUserProductList(req.session.user._id)
+    let total = await userHelper.getTotalAmount(req.session.user._id)
+    var config = {
+        method: 'get',
+        url: 'https://apiv2.shiprocket.in/v1/external/courier/serviceability/',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${req.session.shiprocketToken}`
+        },
+        data: {
+            pickup_postcode: '575007',
+            delivery_postcode: parseInt(req.body.addresspin),
+            cod: 0,
+            weight: '.4'//example weight set to the product weight
+        }
+    };
+    let courier = await axios(config)
+    let shippingCompany = courier.data.data.available_courier_companies.find((company, index) => {
+        if (company.courier_company_id === courier.data.data.shiprocket_recommended_courier_id) {
+            return true
+        }
+    })
+    if (total < 1000) {
+        total += shippingCompany.rate
     }
-    catch (err) {
-        res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY', jpegErr)
-        console.log(err);
+    userHelper.placeOrder(req.session.user._id, req.body, products, total).then(async (orderId) => {
+        req.session.user.orderid = orderId
+        userHelper.generateOrderNumber(orderId).then((orderid) => {
+            userHelper.generateRazorpay(orderid, total).then((order) => {
+                order.orderId = orderId
+                res.json(order)
+            })
+        })
+    })
+})
+// verify razorpay payment
+router.post('/razorpayverifypayment', (req, res) => {
+    userHelper.verifyPayment(req.body).then(async () => {
+        await userHelper.addPaymentId(req.body['order[orderId]'], req.body['payment[razorpay_payment_id]'])
+        console.log('hi');
+        userHelper.changePaymentStatus(req.body['order[orderId]']).then(async (orderId) => {
+            userHelper.deleteCartItemsWhenOrder(req.session.user._id)
+            userHelper.getOrderDetails(orderId).then(async (order) => {
+                let products = await userHelper.getOrderedProductDetails(orderId)
+                var order_items = await productHelper.returnProductsShiprocket(products)
+                var data = JSON.stringify({
+                    "order_id": order.orderid,
+                    "order_date": order.date,
+                    "pickup_location": "Annshive",
+                    "channel_id": "1749511",
+                    "comment": "AnnsHive",
+                    "billing_customer_name": order.deliveryDetails.name,
+                    "billing_last_name": order.deliveryDetails.name,
+                    "billing_address": order.deliveryDetails.line1,
+                    "billing_address_2": order.deliveryDetails.line2,
+                    "billing_city": order.deliveryDetails.city,
+                    "billing_pincode": order.deliveryDetails.pin,
+                    "billing_state": order.deliveryDetails.state,
+                    "billing_country": "India",
+                    "billing_email": order.deliveryDetails.email,
+                    "billing_phone": order.deliveryDetails.mobile,
+                    "shipping_is_billing": true,
+                    "shipping_customer_name": "",
+                    "shipping_last_name": "",
+                    "shipping_address": "",
+                    "shipping_address_2": "",
+                    "shipping_city": "",
+                    "shipping_pincode": "",
+                    "shipping_country": "",
+                    "shipping_state": "",
+                    "shipping_email": "",
+                    "shipping_phone": "",
+                    "order_items": order_items,
+                    "payment_method": "Prepaid",
+                    "shipping_charges": 0,
+                    "giftwrap_charges": 0,
+                    "transaction_charges": 0,
+                    "total_discount": 0,
+                    "sub_total": order.total,
+                    "length": 10,
+                    "breadth": 15,
+                    "height": 20,
+                    "weight": 2.5
+                });
+
+                var config = {
+                    method: 'post',
+                    url: 'https://apiv2.shiprocket.in/v1/external/orders/create/adhoc',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${req.session.shiprocketToken}`
+                    },
+                    data: data
+                };
+                res.json({ status: true, orderId })
+                // axios(config).then(function (response) {
+                //     userHelper.addOrderShipId(orderId, response.data).then(() => {
+                //         res.json({ status: true, orderId })
+                //     })
+                // })
+            })
+
+        }).catch(() => {
+            res.json({ status: false })
+        })
+    })
+})
+router.get('/checkpincodestatus', async (req, res) => {
+    var config = {
+        method: 'get',
+        url: 'https://apiv2.shiprocket.in/v1/external/courier/serviceability/',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${req.session.shiprocketToken}`
+        },
+        data: {
+            pickup_postcode: '575007',
+            delivery_postcode: req.query.pincode,
+            cod: 0,
+            weight: '1'
+        }
+    };
+    let courier = await axios(config)
+    if (courier.data.status === 404) {
+        res.json({ status: false, data: courier.data.message })
+    } else {
+        let shippingCompany = courier.data.data.available_courier_companies.find((company, index) => {
+            if (company.courier_company_id === courier.data.data.shiprocket_recommended_courier_id) {
+                return true
+            }
+        })
+        res.json({ status: true, data: shippingCompany.estimated_delivery_days })
     }
 })
+// admin routes
 // adding a product in admin page 
 router.post("/dVM217UcHzCpO4dr6mshiNbxLqTu1i", async (req, res) => {
     await productHelper.addProduct(req.body).then((id) => {
@@ -390,10 +498,67 @@ router.post("/dVM217UcHzCpO4dr6mshiNbxLqTu1i", async (req, res) => {
         }
     })
 })
+// editing a product in admin page
+router.post('/SCmVRbJpEXjopyOHKFMaWTunotqPBj', async (req, res) => {
+    productHelper.updateProduct(req.query.id, req.body)
+    try {
+        try {
+            var tempImage1 = req.files.productImage1
+            if (tempImage1.mimetype === "image/jpeg") {
+                tempImage1.mv("./public/images/products/" + req.query.id + ".jpg")
+            }
+        } catch { }
+        try {
+            var tempImage2 = req.files.productImage2
+            if (tempImage2.mimetype === "image/jpeg") {
+                tempImage2.mv("./public/images/products/" + req.query.id + "1" + ".jpg")
+            }
+        } catch { }
+        try {
+            var tempImage3 = req.files.productImage3
+            if (tempImage3.mimetype === "image/jpeg") {
+                tempImage3.mv("./public/images/products/" + req.query.id + "2" + ".jpg")
+            }
+        } catch { }
+        res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+    }
+    catch (err) {
+        res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+    }
+})
 // deleting a product in admin page 
 router.get('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwYdelete', (req, res) => {
+    try {
+        fs.unlink(`./public/images/products/${req.query.id}.jpg`, (err) => {
+            if (!err) {
+                console.log("File 1 is deleted.");
+            }
+        });
+    } catch { }
+    try {
+        fs.unlink(`./public/images/products/${req.query.id}1.jpg`, (err) => {
+            if (!err) {
+                console.log("File 2 is deleted.");
+            }
+        });
+    } catch { }
+    try {
+        fs.unlink(`./public/images/products/${req.query.id}2.jpg`, (err) => {
+            if (!err) {
+                console.log("File 3 is deleted.");
+            }
+        });
+    } catch { }
     productHelper.deleteProduct(req.query.id).then(() => {
-        res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
+        productHelper.getProductInCart(req.query.id).then((data) => {
+            data.forEach(element => {
+                userHelper.cartDeleteProduct({
+                    cartId: element._id,
+                    proId: req.query.id
+                })
+            });
+        })
     })
+    res.redirect('/uQ2gJOrqg2pEogVy3fZqSlrGmwrjwY')
 })
 module.exports = router;

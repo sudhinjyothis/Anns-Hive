@@ -7848,9 +7848,8 @@ iframe {
   color: #6b778d;
   font-size: 16px;
   line-height: 20px;
-  padding: 16px 20px;
+  padding: 25px 20px;
   width: 100%;
-  text-transform: capitalize;
   border-radius: 6px;
 }
 
@@ -19013,7 +19012,7 @@ a.text-dark:focus {
     padding: 0px;
   }
   .signintext{
-    padding-top: 30%;
+    padding-top: 40%;
   }
   .w3l-grids-hny-2 .welcome-image h4 a{
     font-size: 16px;
@@ -19242,7 +19241,7 @@ a.text-dark:focus {
   text-align: center;
   border-radius: 10px;
   animation: slidedown .3s ease forwards;
-  color: red;
+  color: #000000;
 }
 @keyframes slidedown {
   from{
@@ -19327,7 +19326,7 @@ a.text-dark:focus {
 .product,
 .pro-img {
   width: 120px;
-  height: 180px;
+  height: 150px;
   border-radius: 5px
 }
 
@@ -19405,7 +19404,7 @@ a.text-dark:focus {
   .product,
   .pro-img {
       width: 100px;
-      height: 150px
+      height: 131px
   }
 
   .card {
@@ -19510,5 +19509,83 @@ a.text-dark:focus {
 }
 .cartquantityvalue:focus{
   border: none;
+}
+.checkoutaddressdetailsbg{
+  background-color: #ffa310ad;
+  border-radius: 10px;
+  width: 100%;
+  padding: 13px;
+}
+.addresscard{
+  background-color: #ffa310ad;
+  border-radius: 10px;
+  width: 100%;
+  padding: 20px;
+  margin: 10px;
+  max-width:200px;
+  height: 200px;
+  cursor: pointer;
+  transition: .3s
+}
+.addresscards{
+  margin-left: 40px;
+}
+.checkoutdetails .addressdetails{
+  margin:20px 0px 50px 50px;
+}
+.checkoutdetails .paymentdetails{
+  margin-top: 20px
+}
+.paymentdetails .orderdetails{
+  padding-top: 20px;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.placeorderbtn{
+  margin-top: 20px;
+}
+.addresscards .addresscard p{
+  font-size: 14px;
+  margin-top: 10px;
+}
+.addresscard:hover{
+  color: #35342f;
+  box-shadow: 0 0 5px #35342f;
+}
+@media (max-width:767px) {
+  .checkoutdetails .addressdetails{
+    margin:10px 20px;
+  }
+  .addresscards{
+    margin-left: 20px;
+  }
+  .checkoutdetails .paymentdetails{
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  .checkoutaddressdetailsbg{
+    width: 90%;
+  }
+  .addresscards .addresscard p{
+    font-size: 11px;
+  } 
+  .checkoutaddresstext{
+    padding: 0;
+    max-width: 367px;
+  }
+}
+.orderdetails .orderdetailslabels{
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+}
+.ordersuccessbg{
+  background-color: #ffa310ad;
+  border-radius: 10px;
+  padding: 15px;
+  width: 365px;
 }
 /*# sourceMappingURL=style-starter.css.map */

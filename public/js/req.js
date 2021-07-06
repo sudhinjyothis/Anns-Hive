@@ -194,9 +194,11 @@ $(document).ready(() => {
     // signIn
     $('#signinBtn').click((e) => {
         $('#signinErrMsg').css('display', 'none')
+        $('#signinBtn').addClass('disabled')
         e.preventDefault()
         if ($.trim($('#signinEmail').val()) == '') {
             $('#signinErrMsg').css('display', 'inline-block')
+            $('#signinBtn').removeClass('disabled')
         } else {
             $.ajax({
                 url: '/api/signin',
@@ -213,6 +215,7 @@ $(document).ready(() => {
                         location.href = '/notverified'
                     }
                     else {
+                        $('#signinBtn').removeClass('disabled')
                         $('#signinErrMsg').css('display', 'inline-block')
                     }
                 }
@@ -320,7 +323,103 @@ $(document).ready(() => {
             $('#passwordeye').removeClass('fa-eye-slash').addClass('fa-eye');
         }
     });
+    $('#passwordeye1').click(function () {
+        $('#Password').attr('type', $('#Password').is(':password') ? 'text' : 'password');
+        if ($('#Password').attr('type') === 'password') {
+            $('#passwordeye1').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            $('#passwordeye1').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+    $('#passwordeye2').click(function () {
+        $('#confirmPassword').attr('type', $('#confirmPassword').is(':password') ? 'text' : 'password');
+        if ($('#confirmPassword').attr('type') === 'password') {
+            $('#passwordeye2').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            $('#passwordeye2').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+    $('#placeorderbtn').click((e) => {
+        e.preventDefault()
+        $('#placeorderbtn').addClass('disabled')
+        $.ajax({
+            url: '/api/placeorder',
+            method: "POST",
+            data: {
+                addressname: $('#addressname').val(),
+                addressemail: $('#checkoutaddressemail').val(),
+                addressmobile: $('#addressmobile').val(),
+                addressmobile2: $('#addressmobile2').val(),
+                addressline1: $('#addressline1').val(),
+                addressline2: $('#addressline2').val(),
+                addressstate: $("#addressstate option:selected").text(),
+                addresscity: $('#addresscity').val(),
+                addresspin: $('#addresspin').val()
+            },
+            success: (response) => {
+                razorpayPayment(response)
+            }
+        })
+    })
+    $('#addresspin').blur(() => {
+        $.ajax({
+            url: '/api/checkpincodestatus',
+            method: 'GET',
+            data: {
+                pincode: $('#addresspin').val()
+            },
+            success: (response) => {
+                if (response.status) {
+                    $('#pincodeErr').text(`Estimated delivery days : ${parseInt(response.data) + 7}`)
+                    $('#pincodeErr').css('display', 'inline-block')
+                } else {
+                    $('#pincodeErr').text(response.data)
+                    $('#pincodeErr').css('display', 'inline-block')
+                }
+            }
+        })
+    })
 })
+function razorpayPayment(order) {
+    document.getElementById('placeorderbtn').classList.remove('disabled')
+    var options = {
+        "key": "rzp_test_ydUc5UvXLVFQJ8", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "AnnsHive pvt ltd",
+        "description": "AnnsHive pvt ltd is a multinational company",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
+            verifyPayment(response, order)
+        },
+        "notes": {
+            "address": "AnnsHive pvt ltd"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+}
+function verifyPayment(payment, order) {
+    $.ajax({
+        url: "/api/razorpayverifypayment",
+        data: {
+            payment,
+            order
+        },
+        method: 'POST',
+        success: (response) => {
+            if (response.status) {
+                location.href = `/ordersuccessful?id=${response.orderId}&total=${response.total}`
+            } else {
+                console.log(response);
+            }
+        }
+
+    })
+}
 function cartDeleteProduct(cartId, proId) {
     $.ajax({
         url: '/api/deletecartproduct',
@@ -371,4 +470,26 @@ function changeQuantity(cartId, proId, qty) {
         })
 
     }
+}
+function addressClick(email, index) {
+    $.ajax({
+        url: '/api/getaddress',
+        method: "POST",
+        data: {
+            email: email,
+            index: index
+        },
+        success: (address) => {
+            document.getElementById('addressname').value = address.name
+            document.getElementById('checkoutaddressemail').value = address.email
+            document.getElementById('addressmobile').value = address.mobile
+            document.getElementById('addressmobile2').value = address.mobile2
+            document.getElementById('addressline1').value = address.line1
+            document.getElementById('addressline2').value = address.line2
+            document.getElementById('addressstate').value = address.state
+            document.getElementById('addresscity').value = address.city
+            document.getElementById('addresspin').value = parseInt(address.pincode)
+
+        }
+    })
 }
