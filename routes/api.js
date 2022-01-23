@@ -333,7 +333,7 @@ router.post('/getaddress', (req, res) => {
 // placing order
 router.post('/placeorder', middleware.activeuser, async (req, res) => {
     await userHelper.deletePendingOrders(req.session.user._id)
-    let products = await userHelper.getUserProductList(req.session.user._id)
+    let products = await userHelper.getAllCart(req.session.user._id)
     let total = await userHelper.getTotalAmount(req.session.user._id)
     var config = {
         method: 'get',
@@ -372,7 +372,6 @@ router.post('/placeorder', middleware.activeuser, async (req, res) => {
 router.post('/razorpayverifypayment', (req, res) => {
     userHelper.verifyPayment(req.body).then(async () => {
         await userHelper.addPaymentId(req.body['order[orderId]'], req.body['payment[razorpay_payment_id]'])
-        console.log('hi');
         userHelper.changePaymentStatus(req.body['order[orderId]']).then(async (orderId) => {
             userHelper.deleteCartItemsWhenOrder(req.session.user._id)
             userHelper.getOrderDetails(orderId).then(async (order) => {
@@ -427,45 +426,78 @@ router.post('/razorpayverifypayment', (req, res) => {
                     },
                     data: data
                 };
-                res.json({ status: true, orderId })
-                // axios(config).then(function (response) {
-                //     userHelper.addOrderShipId(orderId, response.data).then(() => {
-                //         res.json({ status: true, orderId })
-                //     })
-                // })
+                axios(config).then(function (response) {
+                    userHelper.addOrderShipId(orderId, response.data).then(() => {
+                        res.json({ status: true, orderId, total: order.total })
+                    })
+                })
             })
 
         }).catch(() => {
-            res.json({ status: false })
+            console.log(123);
+            res.json({ status: false, msg: 'payment failed' })
         })
     })
 })
 router.get('/checkpincodestatus', async (req, res) => {
+    try {
+        var config = {
+            method: 'get',
+            url: 'https://apiv2.shiprocket.in/v1/external/courier/serviceability/',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${req.session.shiprocketToken}`
+            },
+            data: {
+                pickup_postcode: '575007',
+                delivery_postcode: req.query.pincode,
+                cod: 0,
+                weight: '1'
+            }
+        };
+        let courier = await axios(config)
+        if (courier.data.status === 404) {
+            res.json({ status: false, data: courier.data.message })
+        } else {
+            let shippingCompany = courier.data.data.available_courier_companies.find((company, index) => {
+                if (company.courier_company_id === courier.data.data.shiprocket_recommended_courier_id) {
+                    return true
+                }
+            })
+            res.json({ status: true, data: shippingCompany.estimated_delivery_days })
+        }
+    } catch {
+        res.json({ status: false, data: 'Something went wrong try again' })
+    }
+})
+router.post('/generateinvoice', (req, res) => {
+    var data = JSON.stringify({
+        "ids": [
+            req.body.orderId
+        ]
+    });
+
     var config = {
-        method: 'get',
-        url: 'https://apiv2.shiprocket.in/v1/external/courier/serviceability/',
+        method: 'post',
+        url: 'https://apiv2.shiprocket.in/v1/external/orders/print/invoice',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${req.session.shiprocketToken}`
         },
-        data: {
-            pickup_postcode: '575007',
-            delivery_postcode: req.query.pincode,
-            cod: 0,
-            weight: '1'
-        }
+        data: data
     };
-    let courier = await axios(config)
-    if (courier.data.status === 404) {
-        res.json({ status: false, data: courier.data.message })
-    } else {
-        let shippingCompany = courier.data.data.available_courier_companies.find((company, index) => {
-            if (company.courier_company_id === courier.data.data.shiprocket_recommended_courier_id) {
-                return true
+
+    axios(config)
+        .then(function (response) {
+            if (response.data.is_invoice_created) {
+                res.json({ status: true, data: response.data.invoice_url })
+            } else {
+                res.json({ status: false, data: 'Something went wrong ' })
             }
         })
-        res.json({ status: true, data: shippingCompany.estimated_delivery_days })
-    }
+        .catch(function (error) {
+            console.log(error);
+        });
 })
 // admin routes
 // adding a product in admin page 

@@ -3,6 +3,7 @@ var collection = require("../config/collections")
 const promise = require("promise")
 const { resolve, reject } = require("promise")
 const objectID = require("mongodb").ObjectID
+const userHelper = require("./user-helper")
 module.exports = {
     // adding a new product
     addProduct: (product) => {

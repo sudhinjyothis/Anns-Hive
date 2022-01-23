@@ -1,0 +1,132 @@
+<section style="padding-top: 85px;" class="editaddresscontainer">
+    <div class="container">
+        <div class="wrap">
+            {{#if orders}}
+            {{#each orders}}
+            <div style="margin-top: 20px;" class="orderspagebg bg mx-auto mw-100">
+                <div class="container px-4 py-2 mx-auto">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <div class="">
+                                <p style="color: #232222;margin-bottom: 5px;">Order placed</p>
+                                <p style="color: #232222;margin-bottom: 0;">{{dateform this.date}}</p>
+                            </div>
+                            <div class="userordersdetails">
+                                <p style="color: #232222;margin-bottom: 5px;">Total</p>
+                                <p style="color: #232222;margin-bottom: 0;">{{this.total}}</p>
+                            </div>
+                            <div class="userordersdetails">
+                                <p style="color: #232222;margin-bottom: 5px;">Ship to</p>
+                                <a style="padding: 0px;color: #232222;" class="nav-link dropdown-toggle" href="#"
+                                    id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    {{this.deliveryDetails.name}}
+                                </a>
+                                <ul style="padding: 10px;color: white;" class="dropdown-menu dropdown-menu-dark"
+                                    aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li>{{this.deliveryDetails.line1}}</li>
+                                    <li>{{this.deliveryDetails.line2}}</li>
+                                    <li>{{this.deliveryDetails.email}}</li>
+                                    <li>{{this.deliveryDetails.city}} , {{this.deliveryDetails.state}} ,
+                                        {{this.deliveryDetails.pin}}</li>
+                                    <li>{{this.deliveryDetails.mobile}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <div class="">
+                                ORDER #{{this.shiprocketOrderId}}
+                            </div>
+                            <div class="">
+                                <a style="cursor: pointer;" onclick="orderDetails('{{this._id}}','{{this.total}}')">View
+                                    order</a><span style="margin-left: 5px;margin-right: 5px;">|</span>
+                                <a style="cursor: pointer;" role="button"
+                                    onclick="generateInvoice({{this.shiprocketOrderId}})">Invoice</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row border-top">
+                        <div style="display: flex;flex-direction: column;" class="col-5 p-0">
+                            {{#each this.products}}
+                            <div class=" d-flex">
+                                <div class="product">
+                                    <a href=""><img src="images/products/{{this.product._id}}.jpg"
+                                            class="orderspro-img"></a>
+                                </div>
+                                <div class="my-auto flex-column d-flex ">
+                                    <a href="" class="cartproductname">
+                                        {{this.product.name}}
+                                    </a>
+                                    <p style="margin-bottom: 0px;" class="mob-text">{{this.product.category}}</p>
+                                    <div style="width: 103px;" class="cartqtylabel">Qty : {{this.quantity}}
+
+                                    </div>
+                                    <button style="width: 100px;" type="submit"
+                                        onclick="addToCart('{{this.product._id}}')" class="btn btn-dark btn-sm mt-2">Buy
+                                        it again</button>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                        <div class="my-auto col-7">
+                            <div class="ordersbtns row text-right">
+                                <div class="col-4">
+                                    <button style="width: 182px;" class="btn btn-dark">Track Order</button>
+                                    <button style="width: 182px;margin-top: 10px;" class="btn btn-dark">Write Product
+                                        Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            <div class="orderspagebg bg mx-auto mw-100 ">
+                <h1 style="text-align: center;padding: 30px;">No order Found</h1>
+                <div class="" style="display: flex;justify-content: center;">
+                    <a href="" class="btn btn-dark">Shop Now</a>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</section>
+<section class="w3l-grids-hny-2">
+    <div class="grids-hny-2-mian ">
+        <div class="container py-lg-5">
+            <h3 class="hny-title mb-0 text-center">You Might <span>Like</span></h3>
+        </div>
+    </div>
+</section>
+<section class="w3l-ecommerce-main">
+    <div class="ecom-contenthny ">
+        <div class="container ">
+            <div class="ecom-products-grids row mt-lg-5 mt-3">
+                {{#each productsDisplay}}
+                <div class="col-lg-3 col-6 product-incfhny mt-4">
+                    <div class="product-grid2 transmitv">
+                        <div class="product-image2"> <a href="#"> <img loading="eager" style="width: 350px;height: 450;"
+                                    class="pic-1 img-fluid" src="images/products/{{this._id}}.jpg"> <img loading="eager"
+                                    class="pic-2 img-fluid" src="images/products/{{this._id}}1.jpg"> </a>
+                            <ul class="social">
+                                <li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
+                                <li><a data-tip="Add to Cart"><span class="fa fa-shopping-bag"></span></a></li>
+                            </ul>
+                            <div class="transmitv single-item">
+                                <a style="cursor: pointer;" id="addToCartBtn" onclick="addToCart('{{this._id}}')"
+                                    class="transmitv-cart ptransmitv-cart add-to-cart">
+                                    Add to Cart</a>
+                            </div>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="title"><a href="#">{{this.name}} </a></h3> <span
+                                class="price"><del>₹2000</del>{{this.selling_price}}</span>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</section>

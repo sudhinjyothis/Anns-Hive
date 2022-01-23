@@ -33,12 +33,11 @@ module.exports = {
     },
     checkaddress: async (req, res, next) => {
         await userHelper.fetchUserById(req.session.user._id).then((data) => {
-            if (data.address) {
+            if (data.address.length != 0) {
                 next()
             } else {
-                res.redirect('/profile')
+                res.redirect('/profile#address')
             }
         })
     }
-
 }

@@ -16,7 +16,7 @@
                 <div class="ordersuccessproduct mt-3"
                     style="display: flex;align-items: center;justify-content: space-between;">
                     <div class="leftside" style="display: flex; align-items: center;">
-                        <img style="width: 60px;" src="images/products/60dc0fd9d76e8f2a540a1c2e.jpg" alt="">
+                        <img style="width: 60px;" src="images/products/{{this.product._id}}.jpg" alt="">
                         <div class="ml-2">
                             <h6 style="margin-bottom: 5px;">{{this.product.name}}</h6>
                             <h6 style="font-size: 13px;font-weight: 200;margin-bottom: 5px">{{this.product.category}}
@@ -36,7 +36,7 @@
                     <h6>₹{{order.total}}</h6>
                 </div>
                 <div class="ordertrackbtn mt-2 d-flex justify-content-center">
-                    <a href="" class="btn btn-dark">Track Order</a>
+                    <a href="/orders" class="btn btn-dark">Track Order</a>
                 </div>
             </div>
         </div>

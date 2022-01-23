@@ -362,6 +362,7 @@ $(document).ready(() => {
         })
     })
     $('#addresspin').blur(() => {
+        $('#pincodeErr').css('display', 'none')
         $.ajax({
             url: '/api/checkpincodestatus',
             method: 'GET',
@@ -370,9 +371,11 @@ $(document).ready(() => {
             },
             success: (response) => {
                 if (response.status) {
+                    $('#pincodeErr').css('background-color', '#35dc4aa8')
                     $('#pincodeErr').text(`Estimated delivery days : ${parseInt(response.data) + 7}`)
                     $('#pincodeErr').css('display', 'inline-block')
                 } else {
+                    $('#pincodeErr').css('background-color', '#dc3545a8')
                     $('#pincodeErr').text(response.data)
                     $('#pincodeErr').css('display', 'inline-block')
                 }
@@ -414,7 +417,7 @@ function verifyPayment(payment, order) {
             if (response.status) {
                 location.href = `/ordersuccessful?id=${response.orderId}&total=${response.total}`
             } else {
-                console.log(response);
+                console.log(response.msg);
             }
         }
 
@@ -492,4 +495,23 @@ function addressClick(email, index) {
 
         }
     })
+}
+function generateInvoice(orderId) {
+    $.ajax({
+        url: '/api/generateinvoice',
+        method: 'POST',
+        data: {
+            orderId
+        },
+        success: (response) => {
+            if (response.status) {
+                window.open(response.data, '_blank')
+            } else {
+                console.log(1);
+            }
+        }
+    })
+}
+function orderDetails(orderId, total) {
+
 }

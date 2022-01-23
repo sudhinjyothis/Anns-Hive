@@ -14,6 +14,10 @@ Handlebars.registerHelper('increment', function (num) {
 Handlebars.registerHelper('sum', function (num1, num2) {
   return num1 + num2
 })
+Handlebars.registerHelper('dateform', function (date) {
+  let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+})
 /* GET home page. */
 router.get('/', async (req, res) => {
   let products = await productHelper.getLimitedRandomProducts(8)
@@ -232,7 +236,7 @@ router.get('/addedtocat', middleware.activeuser, async (req, res) => {
     res.render('users/addedtocart', { product, user, header: true, footer: true, cartCount, productsDisplay })
   })
 })
-router.get('/checkout', middleware.activeuser, async (req, res) => {
+router.get('/checkout', middleware.activeuser, middleware.checkaddress, async (req, res) => {
   let user = req.session.user
   let total = await userHelper.getTotalAmount(req.session.user._id)
   let freeShipping = false
@@ -292,14 +296,21 @@ router.get('/checkout', middleware.activeuser, async (req, res) => {
       return true
     }
   })
-  res.render('users/checkout', { imgheader: 'checkout', footer: true, user, total, cartCount, address, defaultAddress, indianStates, shippingCompany, freeShipping })
+  res.render('users/checkout', { imgheader: 'checkout', footer: true, user, total, cartCount, address, defaultAddress, indianStates, shippingCompany, freeShipping, etd: parseInt(shippingCompany.estimated_delivery_days) + 7 })
 })
 // ordersuccessfull
 router.get('/ordersuccessful', middleware.activeuser, async (req, res) => {
   user = req.session.user
   let products = await userHelper.getOrderedProductDetails(req.query.id)
   let order = await userHelper.getOrderDetails(req.query.id)
+
   res.render('users/ordersuccessful', { footer: true, header: true, user, products, order })
+})
+// orders page 
+router.get('/orders', middleware.activeuser, async (req, res) => {
+  let orders = await userHelper.getUserOrders('60da9120c7546c2498bd2274')
+  let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  res.render('users/orders', { imgheader: 'Orders', footer: true, orders })
 })
 // admin routes start
 // renders admin dashboard

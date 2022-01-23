@@ -371,13 +371,6 @@ module.exports = {
         })
 
     },
-    // fetching cart products[array] of a specifi user
-    getUserProductList: (userId) => {
-        return new Promise(async (resolve, reject) => {
-            let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) })
-            resolve(cart.products)
-        })
-    },
     // placing an order
     placeOrder: (userId, address, products, total) => {
         return new Promise((resolve, reject) => {
